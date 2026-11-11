@@ -15,8 +15,8 @@ EOF
   head -n $((n - 1)) src/app.html
   cat <<'EOF'
 <meta name="description" content="ผู้ช่วยเรื่องประจำวัน เริ่มจากครัว: หาเมนูจากของที่มี จัดมื้อ และทำตามทีละขั้น">
-<meta name="theme-color" content="#f2f5f1" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#111814" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f3f5f9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ชีวิตง่าย">
