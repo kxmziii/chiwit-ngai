@@ -342,6 +342,11 @@ dialog::backdrop { background: rgba(8, 16, 12, .55); }
   <section id="view-home" aria-label="หน้าแรก">
     <div class="pagehead"><h2>วันนี้ให้ช่วยเรื่องอะไรดี</h2><p>เลือกหัวข้อที่ต้องการ</p></div>
     <div id="homeBody"></div>
+    <div class="card" style="margin-top:14px">
+      <h3>ตั้งค่า</h3>
+      <label class="switch" for="sfxSwitch"><input type="checkbox" role="switch" id="sfxSwitch"><span>เสียงเอฟเฟกต์</span></label>
+      <p class="hint">เสียงตอนแตะปุ่ม เพิ่มเมนู และทำเสร็จ ส่วนเสียงเตือนหมดเวลาจะดังเสมอแม้ปิดไว้</p>
+    </div>
   </section>
 
   <section id="view-menu" aria-label="หาเมนู" hidden>
@@ -1226,6 +1231,61 @@ function toast(msg) {
   clearTimeout(toast.h); toast.h = setTimeout(() => { t.hidden = true; }, 2000);
 }
 
+/* ---------- Sound effects: short synthesized tones, no audio files ---------- */
+let sfxOn = load("life-sfx-v1", [true])[0] !== false;
+// Each sound is a list of notes: f = pitch in Hz, to = pitch to glide to, t = start offset, d = length (seconds), g = loudness
+const SFX = {
+  tap: [{ f: 520, d: .05, g: .06 }],
+  open: [{ f: 392, to: 523, d: .08, g: .07 }],
+  back: [{ f: 520, to: 390, d: .09, g: .07, type: "triangle" }],
+  on: [{ f: 523, d: .07 }, { f: 784, t: .07, d: .1 }],
+  off: [{ f: 523, d: .07 }, { f: 392, t: .07, d: .1 }],
+  fav: [{ f: 659, d: .07, type: "triangle" }, { f: 988, t: .06, d: .14, type: "triangle" }],
+  next: [{ f: 440, to: 660, d: .09, type: "triangle" }],
+  shuffle: [{ f: 523, d: .06 }, { f: 659, t: .07, d: .06 }, { f: 784, t: .14, d: .06 }, { f: 1047, t: .21, d: .12 }],
+  done: [{ f: 523, d: .12, type: "triangle" }, { f: 659, t: .12, d: .12, type: "triangle" }, { f: 784, t: .24, d: .12, type: "triangle" }, { f: 1047, t: .36, d: .3, type: "triangle" }],
+  warn: [{ f: 220, d: .14, g: .05, type: "square" }]
+};
+// Actions whose sound differs from a plain tap. null = the action plays its own sound once it knows the outcome.
+const ACT_SFX = { shuffle: null, "shop-add": null, back: "back", close: "back", "close-filters": "back", reset: "off", "clear-meal": "off",
+  "equip-none": "off", "pantry-clear": "off", "equip-all": "on", "open-filters": "open", "start-cook": "next", "cook-meal": "next", install: "on" };
+function sfx(name) {
+  if (!sfxOn) return;
+  try {
+    const ctx = audio || (audio = new (window.AudioContext || window.webkitAudioContext)());
+    if (ctx.state === "suspended") ctx.resume();
+    (SFX[name] || []).forEach(n => {
+      const osc = ctx.createOscillator(), amp = ctx.createGain(), s = ctx.currentTime + (n.t || 0), d = n.d || .08;
+      osc.type = n.type || "sine";
+      osc.frequency.setValueAtTime(n.f, s);
+      if (n.to) osc.frequency.exponentialRampToValueAtTime(n.to, s + d);
+      amp.gain.setValueAtTime(.0001, s);
+      amp.gain.exponentialRampToValueAtTime(n.g || .11, s + .008);
+      amp.gain.exponentialRampToValueAtTime(.0001, s + d);
+      osc.connect(amp); amp.connect(ctx.destination);
+      osc.start(s); osc.stop(s + d + .02);
+    });
+  } catch (e) {}
+}
+// Picks the sound for a tap before anything changes, so "on" and "off" reflect what the tap is about to do
+function clickSound(t) {
+  let el;
+  if (t.closest(".tab, [data-preset], [data-f], [data-t], [data-th], [data-done], [data-jump]")) return sfx("tap");
+  if (t.closest("[data-view-go], [data-open]")) return sfx("open");
+  if ((el = t.closest("[data-eq]"))) return sfx(have.has(el.dataset.eq) ? "off" : "on");
+  if ((el = t.closest("[data-pid]"))) return sfx(pantry.has(el.dataset.pid) ? "off" : "on");
+  if ((el = t.closest("[data-fav]"))) return sfx(favs.has(el.dataset.fav) ? "off" : "fav");
+  if ((el = t.closest("[data-add]"))) return sfx(meal.includes(el.dataset.add) ? "off" : "on");
+  if (t.closest("[data-del]")) return sfx("off");
+  if ((el = t.closest("[data-act]"))) { const s = ACT_SFX[el.dataset.act]; if (s !== null) sfx(s || "tap"); return; }
+  if ((el = t.closest("#next"))) return sfx(el.textContent.includes("เสร็จ") ? "done" : "next");
+  if (t.closest("#prev, #finish")) return sfx("back");
+  if (t.closest("#tStart")) return sfx("on");
+  if (t.closest("#tStop")) return sfx("off");
+}
+$("sfxSwitch").checked = sfxOn;
+$("sfxSwitch").addEventListener("change", ev => { sfxOn = ev.target.checked; store("life-sfx-v1", [sfxOn]); sfx("on"); });
+
 /* ---------- Views and tab bar ---------- */
 // Every topic of the app is listed here. To add one later: add its views and tabs to the page, then describe it in this list.
 const APP_NAME = "ชีวิตง่าย";
@@ -1312,7 +1372,7 @@ function renderKitchen() {
 function saveEquip() { store("krua-equip-v1", [...have]); updateKitchenSum(); }
 function savePantry() { store("krua-pantry-v1", [...pantry]); if (!pantryOn()) state.stocked = false; updateKitchenSum(); }
 $("noPork").addEventListener("change", ev => {
-  noPork = ev.target.checked; store("krua-nopork-v1", [noPork]);
+  noPork = ev.target.checked; store("krua-nopork-v1", [noPork]); sfx(noPork ? "on" : "off");
   if (noPork && state.protein === "หมู") state.protein = "";
   applyDiet(); renderKitchen(); renderShortcuts(); renderMealBadge();
   toast(noPork ? "เปลี่ยนเมนูหมูเป็นไก่และเนื้อวัวแล้ว" : "แสดงสูตรเดิมที่มีหมูแล้ว");
@@ -1424,7 +1484,8 @@ function shuffleMeal() {
   const cookable = RECIPES.filter(r => r.kind === "เมนูหลัก" && canMake(r));
   let mains = cookable.filter(r => (!state.protein || r.protein === state.protein) && originOk(r));
   if (!mains.length) mains = cookable;
-  if (!mains.length) { toast("ยังไม่มีเมนูหลักที่ทำได้ ลองเพิ่มเครื่องครัวในครัวของฉัน"); return; }
+  if (!mains.length) { sfx("warn"); toast("ยังไม่มีเมนูหลักที่ทำได้ ลองเพิ่มเครื่องครัวในครัวของฉัน"); return; }
+  sfx("shuffle");
   let best = mains;
   if (pantryOn()) { // closest matches to the fridge first, widened until there are at least 3 to pick from
     const counts = [...new Set(mains.map(r => lacking(r).length))].sort((a, b) => a - b);
@@ -1519,7 +1580,8 @@ function copyShop() {
 }
 function addBought() {
   const add = shopLines(mealItems()).buy.filter(x => bought.has(x.id));
-  if (!add.length) { toast("ติ๊กของที่ซื้อแล้วก่อน"); return; }
+  if (!add.length) { sfx("warn"); toast("ติ๊กของที่ซื้อแล้วก่อน"); return; }
+  sfx("on");
   const ids = new Set(add.flatMap(x => x.lack));
   ids.forEach(i => pantry.add(i)); savePantry(); renderMealPage();
   toast(`เพิ่ม ${ids.size} อย่างลงตู้เย็นแล้ว`);
@@ -1828,6 +1890,7 @@ const ACTIONS = {
 };
 document.addEventListener("click", ev => {
   const t = ev.target; let el;
+  clickSound(t);
   if (t === dlg) { dlg.close(); return; }
   if (t === fdlg) { fdlg.close(); return; }
   if ((el = t.closest(".tab"))) { go(el.dataset.view); return; }
@@ -1867,6 +1930,7 @@ document.addEventListener("click", ev => {
 });
 document.addEventListener("change", ev => {
   const d = ev.target.dataset || {};
+  if (d.shop || d.ing !== undefined) sfx("tap");
   if (d.shop) { ev.target.checked ? bought.add(d.shop) : bought.delete(d.shop); store("krua-shop-v1", [...bought]); }
   if (d.ing !== undefined && cur) {
     const ticks = checks[cur.key] || (checks[cur.key] = new Set()), k = +d.ing;
