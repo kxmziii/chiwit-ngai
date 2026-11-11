@@ -16,6 +16,7 @@
   --basil-strong: #1f5a37;
   --on-basil: #ffffff;
   --basil-soft: #e0eee4;
+  --basil-mid: #8fbf9f;
   --chili: #b8402c;
   --on-chili: #ffffff;
   --chili-soft: #f9e3dd;
@@ -30,14 +31,14 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #111814; --surface: #19221d; --surface-2: #1e2823; --ink: #e5eee8; --muted: #9db0a5; --line: #2b3a32;
-    --basil: #72c494; --basil-strong: #8fd6ab; --on-basil: #0f1a14; --basil-soft: #1d3527;
+    --basil: #72c494; --basil-strong: #8fd6ab; --on-basil: #0f1a14; --basil-soft: #1d3527; --basil-mid: #3f7a57;
     --chili: #f08670; --on-chili: #2a0f0a; --chili-soft: #3b211c; --turmeric: #e6b650; --turmeric-soft: #362c15; --sky-soft: #1b2b38;
     --shadow: 0 1px 2px rgba(0, 0, 0, .3); color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #111814; --surface: #19221d; --surface-2: #1e2823; --ink: #e5eee8; --muted: #9db0a5; --line: #2b3a32;
-  --basil: #72c494; --basil-strong: #8fd6ab; --on-basil: #0f1a14; --basil-soft: #1d3527;
+  --basil: #72c494; --basil-strong: #8fd6ab; --on-basil: #0f1a14; --basil-soft: #1d3527; --basil-mid: #3f7a57;
   --chili: #f08670; --on-chili: #2a0f0a; --chili-soft: #3b211c; --turmeric: #e6b650; --turmeric-soft: #362c15; --sky-soft: #1b2b38;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3); color-scheme: dark;
 }
@@ -56,7 +57,7 @@ button { font: inherit; color: inherit; }
 /* App bar and tabs */
 .appbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 4px; }
 .appbar h1 { font-family: var(--font-display); font-weight: 600; font-size: 24px; margin: 0; line-height: 1.2; color: var(--basil); }
-.tabs { position: fixed; z-index: 30; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; background: var(--surface); border-top: 1px solid var(--line);
+.tabs { position: fixed; z-index: 30; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(var(--n, 4), 1fr); gap: 4px; background: var(--surface); border-top: 1px solid var(--line);
   padding: 6px max(8px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px)); }
 .tab { position: relative; border: none; background: none; cursor: pointer; min-height: 52px; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; font-size: 12.5px; color: var(--muted); }
 .tab svg { width: 24px; height: 24px; }
@@ -250,6 +251,98 @@ dialog::backdrop { background: rgba(8, 16, 12, .55); }
 .chip:hover { border-color: var(--basil); }
 .chip[aria-pressed="true"] { background: var(--basil-soft); color: var(--basil-strong); border-color: var(--basil); font-weight: 500; }
 
+/* Money topic */
+#mdlg { width: 100vw; max-width: 100vw; height: 100vh; height: 100dvh; max-height: none; margin: 0; border-radius: 0; }
+@media (min-width: 700px) { #mdlg { width: min(460px, calc(100vw - 32px)); height: auto; max-height: calc(100vh - 32px); margin: auto; border-radius: 20px; } }
+#mdlg .sheet-top { padding-left: 20px; }
+.mform { gap: 14px; padding-block: 14px; }
+.mform .seg { margin: 0; }
+.amount { display: flex; align-items: baseline; justify-content: center; gap: 6px; padding: 6px 0 2px; font-weight: 600; line-height: 1.1; }
+.amount span { font-size: 26px; color: var(--muted); }
+.amount b { font-size: clamp(44px, 14vw, 60px); font-weight: 600; }
+.amount.zero b { color: var(--muted); }
+.mcats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.mcat { border: 1px solid transparent; background: none; border-radius: 14px; padding: 8px 2px 6px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 12.5px; line-height: 1.3; min-height: 62px; min-width: 0; }
+.mcat span { font-size: 24px; line-height: 1.1; }
+.mcat i { font-style: normal; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mcat[aria-pressed="true"] { background: var(--basil-soft); border-color: var(--basil); color: var(--basil-strong); font-weight: 600; }
+.field { width: 100%; font: inherit; min-height: 48px; padding: 0 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); min-width: 0; }
+.field:focus { outline: 2px solid var(--basil); outline-offset: 1px; }
+.field.sm { width: 120px; min-height: 42px; text-align: right; font-variant-numeric: tabular-nums; }
+.datefield { flex: 1 1 130px; min-height: 42px; }
+.keypad { flex: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 8px 16px 0; border-top: 1px solid var(--line); }
+.key { min-height: 50px; border: none; border-radius: 12px; background: var(--surface-2); cursor: pointer; font-size: 22px; font-weight: 500; display: grid; place-items: center; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.key:active { background: var(--basil-soft); }
+.key svg { width: 24px; height: 24px; }
+@media (max-height: 700px) { .key { min-height: 42px; } .mcat { min-height: 54px; } }
+#mdlg .sheet-foot { border-top: none; }
+.fab { position: fixed; z-index: 25; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(var(--nav-h) + 18px + env(safe-area-inset-bottom, 0px)); min-height: 56px; padding: 0 22px 0 18px; border: none; border-radius: 999px; background: var(--basil); color: var(--on-basil); font-size: 16.5px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(0, 0, 0, .25); }
+.fab svg { width: 22px; height: 22px; }
+body.has-fab { padding-bottom: calc(var(--nav-h) + 104px); }
+@media (max-width: 899px) { body.has-fab > .toast { bottom: calc(var(--nav-h) + 88px + env(safe-area-inset-bottom, 0px)); } }
+@media (min-width: 900px) { .fab { bottom: 28px; } body.has-fab { padding-bottom: 110px; } }
+.frow { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; }
+.hero-num { display: flex; flex-direction: column; gap: 2px; margin: 6px 0 12px; }
+.hero-num span { font-size: 14.5px; color: var(--muted); }
+.hero-num b { font-size: clamp(44px, 13vw, 58px); font-weight: 600; line-height: 1.1; }
+.meter { height: 10px; border-radius: 999px; overflow: hidden; background: var(--basil-soft); }
+.meter i { display: block; height: 100%; border-radius: 999px; background: var(--basil); transition: width .3s; }
+.meter.warn { background: var(--turmeric-soft); } .meter.warn i { background: var(--turmeric); }
+.meter.over { background: var(--chili-soft); } .meter.over i { background: var(--chili); }
+.meter-note { margin: 6px 0 0; font-size: 14.5px; color: var(--muted); }
+.meter-note b { color: var(--ink); font-weight: 600; }
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; min-width: 0; }
+.tile span { font-size: 12.5px; color: var(--muted); }
+.tile b { font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tile small { font-size: 12px; color: var(--muted); }
+.tile small.up { color: var(--chili); } .tile small.down { color: var(--basil-strong); }
+.dayhead { margin: 12px 0 2px; display: flex; justify-content: space-between; align-items: baseline; font-size: 13.5px; font-weight: 600; color: var(--muted); }
+.dayhead:first-child { margin-top: 0; }
+.dayhead small { font-weight: 400; font-variant-numeric: tabular-nums; }
+.txlist, .catbars, .plainlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.txrow, .catrow { all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: flex; align-items: center; gap: 12px; padding: 8px 4px; border-radius: 12px; min-height: 56px; }
+.txrow:hover, .catrow:hover { background: var(--surface-2); }
+.txrow:focus-visible, .catrow:focus-visible { outline: 2px solid var(--basil); outline-offset: -2px; }
+.thumb.sm { width: 40px; height: 40px; border-radius: 12px; font-size: 20px; }
+.txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.txt b { font-weight: 500; font-size: 15.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.txt small { font-size: 13px; color: var(--muted); }
+.txrow em { font-style: normal; font-weight: 600; font-size: 15.5px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.txrow em.inc { color: var(--basil-strong); }
+.monthbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 2px 0 10px; }
+.monthbar b { font-family: var(--font-display); font-weight: 500; font-size: 19px; }
+.monthbar .fav:disabled { opacity: .3; cursor: default; }
+.flip svg { transform: rotate(180deg); }
+.scrollrow { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin-inline: -16px; padding: 2px 16px 10px; }
+.scrollrow::-webkit-scrollbar { display: none; }
+.scrollrow .chip { flex: none; }
+.totals { margin: 10px 0; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.cr-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.cr-top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.cr-top b { font-weight: 500; font-size: 15.5px; }
+.cr-top em { font-style: normal; font-weight: 600; font-variant-numeric: tabular-nums; }
+.cr-main small { font-size: 12.5px; color: var(--muted); }
+.hbar { display: block; height: 8px; }
+.hbar i { display: block; height: 100%; min-width: 3px; border-radius: 0 4px 4px 0; background: var(--basil-mid); }
+.hbar.now i { background: var(--basil); }
+.trend { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 6px 10px; align-items: center; font-size: 14px; }
+.trend span { color: var(--muted); } .trend em { font-style: normal; font-variant-numeric: tabular-nums; text-align: right; }
+.cols svg { display: block; width: 100%; height: auto; overflow: visible; }
+.cols .col { fill: var(--basil-mid); } .cols .col.now, .cols .col.pick { fill: var(--basil); }
+.cols .grid { stroke: var(--line); stroke-width: 1; } .cols .avg { stroke: var(--muted); stroke-width: .6; }
+.cols .hit { fill: transparent; cursor: pointer; }
+.xaxis { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; margin-top: 2px; }
+.cap { margin: 6px 0 0; font-size: 14px; color: var(--muted); min-height: 22px; }
+.cap b { color: var(--ink); font-weight: 600; }
+.brow { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.brow:last-child { border-bottom: none; }
+.brow .txt small.over { color: var(--chili); }
+.emojis { display: flex; flex-wrap: wrap; gap: 6px; }
+.emojis button { width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); font-size: 20px; cursor: pointer; }
+.emojis button[aria-pressed="true"] { border-color: var(--basil); background: var(--basil-soft); }
+.toast-act { background: none; border: none; color: inherit; font: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; margin-left: 10px; padding: 4px 0; }
+
 /* Steak calculator and guides */
 .calc { border: 1px solid var(--basil); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; background: var(--surface-2); }
 .calc h3 { margin: 0; }
@@ -322,6 +415,22 @@ dialog::backdrop { background: rgba(8, 16, 12, .55); }
     <button type="button" class="tab" data-view="home">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg>
       <span>หน้าแรก</span>
+    </button>
+    <button type="button" class="tab" data-view="money">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18M16 15h2"/></svg>
+      <span>ภาพรวม</span>
+    </button>
+    <button type="button" class="tab" data-view="ledger">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 7h12M8 12h12M8 17h12M4 7h.01M4 12h.01M4 17h.01"/></svg>
+      <span>รายการ</span>
+    </button>
+    <button type="button" class="tab" data-view="stats">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 20V11M12 20V4M19 20v-6"/></svg>
+      <span>สรุป</span>
+    </button>
+    <button type="button" class="tab" data-view="budget">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><path d="M12 12h.01"/></svg>
+      <span>งบ</span>
     </button>
     <button type="button" class="tab" data-view="menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -400,6 +509,25 @@ dialog::backdrop { background: rgba(8, 16, 12, .55); }
     </div>
     <button type="button" class="btn primary big" data-act="go-menu">ดูเมนูที่ทำได้</button>
   </section>
+
+  <section id="view-money" aria-label="ภาพรวมรายจ่าย" hidden><div id="moneyBody" class="stack"></div></section>
+
+  <section id="view-ledger" aria-label="รายการรายรับรายจ่าย" hidden>
+    <div id="ledgerHead"></div>
+    <div class="searchbox">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input class="search" id="lq" type="search" placeholder="ค้นหาโน้ตหรือหมวด" aria-label="ค้นหารายการ" autocomplete="off">
+    </div>
+    <div id="ledgerBody"></div>
+  </section>
+
+  <section id="view-stats" aria-label="สรุปรายจ่าย" hidden><div id="statsBody" class="stack"></div></section>
+
+  <section id="view-budget" aria-label="งบและการตั้งค่ารายจ่าย" hidden>
+    <div class="pagehead"><h2>งบและการตั้งค่า</h2><p>ตั้งงบ รายการประจำ หมวดของคุณเอง และสำรองข้อมูล</p></div>
+    <div id="budgetBody" class="stack"></div>
+    <input type="file" id="restoreFile" accept="application/json,.json" hidden>
+  </section>
 </main>
 
 <dialog id="dlg" aria-labelledby="dlg-title"></dialog>
@@ -414,6 +542,10 @@ dialog::backdrop { background: rgba(8, 16, 12, .55); }
     <button type="button" class="btn primary" id="fApply" data-act="close-filters">ดูเมนู</button>
   </div>
 </dialog>
+<dialog id="mdlg" aria-labelledby="m-title"></dialog>
+<button type="button" class="fab" id="fab" data-act="m-add" hidden>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>จดรายจ่าย
+</button>
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script>
@@ -1077,7 +1209,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;",
 function load(key, fallback) { try { const v = JSON.parse(localStorage.getItem(key)); return Array.isArray(v) ? v : fallback; } catch (e) { return fallback; } }
 function store(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
 
-const dlg = $("dlg"), fdlg = $("fdlg");
+const dlg = $("dlg"), fdlg = $("fdlg"), mdlg = $("mdlg");
 const savedEquip = load("krua-equip-v1", null);
 let have = new Set(savedEquip || ["stove", "wok", "pot", "ricecooker", "microwave", "kettle"]);
 let favs = new Set(load("krua-fav-v1", []));
@@ -1222,13 +1354,15 @@ const sortList = (a, b) => KORDER[a.kind] - KORDER[b.kind]
   || a.time - b.time;
 
 // The toast must sit inside an open dialog, because a modal dialog covers everything outside it
-function toast(msg) {
+function toast(msg, act) { // act = { label, fn } adds one button, used for undo
   let t = $("toast");
   if (!t) { t = document.createElement("div"); t.id = "toast"; t.className = "toast"; t.setAttribute("role", "status"); }
-  const host = fdlg.open ? fdlg : dlg.open ? dlg : document.body;
+  const host = mdlg.open ? mdlg : fdlg.open ? fdlg : dlg.open ? dlg : document.body;
   if (t.parentNode !== host) host.appendChild(t);
   t.textContent = msg; t.hidden = false;
-  clearTimeout(toast.h); toast.h = setTimeout(() => { t.hidden = true; }, 2000);
+  toast.fn = act ? act.fn : null;
+  if (act) { const b = document.createElement("button"); b.type = "button"; b.className = "toast-act"; b.dataset.act = "toast-act"; b.textContent = act.label; t.appendChild(b); }
+  clearTimeout(toast.h); toast.h = setTimeout(() => { t.hidden = true; toast.fn = null; }, act ? 6000 : 2000);
 }
 
 /* ---------- Sound effects: short synthesized tones, no audio files ---------- */
@@ -1247,7 +1381,8 @@ const SFX = {
   warn: [{ f: 220, d: .14, g: .05, type: "square" }]
 };
 // Actions whose sound differs from a plain tap. null = the action plays its own sound once it knows the outcome.
-const ACT_SFX = { shuffle: null, "shop-add": null, back: "back", close: "back", "close-filters": "back", reset: "off", "clear-meal": "off",
+const ACT_SFX = { shuffle: null, "shop-add": null, "m-save": null, "m-save-more": null, "m-wipe": null, "m-delete": "off", "m-close": "back",
+  "m-add": "open", "rec-add": "open", "shop-pay": "open", "toast-act": "on", back: "back", close: "back", "close-filters": "back", reset: "off", "clear-meal": "off",
   "equip-none": "off", "pantry-clear": "off", "equip-all": "on", "open-filters": "open", "start-cook": "next", "cook-meal": "next", install: "on" };
 function sfx(name) {
   if (!sfxOn) return;
@@ -1270,8 +1405,10 @@ function sfx(name) {
 // Picks the sound for a tap before anything changes, so "on" and "off" reflect what the tap is about to do
 function clickSound(t) {
   let el;
-  if (t.closest(".tab, [data-preset], [data-f], [data-t], [data-th], [data-done], [data-jump]")) return sfx("tap");
-  if (t.closest("[data-view-go], [data-open]")) return sfx("open");
+  if (t.closest(".tab, [data-preset], [data-f], [data-t], [data-th], [data-done], [data-jump], [data-key], [data-mtype], [data-mcat], [data-mdate], [data-mmonth], [data-lt], [data-lcat], [data-emoji], [data-day]")) return sfx("tap");
+  if (t.closest("[data-view-go], [data-open], [data-tx], [data-statcat]")) return sfx("open");
+  if (t.closest("[data-quick]")) return sfx("on");
+  if (t.closest("[data-delrec], [data-delcat]")) return sfx("off");
   if ((el = t.closest("[data-eq]"))) return sfx(have.has(el.dataset.eq) ? "off" : "on");
   if ((el = t.closest("[data-pid]"))) return sfx(pantry.has(el.dataset.pid) ? "off" : "on");
   if ((el = t.closest("[data-fav]"))) return sfx(favs.has(el.dataset.fav) ? "off" : "fav");
@@ -1293,7 +1430,12 @@ const TOPICS = [
   { id: "kitchen", name: "ครัวบ้านเรา", icon: "🍳", tint: "t1", start: "menu", views: ["menu", "meal", "kitchen"],
     desc: "หาเมนูจากของที่มี จัดมื้อ และทำตามทีละขั้น",
     stat: () => `ทำได้ ${RECIPES.filter(canMake).length} จาก ${RECIPES.length} สูตร` + (mealItems().length ? ` · มื้อนี้ ${mealItems().length} เมนู` : ""),
-    quick: [["shuffle", "สุ่มจัดมื้อ"], ["go-meal", "มื้อนี้"], ["go-kitchen", "ครัวของฉัน"]] }
+    quick: [["shuffle", "สุ่มจัดมื้อ"], ["go-meal", "มื้อนี้"], ["go-kitchen", "ครัวของฉัน"]] },
+  { id: "money", name: "รายจ่าย", icon: "💰", tint: "t3", start: "money", views: ["money", "ledger", "stats", "budget"],
+    desc: "จดรายจ่ายในไม่กี่แตะ ดูสรุป และคุมงบรายเดือน",
+    stat: () => { const spent = sum(txIn(monthKey(today())));
+      return `เดือนนี้ใช้ไป ${baht(spent)}` + (money.budget ? (money.budget >= spent ? ` · เหลือ ${baht(money.budget - spent)}` : ` · เกินงบ ${baht(spent - money.budget)}`) : ""); },
+    quick: [["m-add", "จดรายจ่าย"], ["go-ledger", "รายการ"], ["go-stats", "สรุป"]] }
 ];
 const topicOf = v => TOPICS.find(t => t.views.includes(v));
 const VIEWS = ["home", ...TOPICS.flatMap(t => t.views)];
@@ -1321,7 +1463,7 @@ function renderHome() {
       </button>
       <div class="rowbtns">${t.quick.map(([a, label]) => `<button type="button" class="btn small" data-act="${a}">${label}</button>`).join("")}</div>
     </article>`).join("") + `
-    <div class="topic soon"><b>หัวข้อใหม่จะมาอยู่ตรงนี้</b><span>แอปนี้เพิ่มเรื่องอื่นได้อีก เช่น รายจ่าย งานบ้าน หรือสุขภาพ</span></div>
+    <div class="topic soon"><b>หัวข้อใหม่จะมาอยู่ตรงนี้</b><span>แอปนี้เพิ่มเรื่องอื่นได้อีก เช่น ของใช้ในบ้าน งานบ้าน หรือสุขภาพ</span></div>
   </div>` + installCard();
 }
 const scrollPos = {};
@@ -1337,6 +1479,10 @@ function go(v, setHash = true) {
     t.hidden = !!topic && t.dataset.view !== "home" && !topic.views.includes(t.dataset.view);
     t.dataset.view === v ? t.setAttribute("aria-current", "page") : t.removeAttribute("aria-current");
   });
+  $("tabs").style.setProperty("--n", topic ? topic.views.length + 1 : 4);
+  const inMoney = !!topic && topic.id === "money";
+  $("fab").hidden = !inMoney; document.body.classList.toggle("has-fab", inMoney);
+  if (inMoney) renderMoney();
   if (v === "home") renderHome();
   if (v === "meal") renderMealPage();
   if (v === "kitchen") renderKitchen();
@@ -1548,7 +1694,7 @@ function shopHTML(items, { buy, other, got }) {
       : `<div class="empty"><p>ของสดสำหรับมื้อนี้มีครบแล้ว</p></div>`}
     ${other.length ? `<div class="card"><h3>เครื่องปรุงและของอื่น ๆ <small>เช็กว่าที่บ้านมีหรือยัง</small></h3><ul class="checklist shop">${other.map(row).join("")}</ul></div>` : ""}
     ${got.length ? `<details class="mi"><summary>มีอยู่แล้วในตู้เย็น <small>${got.length} รายการ</small></summary><ul>${got.map(x => `<li>${esc(x.text)}</li>`).join("")}</ul></details>` : ""}
-    <div class="rowbtns">${buy.length ? `<button type="button" class="btn primary" data-act="shop-add">เพิ่มของที่ติ๊กลงตู้เย็น</button>` : ""}<button type="button" class="btn" data-act="shop-copy">คัดลอกรายการ</button></div>`;
+    <div class="rowbtns">${buy.length ? `<button type="button" class="btn primary" data-act="shop-add">เพิ่มของที่ติ๊กลงตู้เย็น</button>` : ""}<button type="button" class="btn" data-act="shop-copy">คัดลอกรายการ</button><button type="button" class="btn" data-act="shop-pay">จดค่าของที่ซื้อ</button></div>`;
 }
 function renderMealPage() {
   const items = mealItems();
@@ -1843,6 +1989,361 @@ function renderMulti() {
   const focusBtn = $("next") || $("finish"); focusBtn && focusBtn.focus();
 }
 
+/* ---------- Money: expenses, income and budgets ---------- */
+function loadObj(key, fallback) { try { const v = JSON.parse(localStorage.getItem(key)); return v && typeof v === "object" && !Array.isArray(v) ? v : fallback; } catch (e) { return fallback; } }
+// Built-in categories. t: "e" = expense, "i" = income. People add their own in the budget view.
+const MCATS = [
+  { id: "food", t: "e", name: "อาหาร", icon: "🍜" }, { id: "grocery", t: "e", name: "ของสด", icon: "🛒" },
+  { id: "travel", t: "e", name: "เดินทาง", icon: "🚌" }, { id: "home", t: "e", name: "ของใช้", icon: "🧴" },
+  { id: "bill", t: "e", name: "บิล", icon: "💡" }, { id: "rent", t: "e", name: "ที่พัก", icon: "🏠" },
+  { id: "health", t: "e", name: "สุขภาพ", icon: "💊" }, { id: "fun", t: "e", name: "บันเทิง", icon: "🎬" },
+  { id: "shop", t: "e", name: "ช้อปปิ้ง", icon: "👕" }, { id: "other", t: "e", name: "อื่น ๆ", icon: "📦" },
+  { id: "salary", t: "i", name: "เงินเดือน", icon: "💼" }, { id: "extra", t: "i", name: "รายได้เสริม", icon: "💰" },
+  { id: "gift", t: "i", name: "ได้คืน อื่น ๆ", icon: "🎁" }
+];
+const EMOJIS = ["☕", "🍺", "🐶", "👶", "🎓", "💇", "🎁", "✈️", "⛽", "📱", "🏋️", "🧾"];
+const BACKSPACE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h10a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 19 18H9l-5.5-6z"/><path d="m12 10 4 4m0-4-4 4"/></svg>`;
+// Amounts are whole satang (1/100 baht), so sums never pick up rounding errors
+const MONEY_BLANK = () => ({ tx: [], budget: 0, catBudget: {}, rec: [], recDone: {}, cats: [], lastCat: { e: "food", i: "salary" } });
+const money = Object.assign(MONEY_BLANK(), loadObj("life-money-v1", {}));
+function saveMoney() { try { localStorage.setItem("life-money-v1", JSON.stringify(money)); } catch (e) { toast("บันทึกไม่สำเร็จ พื้นที่เก็บข้อมูลของเบราว์เซอร์อาจเต็ม"); } }
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const allCats = () => [...MCATS, ...money.cats];
+const catOf = id => allCats().find(c => c.id === id) || MCATS.find(c => c.id === "other");
+const baht = (satang, sign = "") => sign + "฿" + (satang / 100).toLocaleString("en-US", { minimumFractionDigits: satang % 100 ? 2 : 0, maximumFractionDigits: 2 });
+const parseBaht = s => Math.max(0, Math.round(parseFloat(String(s).replace(/,/g, "")) * 100) || 0);
+const sum = list => list.reduce((n, x) => n + x.a, 0);
+const pad2 = n => String(n).padStart(2, "0");
+const ymd = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const today = () => ymd(new Date());
+const monthKey = s => s.slice(0, 7);
+const parseYmd = s => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+function addDays(d, n) { const x = new Date(d); x.setDate(x.getDate() + n); return x; }
+function shiftMonth(k, n) { const [y, m] = k.split("-").map(Number); const d = new Date(y, m - 1 + n, 1); return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}`; }
+const daysIn = k => { const [y, m] = k.split("-").map(Number); return new Date(y, m, 0).getDate(); };
+const weekStart = () => { const d = new Date(); return ymd(addDays(d, -((d.getDay() + 6) % 7))); }; // weeks start on Monday
+const monthLabel = k => parseYmd(k + "-01").toLocaleDateString("th-TH", { month: "long", year: "numeric" });
+const dayLabel = s => s === today() ? "วันนี้" : s === ymd(addDays(new Date(), -1)) ? "เมื่อวาน" : parseYmd(s).toLocaleDateString("th-TH", { weekday: "short", day: "numeric", month: "short" });
+const txIn = (k, t = "e") => money.tx.filter(x => x.t === t && x.d.startsWith(k));
+const onSite = () => !!document.querySelector('link[rel="manifest"]');
+
+// Monthly items (rent, subscriptions, salary) are written into the list once their day has come
+function postRecurring() {
+  const cur = monthKey(today()), td = new Date().getDate(); let added = 0;
+  money.rec.forEach(r => {
+    for (let k = r.since || cur, guard = 0; k <= cur && guard < 12; k = shiftMonth(k, 1), guard++) {
+      const key = r.id + "|" + k; if (money.recDone[key]) continue;
+      const day = Math.min(r.day, daysIn(k)); if (k === cur && td < day) continue;
+      money.tx.push({ id: newId(), ts: Date.now(), t: r.t, a: r.a, c: r.c, n: r.name, d: `${k}-${pad2(day)}`, r: r.id });
+      money.recDone[key] = 1; added++;
+    }
+  });
+  if (added) saveMoney();
+  return added;
+}
+// The same expense written at least twice in the last 60 days becomes a one-tap shortcut
+function frequent() {
+  const cut = ymd(addDays(new Date(), -60)), seen = new Map();
+  money.tx.filter(x => x.t === "e" && x.d >= cut && !x.r).forEach(x => { const key = x.c + "|" + (x.n || "") + "|" + x.a; const e = seen.get(key) || { n: 0, x }; e.n++; seen.set(key, e); });
+  return [...seen.values()].filter(e => e.n >= 2).sort((a, b) => b.n - a.n).slice(0, 4).map(e => e.x);
+}
+function renderMoney() { const fn = { money: renderMoneyHome, ledger: renderLedger, stats: renderStats, budget: renderBudget }[view]; if (fn) fn(); }
+function moneyChanged() { saveMoney(); renderMoney(); if (view === "home") renderHome(); }
+
+function meterHTML(spent, budget) {
+  const pct = budget ? spent / budget * 100 : 0, cls = pct > 100 ? "over" : pct >= 80 ? "warn" : "ok";
+  return `<div class="meter ${cls}" role="img" aria-label="ใช้ไป ${Math.round(pct)}% ของงบ"><i style="width:${Math.min(100, pct).toFixed(1)}%"></i></div>`;
+}
+function txRow(x, withDate) {
+  const c = catOf(x.c), inc = x.t === "i";
+  return `<li><button type="button" class="txrow" data-tx="${x.id}">
+    <span class="thumb sm ${inc ? "t3" : "t1"}" aria-hidden="true">${c.icon}</span>
+    <span class="txt"><b>${esc(x.n || c.name)}</b><small>${esc(c.name)}${withDate ? " · " + dayLabel(x.d) : ""}${x.r ? " · รายการประจำ" : ""}</small></span>
+    <em class="${inc ? "inc" : ""}">${inc ? "+" : "−"}${baht(x.a)}</em></button></li>`;
+}
+function txListHTML(list) {
+  const days = new Map();
+  [...list].sort((a, b) => b.d.localeCompare(a.d) || b.ts - a.ts).forEach(x => { if (!days.has(x.d)) days.set(x.d, []); days.get(x.d).push(x); });
+  return [...days].map(([d, items]) => {
+    const out = sum(items.filter(x => x.t === "e"));
+    return `<h4 class="dayhead"><span>${dayLabel(d)}</span><small>${out ? baht(out) : ""}</small></h4><ul class="txlist">${items.map(x => txRow(x)).join("")}</ul>`;
+  }).join("");
+}
+
+function renderMoneyHome() {
+  const t = today(), k = monthKey(t), exp = txIn(k), spent = sum(exp), income = sum(txIn(k, "i"));
+  const dayS = sum(exp.filter(x => x.d === t)), ws = weekStart(), weekS = sum(money.tx.filter(x => x.t === "e" && x.d >= ws && x.d <= t));
+  const left = money.budget - spent, daysLeft = daysIn(k) - new Date().getDate() + 1, freq = frequent();
+  const recent = [...money.tx].sort((a, b) => b.d.localeCompare(a.d) || b.ts - a.ts).slice(0, 6);
+  $("moneyBody").innerHTML = `
+    <div>
+      <div class="hero-num"><span>ใช้ไปเดือนนี้ · ${monthLabel(k)}</span><b>${baht(spent)}</b></div>
+      ${money.budget ? meterHTML(spent, money.budget) + `<p class="meter-note">${left >= 0
+          ? `เหลือ <b>${baht(left)}</b> จากงบ ${baht(money.budget)} · ใช้ได้อีกวันละ <b>${baht(Math.floor(left / daysLeft / 100) * 100)}</b>`
+          : `เกินงบแล้ว <b>${baht(-left)}</b> จากงบ ${baht(money.budget)}`}</p>`
+        : `<button type="button" class="link" data-act="go-budget">ตั้งงบรายเดือน เพื่อดูว่าเหลือใช้อีกเท่าไร</button>`}
+    </div>
+    <div class="tiles">
+      <div class="tile"><span>วันนี้</span><b>${baht(dayS)}</b></div>
+      <div class="tile"><span>สัปดาห์นี้</span><b>${baht(weekS)}</b></div>
+      <div class="tile"><span>รายรับเดือนนี้</span><b>${baht(income)}</b></div>
+    </div>
+    ${freq.length ? `<div class="card"><h3>จดด่วน <small>แตะครั้งเดียวจากรายการที่ใช้บ่อย</small></h3><div class="row">${freq.map((x, i) =>
+      `<button type="button" class="chip" data-quick="${i}"><span aria-hidden="true">${catOf(x.c).icon}</span>${esc(x.n || catOf(x.c).name)} ${baht(x.a)}</button>`).join("")}</div></div>` : ""}
+    ${money.tx.length ? `<div class="card"><h3>ล่าสุด <button type="button" class="link" data-act="go-ledger" style="padding:0">ดูทั้งหมด</button></h3><div>${txListHTML(recent)}</div></div>`
+      : `<div class="empty"><span class="big-emoji" aria-hidden="true">🧾</span><p>ยังไม่มีรายการ แตะ “จดรายจ่าย” ใส่จำนวนเงิน เลือกหมวด แล้วบันทึก ใช้เวลาไม่กี่วินาที</p><button type="button" class="btn primary" data-act="m-add">จดรายจ่ายแรก</button></div>`}`;
+}
+
+let mMonth = monthKey(today());
+const lf = { t: "all", c: "" };
+function monthBar() {
+  return `<div class="monthbar"><button type="button" class="fav" data-mmonth="-1" aria-label="เดือนก่อนหน้า">${ICON.back}</button><b>${monthLabel(mMonth)}</b>
+    <button type="button" class="fav flip" data-mmonth="1" aria-label="เดือนถัดไป" ${mMonth >= monthKey(today()) ? "disabled" : ""}>${ICON.back}</button></div>`;
+}
+function renderLedger() {
+  const old = $("ledgerHead").querySelector(".scrollrow"), left = old ? old.scrollLeft : 0;
+  const cats = allCats().filter(c => lf.t === "all" || c.t === lf.t);
+  $("ledgerHead").innerHTML = monthBar() + `
+    <div class="row" role="group" aria-label="ประเภท">${[["all", "ทั้งหมด"], ["e", "รายจ่าย"], ["i", "รายรับ"]].map(([v, l]) =>
+      `<button type="button" class="chip" data-lt="${v}" aria-pressed="${lf.t === v}">${l}</button>`).join("")}</div>
+    <div class="scrollrow" role="group" aria-label="หมวด" style="margin-top:8px"><button type="button" class="chip" data-lcat="" aria-pressed="${!lf.c}">ทุกหมวด</button>${cats.map(c =>
+      `<button type="button" class="chip" data-lcat="${c.id}" aria-pressed="${lf.c === c.id}"><span aria-hidden="true">${c.icon}</span>${esc(c.name)}</button>`).join("")}</div>`;
+  $("ledgerHead").querySelector(".scrollrow").scrollLeft = left;
+  renderLedgerBody();
+}
+function renderLedgerBody() {
+  const q = $("lq").value.trim().toLowerCase();
+  const list = money.tx.filter(x => x.d.startsWith(mMonth) && (lf.t === "all" || x.t === lf.t) && (!lf.c || x.c === lf.c) &&
+    (!q || (x.n || "").toLowerCase().includes(q) || catOf(x.c).name.toLowerCase().includes(q)));
+  const out = sum(list.filter(x => x.t === "e")), inc = sum(list.filter(x => x.t === "i"));
+  $("ledgerBody").innerHTML = list.length
+    ? `<p class="totals">${list.length} รายการ · รายจ่าย ${baht(out)}${inc ? ` · รายรับ ${baht(inc)}` : ""}</p><div class="card"><div>${txListHTML(list)}</div></div>`
+    : `<div class="empty" style="margin-top:12px"><p>${money.tx.length ? "ไม่มีรายการที่ตรงกับตัวกรองในเดือนนี้" : "ยังไม่มีรายการ"}</p><button type="button" class="btn primary" data-act="m-add">จดรายจ่าย</button></div>`;
+}
+
+// Daily spending as thin columns from one baseline, one hue; today (or the tapped day) is the stronger step
+let dayData = null;
+function dailyChart(k, exp) {
+  const n = daysIn(k), per = Array(n).fill(0); exp.forEach(x => { per[+x.d.slice(8) - 1] += x.a; });
+  const max = Math.max(...per, 1), H = 96, W = n * 10, isCur = k === monthKey(today()), td = new Date().getDate();
+  const avg = sum(exp) / (isCur ? td : n), avgY = H - avg / max * H, peak = per.indexOf(Math.max(...per));
+  dayData = { k, per, base: `สูงสุดวันที่ <b>${peak + 1}</b> ที่ ${baht(per[peak])} · เฉลี่ยวันละ <b>${baht(Math.round(avg / 100) * 100)}</b>` };
+  const cols = per.map((v, i) => {
+    const h = v ? Math.max(3, v / max * H) : 0, x = i * 10 + 1, y = H - h, r = Math.min(3, h);
+    return (h ? `<path class="col${isCur && i + 1 === td ? " now" : ""}" data-col="${i + 1}" d="M${x},${H}V${y + r}Q${x},${y} ${x + r},${y}H${x + 8 - r}Q${x + 8},${y} ${x + 8},${y + r}V${H}Z"/>` : "") +
+      `<rect class="hit" data-day="${i + 1}" x="${i * 10}" y="0" width="10" height="${H}"/>`;
+  }).join("");
+  return `<div class="cols"><svg viewBox="0 0 ${W} ${H + 1}" role="img" aria-label="รายจ่ายรายวันของ${monthLabel(k)}">
+      <line class="avg" x1="0" x2="${W}" y1="${avgY.toFixed(1)}" y2="${avgY.toFixed(1)}"/>${cols}<line class="grid" x1="0" x2="${W}" y1="${H + .5}" y2="${H + .5}"/></svg>
+    <div class="xaxis"><span>1</span><span>${Math.ceil(n / 2)}</span><span>${n}</span></div>
+    <p class="cap" id="dayCap">${dayData.base}</p></div>`;
+}
+function pickDay(day) {
+  if (!dayData || !$("dayCap")) return;
+  document.querySelectorAll(".cols .col").forEach(c => c.classList.toggle("pick", +c.dataset.col === day));
+  const v = dayData.per[day - 1];
+  $("dayCap").innerHTML = `${dayLabel(`${dayData.k}-${pad2(day)}`)} · <b>${v ? baht(v) : "ไม่มีรายจ่าย"}</b>`;
+}
+function renderStats() {
+  const k = mMonth, exp = txIn(k), spent = sum(exp), income = sum(txIn(k, "i")), prev = sum(txIn(shiftMonth(k, -1)));
+  const diff = spent - prev, net = income - spent;
+  const byCat = new Map(); exp.forEach(x => { const e = byCat.get(x.c) || { a: 0, n: 0 }; e.a += x.a; e.n++; byCat.set(x.c, e); });
+  const cats = [...byCat].sort((a, b) => b[1].a - a[1].a), top = cats.length ? cats[0][1].a : 1;
+  const months = Array.from({ length: 6 }, (_, i) => shiftMonth(k, i - 5)).map(m => [m, sum(txIn(m))]), mMax = Math.max(...months.map(m => m[1]), 1);
+  const big = [...exp].sort((a, b) => b.a - a.a).slice(0, 5);
+  $("statsBody").innerHTML = monthBar() + `
+    <div class="hero-num"><span>รายจ่ายทั้งเดือน</span><b>${baht(spent)}</b></div>
+    <div class="tiles">
+      <div class="tile"><span>รายรับ</span><b>${baht(income)}</b></div>
+      <div class="tile"><span>คงเหลือ</span><b>${baht(Math.abs(net), net < 0 ? "−" : "")}</b></div>
+      <div class="tile"><span>เทียบเดือนก่อน</span><b>${prev ? baht(Math.abs(diff), diff > 0 ? "+" : diff < 0 ? "−" : "") : "ไม่มีข้อมูล"}</b>${prev && diff ? `<small class="${diff > 0 ? "up" : "down"}">${diff > 0 ? "▲ ใช้มากขึ้น" : "▼ ใช้น้อยลง"}</small>` : ""}</div>
+    </div>
+    ${exp.length ? `
+    <div class="card"><h3>แยกตามหมวด <small>แตะเพื่อดูรายการ</small></h3><ul class="catbars">${cats.map(([id, e]) => { const c = catOf(id), cb = money.catBudget[id];
+      return `<li><button type="button" class="catrow" data-statcat="${id}"><span class="thumb sm t1" aria-hidden="true">${c.icon}</span><span class="cr-main">
+        <span class="cr-top"><b>${esc(c.name)}</b><em>${baht(e.a)}</em></span><span class="hbar now"><i style="width:${(e.a / top * 100).toFixed(1)}%"></i></span>
+        <small>${Math.round(e.a / spent * 100)}% ของรายจ่าย · ${e.n} รายการ${cb ? ` · งบหมวด ${baht(cb)}` : ""}</small></span></button></li>`; }).join("")}</ul></div>
+    <div class="card"><h3>รายจ่ายรายวัน <small>แตะแท่งเพื่อดูยอด</small></h3>${dailyChart(k, exp)}</div>
+    <div class="card"><h3>รายจ่ายก้อนใหญ่</h3><ul class="txlist">${big.map(x => txRow(x, true)).join("")}</ul></div>`
+    : `<div class="empty"><p>เดือนนี้ยังไม่มีรายจ่าย</p></div>`}
+    <div class="card"><h3>6 เดือนล่าสุด</h3><div class="trend">${months.map(([m, v]) =>
+      `<span>${parseYmd(m + "-01").toLocaleDateString("th-TH", { month: "short" })}</span><span class="hbar${m === k ? " now" : ""}"><i style="width:${(v / mMax * 100).toFixed(1)}%${v ? "" : ";min-width:0"}"></i></span><em>${baht(v)}</em>`).join("")}</div></div>`;
+}
+
+let newCatIcon = EMOJIS[0], wipeArmed = false;
+const bstat = (s, b) => b ? (s > b ? `เกินงบ ${baht(s - b)}` : `ใช้ไป ${baht(s)} จาก ${baht(b)}`) : (s ? `เดือนนี้ใช้ไป ${baht(s)}` : "ยังไม่มีรายจ่ายเดือนนี้");
+function budgetMeter(spent) {
+  return money.budget ? meterHTML(spent, money.budget) + `<p class="meter-note">เดือนนี้ใช้ไป ${baht(spent)} จากงบ ${baht(money.budget)}</p>`
+    : `<p class="hint">ใส่งบแล้วหน้าภาพรวมจะบอกว่าเหลือใช้ได้อีกวันละเท่าไร</p>`;
+}
+function renderBudget() {
+  const exp = txIn(monthKey(today())), spent = sum(exp), by = id => sum(exp.filter(x => x.c === id));
+  wipeArmed = false;
+  $("budgetBody").innerHTML = `
+    <div class="card"><h3>งบรายเดือน</h3>
+      <label class="frow" for="bTotal"><span>งบรวมต่อเดือน (บาท)</span><input class="field sm" id="bTotal" type="text" inputmode="decimal" autocomplete="off" placeholder="0" value="${money.budget ? money.budget / 100 : ""}"></label>
+      <div id="bMeter">${budgetMeter(spent)}</div></div>
+    <div class="card"><h3>งบตามหมวด <small>ไม่ใส่ก็ได้</small></h3><div>${allCats().filter(c => c.t === "e").map(c => { const s = by(c.id), b = money.catBudget[c.id] || 0;
+      return `<div class="brow"><span class="thumb sm t1" aria-hidden="true">${c.icon}</span><span class="txt"><b>${esc(c.name)}</b><small class="${b && s > b ? "over" : ""}" data-bstat="${c.id}">${bstat(s, b)}</small></span>
+        <input class="field sm" type="text" inputmode="decimal" autocomplete="off" placeholder="ไม่ตั้ง" aria-label="งบหมวด${esc(c.name)}" id="bc-${c.id}" data-bcat="${c.id}" value="${b ? b / 100 : ""}"></div>`; }).join("")}</div></div>
+    <div class="card"><h3>รายการประจำ <small>แอปจดให้เองทุกเดือน</small></h3>
+      ${money.rec.length ? `<div>${money.rec.map(r => `<div class="brow"><span class="thumb sm ${r.t === "i" ? "t3" : "t1"}" aria-hidden="true">${catOf(r.c).icon}</span><span class="txt"><b>${esc(r.name)}</b><small>ทุกวันที่ ${r.day} · ${r.t === "i" ? "รายรับ" : "รายจ่าย"} ${baht(r.a)}</small></span>
+        <button type="button" class="fav" data-delrec="${r.id}" aria-label="ลบรายการประจำ ${esc(r.name)}">${ICON.close}</button></div>`).join("")}</div>`
+        : `<p class="hint">เช่น ค่าเช่า ค่าเน็ต ค่าสมาชิก หรือเงินเดือน ตั้งครั้งเดียว แอปจะจดให้เมื่อถึงวัน</p>`}
+      <button type="button" class="btn" data-act="rec-add">${ICON.plus}เพิ่มรายการประจำ</button></div>
+    <div class="card"><h3>หมวดของฉัน <small>เพิ่มหมวดรายจ่ายเอง</small></h3>
+      ${money.cats.length ? `<div>${money.cats.map(c => `<div class="brow"><span class="thumb sm t1" aria-hidden="true">${c.icon}</span><span class="txt"><b>${esc(c.name)}</b></span>
+        <button type="button" class="fav" data-delcat="${c.id}" aria-label="ลบหมวด ${esc(c.name)}">${ICON.close}</button></div>`).join("")}</div>` : ""}
+      <div class="emojis" role="group" aria-label="ไอคอนของหมวดใหม่">${EMOJIS.map(e => `<button type="button" data-emoji="${e}" aria-pressed="${e === newCatIcon}">${e}</button>`).join("")}</div>
+      <div class="rowbtns"><input class="field" id="newCat" type="text" maxlength="14" autocomplete="off" placeholder="ชื่อหมวดใหม่ เช่น กาแฟ" aria-label="ชื่อหมวดใหม่" style="flex:2 1 160px"><button type="button" class="btn" data-act="cat-add">เพิ่มหมวด</button></div></div>
+    <div class="card"><h3>ข้อมูล <small>${money.tx.length} รายการ</small></h3>
+      <p class="hint">ข้อมูลเก็บอยู่ในเครื่องนี้เท่านั้น ถ้าล้างข้อมูลเบราว์เซอร์หรือเปลี่ยนเครื่อง ข้อมูลจะหาย ควรสำรองไว้เป็นระยะ</p>
+      <div id="dataBox"></div>
+      <div class="rowbtns"><button type="button" class="btn" data-act="m-backup">สำรองข้อมูล</button><button type="button" class="btn" data-act="m-restore">กู้คืนจากไฟล์</button><button type="button" class="btn" data-act="m-csv">ส่งออกเป็นตาราง</button></div>
+      <button type="button" class="link" data-act="m-wipe" id="wipeBtn" style="color:var(--chili);align-self:flex-start">ลบข้อมูลรายจ่ายทั้งหมด</button></div>`;
+}
+function addCat() {
+  const name = ($("newCat").value || "").trim();
+  if (!name) { sfx("warn"); toast("ตั้งชื่อหมวดก่อน"); $("newCat").focus(); return; }
+  if (allCats().some(c => c.name === name)) { sfx("warn"); toast("มีหมวดชื่อนี้อยู่แล้ว"); return; }
+  money.cats.push({ id: "c" + newId(), t: "e", name, icon: newCatIcon }); moneyChanged(); toast(`เพิ่มหมวด ${name} แล้ว`);
+}
+// On the standalone site a file download works. Inside a sandboxed viewer it does not, so the text is copied instead.
+function giveText(name, text, type) {
+  if (onSite()) {
+    try {
+      const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name;
+      document.body.appendChild(a); a.click(); a.remove(); toast(`บันทึกไฟล์ ${name} แล้ว`); return;
+    } catch (e) {}
+  }
+  const fallback = () => {
+    $("dataBox").innerHTML = `<textarea class="copybox" id="dataText" readonly rows="5" aria-label="ข้อมูลแบบข้อความ"></textarea>`;
+    const t = $("dataText"); t.value = text; t.focus(); t.select(); toast("เลือกข้อความไว้ให้แล้ว กดคัดลอกแล้วเก็บไว้ได้เลย");
+  };
+  try { navigator.clipboard.writeText(text).then(() => toast("คัดลอกข้อมูลแล้ว วางเก็บไว้ในโน้ตได้เลย"), fallback); } catch (e) { fallback(); }
+}
+function csvMoney() {
+  const q = s => `"${String(s).replace(/"/g, '""')}"`;
+  const rows = [...money.tx].sort((a, b) => a.d.localeCompare(b.d) || a.ts - b.ts).map(x => [x.d, x.t === "i" ? "รายรับ" : "รายจ่าย", q(catOf(x.c).name), q(x.n || ""), (x.a / 100).toFixed(2)].join(","));
+  giveText(`chiwit-ngai-${today()}.csv`, "﻿วันที่,ประเภท,หมวด,โน้ต,จำนวนเงิน\n" + rows.join("\n"), "text/csv;charset=utf-8");
+}
+function swapMoney(next, msg) { // replace all money data, with a way back
+  const before = JSON.stringify(money);
+  Object.keys(money).forEach(k => delete money[k]); Object.assign(money, MONEY_BLANK(), next); moneyChanged();
+  toast(msg, { label: "เลิกทำ", fn: () => { Object.keys(money).forEach(k => delete money[k]); Object.assign(money, MONEY_BLANK(), JSON.parse(before)); moneyChanged(); toast("นำข้อมูลเดิมกลับมาแล้ว"); } });
+}
+function restoreMoney(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const o = JSON.parse(reader.result);
+      if (!o || !Array.isArray(o.tx) || o.tx.some(x => !x || typeof x.a !== "number" || typeof x.d !== "string")) throw new Error("shape");
+      sfx("on"); swapMoney(o, `กู้คืนแล้ว ${o.tx.length} รายการ`);
+    } catch (e) { sfx("warn"); toast("ไฟล์นี้ไม่ใช่ไฟล์สำรองของแอปนี้"); }
+  };
+  reader.readAsText(file);
+}
+function wipeMoney() {
+  if (!wipeArmed) { wipeArmed = true; $("wipeBtn").textContent = "แตะอีกครั้งเพื่อยืนยันการลบทั้งหมด"; sfx("warn"); return; }
+  sfx("off"); swapMoney({}, "ลบข้อมูลรายจ่ายทั้งหมดแล้ว");
+}
+
+/* The quick-entry sheet: amount on a keypad, one tap for the category, save */
+let mform = null;
+function openMoneyForm(preset = {}) {
+  mform = { id: null, rec: false, t: "e", amt: "", c: "", n: "", d: today(), day: Math.min(28, new Date().getDate()), ...preset };
+  if (!mform.c) mform.c = money.lastCat[mform.t] || (mform.t === "e" ? "food" : "salary");
+  renderMoneyForm();
+  if (!mdlg.open) mdlg.showModal();
+}
+function editTx(id) { const x = money.tx.find(t => t.id === id); if (x) openMoneyForm({ id, t: x.t, amt: String(x.a / 100), c: x.c, n: x.n || "", d: x.d }); }
+function renderMoneyForm() {
+  const f = mform;
+  mdlg.innerHTML = `
+    <div class="sheet-top"><span class="ttl" id="m-title">${f.rec ? "เพิ่มรายการประจำ" : f.id ? "แก้ไขรายการ" : "จดรายการ"}</span><button type="button" class="fav" data-act="m-close" aria-label="ปิด">${ICON.close}</button></div>
+    <div class="sheet-scroll"><div class="sheet-body mform">
+      <div class="seg" role="group" aria-label="ประเภท"><button type="button" data-mtype="e">รายจ่าย</button><button type="button" data-mtype="i">รายรับ</button></div>
+      <div class="amount" id="mAmtBox" aria-live="polite"><span>฿</span><b id="mAmt">0</b></div>
+      <div class="mcats" id="mCats" role="group" aria-label="หมวด"></div>
+      <input class="field" id="mNote" type="text" maxlength="60" autocomplete="off" placeholder="${f.rec ? "ชื่อรายการ เช่น ค่าเช่า ค่าเน็ต" : "โน้ต เช่น ข้าวกลางวัน (ไม่ใส่ก็ได้)"}" aria-label="${f.rec ? "ชื่อรายการ" : "โน้ต"}" value="${esc(f.n)}">
+      ${f.rec ? `<label class="frow" for="mDay"><span>จดให้ทุกวันที่</span><select class="field sm" id="mDay">${Array.from({ length: 31 }, (_, i) => `<option value="${i + 1}"${i + 1 === f.day ? " selected" : ""}>${i + 1}</option>`).join("")}</select></label>`
+        : `<div class="row" id="mDates" role="group" aria-label="วันที่"><button type="button" class="chip" data-mdate="0">วันนี้</button><button type="button" class="chip" data-mdate="-1">เมื่อวาน</button>
+            <input class="field datefield" id="mDate" type="date" aria-label="เลือกวันที่" max="${today()}" value="${f.d}"></div>`}
+      ${f.id ? `<button type="button" class="link" data-act="m-delete" style="color:var(--chili);align-self:flex-start">ลบรายการนี้</button>` : ""}
+    </div></div>
+    <div class="keypad" role="group" aria-label="แป้นตัวเลข">${["1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "0", "back"].map(k =>
+      `<button type="button" class="key" data-key="${k}"${k === "back" ? ` aria-label="ลบตัวเลข"` : ""}>${k === "back" ? BACKSPACE : k}</button>`).join("")}</div>
+    <div class="sheet-foot">${f.id || f.rec ? "" : `<button type="button" class="btn" data-act="m-save-more">บันทึก แล้วจดต่อ</button>`}<button type="button" class="btn primary" data-act="m-save">บันทึก</button></div>`;
+  syncMoneyForm();
+}
+function syncAmt() {
+  const [whole, frac] = mform.amt.split(".");
+  $("mAmt").textContent = mform.amt ? Number(whole || 0).toLocaleString("en-US") + (frac !== undefined ? "." + frac : "") : "0";
+  $("mAmtBox").classList.toggle("zero", !mform.amt);
+}
+function syncMoneyForm() {
+  const f = mform;
+  mdlg.querySelectorAll("[data-mtype]").forEach(b => b.setAttribute("aria-pressed", b.dataset.mtype === f.t));
+  $("mCats").innerHTML = allCats().filter(c => c.t === f.t).map(c =>
+    `<button type="button" class="mcat" data-mcat="${c.id}" aria-pressed="${c.id === f.c}"><span aria-hidden="true">${c.icon}</span><i>${esc(c.name)}</i></button>`).join("");
+  syncAmt();
+  if ($("mDates")) {
+    mdlg.querySelector('[data-mdate="0"]').setAttribute("aria-pressed", f.d === today());
+    mdlg.querySelector('[data-mdate="-1"]').setAttribute("aria-pressed", f.d === ymd(addDays(new Date(), -1)));
+    $("mDate").value = f.d;
+  }
+}
+function keyAmt(k) {
+  let s = mform.amt;
+  if (k === "back") s = s.slice(0, -1);
+  else if (k === ".") { if (!s.includes(".")) s = (s || "0") + "."; }
+  else {
+    if (s === "0") s = "";
+    const [whole, frac] = s.split(".");
+    if (frac !== undefined ? frac.length >= 2 : whole.length >= 8) { sfx("warn"); return; }
+    s += k;
+  }
+  mform.amt = s; syncAmt();
+}
+function saveMoneyForm(more) {
+  const f = mform, a = Math.round(parseFloat(f.amt || "0") * 100);
+  f.n = ($("mNote").value || "").trim();
+  if (!a) { sfx("warn"); toast("ใส่จำนวนเงินก่อน"); return; }
+  if (f.rec && !f.n) { sfx("warn"); toast("ตั้งชื่อรายการประจำก่อน"); $("mNote").focus(); return; }
+  if (f.rec) { money.rec.push({ id: newId(), t: f.t, a, c: f.c, name: f.n, day: +$("mDay").value, since: monthKey(today()) }); postRecurring(); }
+  else if (f.id) { const x = money.tx.find(t => t.id === f.id); if (x) Object.assign(x, { t: f.t, a, c: f.c, n: f.n, d: f.d }); }
+  else money.tx.push({ id: newId(), ts: Date.now(), t: f.t, a, c: f.c, n: f.n, d: f.d });
+  money.lastCat[f.t] = f.c;
+  moneyChanged(); sfx("on");
+  if (more) { mform = { ...f, id: null, amt: "", n: "" }; renderMoneyForm(); } else mdlg.close();
+  toast(f.rec ? `ตั้งรายการประจำ ${f.n} แล้ว` : `บันทึกแล้ว ${baht(a)} · ${catOf(f.c).name}`);
+}
+function deleteTx(id) {
+  const i = money.tx.findIndex(t => t.id === id); if (i < 0) return;
+  const [x] = money.tx.splice(i, 1);
+  if (mdlg.open) mdlg.close();
+  moneyChanged();
+  toast("ลบรายการแล้ว", { label: "เลิกทำ", fn: () => { money.tx.push(x); moneyChanged(); toast("นำรายการกลับมาแล้ว"); } });
+}
+function quickAdd(i) {
+  const src = frequent()[i]; if (!src) return;
+  const x = { id: newId(), ts: Date.now(), t: "e", a: src.a, c: src.c, n: src.n || "", d: today() };
+  money.tx.push(x); moneyChanged();
+  toast(`จดแล้ว ${baht(x.a)} · ${x.n || catOf(x.c).name}`, { label: "เลิกทำ", fn: () => { money.tx = money.tx.filter(t => t.id !== x.id); moneyChanged(); } });
+}
+mdlg.addEventListener("keydown", ev => {
+  if (!mform || ev.target.matches("input, select, textarea")) return;
+  if (/^[0-9.]$/.test(ev.key)) { keyAmt(ev.key); ev.preventDefault(); }
+  else if (ev.key === "Backspace") { keyAmt("back"); ev.preventDefault(); }
+  else if (ev.key === "Enter" && !ev.target.closest("button")) { saveMoneyForm(false); ev.preventDefault(); }
+});
+document.addEventListener("input", ev => {
+  if (ev.target.id === "lq") renderLedgerBody();
+  if (ev.target.id === "mNote" && mform) mform.n = ev.target.value;
+});
+document.addEventListener("mouseover", ev => { const el = ev.target.closest && ev.target.closest("[data-day]"); if (el) pickDay(+el.dataset.day); });
+postRecurring();
+
 /* ---------- One place for every tap ---------- */
 function refresh() {
   renderMealBadge();
@@ -1851,7 +2352,7 @@ function refresh() {
   if (dlg.open && mode === "sheet") keepScroll(renderSheet);
 }
 function refocus(sel) {
-  const root = fdlg.open ? fdlg : dlg.open ? dlg : $("view-" + view);
+  const root = mdlg.open ? mdlg : fdlg.open ? fdlg : dlg.open ? dlg : $("view-" + view);
   const b = root.querySelector(sel); if (b) b.focus({ preventScroll: true });
 }
 const ACTIONS = {
@@ -1862,6 +2363,20 @@ const ACTIONS = {
   "go-kitchen": () => { setOnboarded(); go("kitchen"); },
   "go-menu": () => go("menu"),
   "go-meal": () => go("meal"),
+  "go-money": () => go("money"), "go-ledger": () => go("ledger"), "go-stats": () => go("stats"), "go-budget": () => go("budget"),
+  "m-add": () => openMoneyForm(),
+  "m-close": () => mdlg.close(),
+  "m-save": () => saveMoneyForm(false),
+  "m-save-more": () => saveMoneyForm(true),
+  "m-delete": () => deleteTx(mform.id),
+  "rec-add": () => openMoneyForm({ rec: true }),
+  "cat-add": () => addCat(),
+  "m-backup": () => giveText(`chiwit-ngai-${today()}.json`, JSON.stringify(money), "application/json"),
+  "m-csv": () => csvMoney(),
+  "m-restore": () => $("restoreFile").click(),
+  "m-wipe": () => wipeMoney(),
+  "shop-pay": () => openMoneyForm({ c: "grocery", n: ("ซื้อของ: " + mealItems().map(r => r.name).join(", ")).slice(0, 60) }),
+  "toast-act": () => { const fn = toast.fn; toast.fn = null; const t = $("toast"); if (t) t.hidden = true; if (fn) fn(); },
   "install": () => { if (!installEvt) return; installEvt.prompt(); installEvt = null; renderHome(); },
   "hide-install": () => { installHidden = true; store("life-install-hide-v1", [true]); renderHome(); },
   "dismiss": () => setOnboarded(),
@@ -1893,6 +2408,24 @@ document.addEventListener("click", ev => {
   clickSound(t);
   if (t === dlg) { dlg.close(); return; }
   if (t === fdlg) { fdlg.close(); return; }
+  if (t === mdlg) { mdlg.close(); return; }
+  if ((el = t.closest("[data-key]"))) { keyAmt(el.dataset.key); return; }
+  if ((el = t.closest("[data-mtype]"))) { mform.t = el.dataset.mtype; mform.c = money.lastCat[mform.t] || (mform.t === "e" ? "food" : "salary"); syncMoneyForm(); return; }
+  if ((el = t.closest("[data-mcat]"))) { mform.c = el.dataset.mcat; syncMoneyForm(); refocus(`[data-mcat="${mform.c}"]`); return; }
+  if ((el = t.closest("[data-mdate]"))) { mform.d = ymd(addDays(new Date(), +el.dataset.mdate)); syncMoneyForm(); return; }
+  if ((el = t.closest("[data-tx]"))) { editTx(el.dataset.tx); return; }
+  if ((el = t.closest("[data-quick]"))) { quickAdd(+el.dataset.quick); return; }
+  if ((el = t.closest("[data-mmonth]"))) { mMonth = shiftMonth(mMonth, +el.dataset.mmonth); renderMoney(); refocus(`[data-mmonth="${el.dataset.mmonth}"]`); return; }
+  if ((el = t.closest("[data-lt]"))) { lf.t = el.dataset.lt; lf.c = ""; renderLedger(); refocus(`[data-lt="${lf.t}"]`); return; }
+  if ((el = t.closest("[data-lcat]"))) { lf.c = el.dataset.lcat; renderLedger(); refocus(`[data-lcat="${lf.c}"]`); return; }
+  if ((el = t.closest("[data-statcat]"))) { lf.t = "e"; lf.c = el.dataset.statcat; $("lq").value = ""; go("ledger"); return; }
+  if ((el = t.closest("[data-day]"))) { pickDay(+el.dataset.day); return; }
+  if ((el = t.closest("[data-emoji]"))) { newCatIcon = el.dataset.emoji; document.querySelectorAll("[data-emoji]").forEach(b => b.setAttribute("aria-pressed", b === el)); return; }
+  if ((el = t.closest("[data-delrec]"))) { money.rec = money.rec.filter(r => r.id !== el.dataset.delrec); moneyChanged(); toast("ลบรายการประจำแล้ว รายการที่จดไปแล้วยังอยู่"); return; }
+  if ((el = t.closest("[data-delcat]"))) {
+    const id = el.dataset.delcat; money.cats = money.cats.filter(c => c.id !== id); delete money.catBudget[id];
+    money.tx.forEach(x => { if (x.c === id) x.c = "other"; }); moneyChanged(); toast("ลบหมวดแล้ว รายการในหมวดนี้ย้ายไปอยู่ อื่น ๆ"); return;
+  }
   if ((el = t.closest(".tab"))) { go(el.dataset.view); return; }
   if ((el = t.closest("[data-view-go]"))) { go(el.dataset.viewGo); return; }
   if ((el = t.closest("[data-preset]"))) {
@@ -1931,6 +2464,19 @@ document.addEventListener("click", ev => {
 document.addEventListener("change", ev => {
   const d = ev.target.dataset || {};
   if (d.shop || d.ing !== undefined) sfx("tap");
+  if (ev.target.id === "mDate" && mform) { mform.d = ev.target.value || today(); syncMoneyForm(); }
+  if (ev.target.id === "bTotal") {
+    money.budget = parseBaht(ev.target.value); saveMoney(); sfx("on");
+    $("bMeter").innerHTML = budgetMeter(sum(txIn(monthKey(today()))));
+  }
+  if (d.bcat) {
+    const v = parseBaht(ev.target.value), spent = sum(txIn(monthKey(today())).filter(x => x.c === d.bcat));
+    if (v) money.catBudget[d.bcat] = v; else delete money.catBudget[d.bcat];
+    saveMoney(); sfx("on");
+    const note = document.querySelector(`[data-bstat="${d.bcat}"]`);
+    if (note) { note.textContent = bstat(spent, v); note.classList.toggle("over", !!v && spent > v); }
+  }
+  if (ev.target.id === "restoreFile" && ev.target.files[0]) { restoreMoney(ev.target.files[0]); ev.target.value = ""; }
   if (d.shop) { ev.target.checked ? bought.add(d.shop) : bought.delete(d.shop); store("krua-shop-v1", [...bought]); }
   if (d.ing !== undefined && cur) {
     const ticks = checks[cur.key] || (checks[cur.key] = new Set()), k = +d.ing;
