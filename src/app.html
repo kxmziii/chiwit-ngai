@@ -1,0 +1,1888 @@
+<title>ชีวิตง่าย</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<style>
+/* Layout: three views behind a tab bar (fixed at the bottom on phones, in the header on wide screens); recipes are full-width tappable rows; a recipe opens full-screen with its main action pinned at the bottom */
+:root {
+  --bg: #f2f5f1;
+  --surface: #ffffff;
+  --surface-2: #f7faf6;
+  --ink: #1b2620;
+  --muted: #5a6a61;
+  --line: #d5ded7;
+  --basil: #2c7148;
+  --basil-strong: #1f5a37;
+  --on-basil: #ffffff;
+  --basil-soft: #e0eee4;
+  --chili: #b8402c;
+  --on-chili: #ffffff;
+  --chili-soft: #f9e3dd;
+  --turmeric: #94680a;
+  --turmeric-soft: #f7edd3;
+  --sky-soft: #e1ecf4;
+  --shadow: 0 1px 2px rgba(20, 40, 30, .06), 0 6px 20px rgba(20, 40, 30, .06);
+  --nav-h: 64px;
+  --font-display: "Mitr", "Leelawadee UI", "Tahoma", sans-serif;
+  --font-body: "IBM Plex Sans Thai", "Leelawadee UI", "Tahoma", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111814; --surface: #19221d; --surface-2: #1e2823; --ink: #e5eee8; --muted: #9db0a5; --line: #2b3a32;
+    --basil: #72c494; --basil-strong: #8fd6ab; --on-basil: #0f1a14; --basil-soft: #1d3527;
+    --chili: #f08670; --on-chili: #2a0f0a; --chili-soft: #3b211c; --turmeric: #e6b650; --turmeric-soft: #362c15; --sky-soft: #1b2b38;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111814; --surface: #19221d; --surface-2: #1e2823; --ink: #e5eee8; --muted: #9db0a5; --line: #2b3a32;
+  --basil: #72c494; --basil-strong: #8fd6ab; --on-basil: #0f1a14; --basil-soft: #1d3527;
+  --chili: #f08670; --on-chili: #2a0f0a; --chili-soft: #3b211c; --turmeric: #e6b650; --turmeric-soft: #362c15; --sky-soft: #1b2b38;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 12px calc(var(--nav-h) + 32px);
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--basil); outline-offset: 2px; }
+.wrap, .appbar { max-width: 1120px; margin-inline: auto; }
+
+/* App bar and tabs */
+.appbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 4px; }
+.appbar h1 { font-family: var(--font-display); font-weight: 600; font-size: 24px; margin: 0; line-height: 1.2; color: var(--basil); }
+.tabs { position: fixed; z-index: 30; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; background: var(--surface); border-top: 1px solid var(--line);
+  padding: 6px max(8px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px)); }
+.tab { position: relative; border: none; background: none; cursor: pointer; min-height: 52px; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; font-size: 12.5px; color: var(--muted); }
+.tab svg { width: 24px; height: 24px; }
+.tab[aria-current="page"] { color: var(--basil-strong); background: var(--basil-soft); font-weight: 600; }
+.badge { min-width: 19px; height: 19px; padding: 0 5px; border-radius: 999px; background: var(--chili); color: var(--on-chili); font-family: var(--font-body); font-size: 11.5px; font-weight: 600; line-height: 19px; text-align: center; font-variant-numeric: tabular-nums; }
+.tab .badge { position: absolute; top: 3px; left: calc(50% + 6px); }
+@media (min-width: 900px) {
+  body { padding-block: 20px 56px; }
+  .appbar { margin-bottom: 12px; }
+  .appbar h1 { font-size: 30px; }
+  .tabs { position: static; display: flex; gap: 6px; background: none; border: none; padding: 0; }
+  .tab { flex-direction: row; gap: 8px; min-height: 46px; padding: 0 16px; font-size: 15px; }
+  .tab svg { width: 20px; height: 20px; }
+  .tab .badge { position: static; }
+}
+
+/* Shared controls */
+.btn { min-height: 48px; padding: 0 18px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 15.5px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-align: center; }
+.btn:hover { border-color: var(--basil); }
+.btn svg { width: 18px; height: 18px; flex: none; }
+.btn.primary { background: var(--basil); border-color: var(--basil); color: var(--on-basil); font-weight: 600; }
+.btn.primary:hover { background: var(--basil-strong); }
+.btn.big { min-height: 56px; width: 100%; font-size: 17px; }
+.btn.small { min-height: 42px; padding: 0 14px; font-size: 14.5px; border-radius: 999px; white-space: nowrap; flex: none; }
+.btn[aria-pressed="true"] { background: var(--basil-soft); border-color: var(--basil); color: var(--basil-strong); }
+.rowbtns { display: flex; gap: 10px; flex-wrap: wrap; }
+.rowbtns .btn { flex: 1 1 140px; }
+.link { background: none; border: none; padding: 8px 0; color: var(--basil); cursor: pointer; font-size: 14.5px; text-decoration: underline; text-underline-offset: 3px; }
+.links { display: flex; gap: 18px; }
+.hint { margin: 0; color: var(--muted); font-size: 14px; }
+.warn { margin: 6px 0 0; font-size: 14px; color: var(--chili); }
+.stack { display: flex; flex-direction: column; gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.card h3 { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 18px; line-height: 1.3; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.card h3 small, .block h3 small { font-family: var(--font-body); font-weight: 400; font-size: 13.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.pagehead h2 { font-family: var(--font-display); font-weight: 600; font-size: 24px; margin: 8px 0 2px; line-height: 1.25; }
+.pagehead p { margin: 0 0 14px; color: var(--muted); }
+.pagehead b { color: var(--ink); font-family: var(--font-display); font-weight: 500; font-size: 18px; }
+.empty { padding: 28px 20px; border: 1px dashed var(--line); border-radius: 16px; text-align: center; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.empty p { margin: 0; max-width: 36ch; }
+.empty .big-emoji { font-size: 44px; line-height: 1; }
+
+/* Home: one card per topic of the app */
+.topics { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+@media (min-width: 700px) { .topics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.topic { display: flex; flex-direction: column; gap: 14px; padding: 16px; border-radius: 20px; border: 1px solid var(--line); background: var(--surface); min-width: 0; }
+.topic-main { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; gap: 14px; width: 100%; border-radius: 14px; }
+.topic-main:focus-visible { outline: 2px solid var(--basil); outline-offset: 4px; }
+.topic-text { display: flex; flex-direction: column; min-width: 0; }
+.topic-text b { font-family: var(--font-display); font-weight: 500; font-size: 21px; line-height: 1.3; }
+.topic-text span { font-size: 14.5px; color: var(--muted); }
+.topic-text em { font-style: normal; font-size: 14px; font-weight: 500; color: var(--basil-strong); margin-top: 4px; font-variant-numeric: tabular-nums; }
+.topic.soon { border-style: dashed; background: none; justify-content: center; gap: 4px; color: var(--muted); font-size: 14.5px; }
+.topic.soon b { font-family: var(--font-display); font-weight: 500; font-size: 17px; color: var(--ink); }
+
+/* Find view */
+.searchrow { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; gap: 8px; padding-block: 8px; background: var(--bg); }
+.searchbox { position: relative; flex: 1; min-width: 0; }
+.searchbox svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; color: var(--muted); pointer-events: none; }
+.search { width: 100%; font: inherit; min-height: 48px; padding: 0 12px 0 44px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.search:focus { outline: 2px solid var(--basil); outline-offset: 1px; }
+.fbtn { position: relative; flex: none; padding: 0 14px; }
+.fbtn .badge { position: absolute; top: -6px; right: -6px; }
+.shortcuts { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin-inline: -16px; padding: 2px 16px 10px; }
+.shortcuts::-webkit-scrollbar { display: none; }
+.sc { flex: none; min-height: 44px; padding: 0 15px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 15px; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+.sc span { font-size: 17px; line-height: 1; }
+.sc[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+@media (min-width: 900px) { .shortcuts { flex-wrap: wrap; overflow: visible; margin-inline: 0; padding-inline: 0; } }
+.hello { border-color: var(--basil); background: var(--basil-soft); margin-bottom: 12px; }
+.hello p { margin: 0; }
+.reshead { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 4px 0 10px; }
+.reshead h2 { font-family: var(--font-display); font-weight: 500; font-size: 20px; margin: 0; line-height: 1.3; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.reshead small { font-family: var(--font-body); font-weight: 400; font-size: 14px; color: var(--muted); }
+.active { margin: -4px 0 10px; font-size: 14px; color: var(--muted); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+@media (min-width: 700px) { .grid:not(.one) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
+@media (min-width: 1100px) { .grid:not(.one) { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* Recipe row */
+.rcard { position: relative; display: flex; align-items: center; gap: 12px; min-height: 78px; padding: 10px 6px 10px 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }
+.rcard:hover { border-color: var(--basil); }
+.rcard:has(.open:focus-visible) { outline: 2px solid var(--basil); outline-offset: 2px; }
+.rcard.locked .thumb { filter: grayscale(.6); opacity: .7; }
+.thumb { width: 56px; height: 56px; border-radius: 14px; display: grid; place-items: center; font-size: 28px; line-height: 1; flex: none; }
+.thumb.big { width: 76px; height: 76px; border-radius: 18px; font-size: 40px; }
+.t1 { background: var(--turmeric-soft); } .t2 { background: var(--chili-soft); } .t3 { background: var(--basil-soft); } .t4 { background: var(--sky-soft); }
+.rtext { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.rtext h3 { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 16.5px; line-height: 1.35; }
+.open { all: unset; cursor: pointer; }
+.open::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: 16px; }
+.meta { font-size: 13.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.need { font-size: 13px; color: var(--chili); }
+.stock { font-size: 13px; color: var(--muted); display: flex; gap: 5px; align-items: center; }
+.stock.ok { color: var(--basil); font-weight: 500; }
+.stock svg { width: 13px; height: 13px; flex: none; }
+.fav { position: relative; z-index: 2; width: 46px; height: 46px; border-radius: 50%; border: none; background: none; display: grid; place-items: center; cursor: pointer; color: var(--muted); flex: none; }
+.fav:hover { background: var(--surface-2); }
+.fav svg { width: 22px; height: 22px; }
+.fav[data-fav][aria-pressed="true"] { color: var(--chili); }
+.fav[data-fav][aria-pressed="true"] svg path { fill: currentColor; }
+.fav.add { border: 1px solid var(--line); width: 42px; height: 42px; margin-right: 4px; }
+.fav.add[aria-pressed="true"] { background: var(--basil); border-color: var(--basil); color: var(--on-basil); }
+.more { border: 1px solid var(--line); border-radius: 16px; background: var(--surface-2); margin-top: 14px; }
+.more summary { cursor: pointer; padding: 14px 16px; font-family: var(--font-display); font-weight: 500; font-size: 16px; list-style: none; display: flex; justify-content: space-between; gap: 10px; }
+.more summary::-webkit-details-marker { display: none; }
+.more summary::after { content: "แสดง"; font-family: var(--font-body); font-weight: 400; font-size: 14px; color: var(--basil); }
+.more[open] summary::after { content: "ซ่อน"; }
+.more .grid { padding: 0 10px 10px; }
+
+/* Meal and kitchen views */
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; margin-bottom: 14px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; }
+.seg button { min-height: 46px; border: none; border-radius: 12px; background: none; cursor: pointer; font-size: 15px; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); font-weight: 600; box-shadow: var(--shadow); }
+.kgrid { display: grid; gap: 14px; margin-bottom: 16px; }
+@media (min-width: 900px) { .kgrid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); align-items: start; } }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { min-height: 44px; padding: 0 15px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 15px; display: inline-flex; align-items: center; gap: 6px; }
+.pill:hover { border-color: var(--basil); }
+.pill[aria-pressed="true"] { background: var(--basil); border-color: var(--basil); color: var(--on-basil); }
+.pill .mark { width: 14px; height: 14px; flex: none; }
+.pill[aria-pressed="false"] .mark { display: none; }
+#pantryGroups { display: flex; flex-direction: column; gap: 8px; }
+.pgroup, .clab { margin: 6px 0 0; font-size: 13px; font-weight: 600; color: var(--muted); letter-spacing: .02em; }
+.insight { background: var(--turmeric-soft); border-radius: 12px; padding: 12px 14px; font-size: 14.5px; display: flex; flex-direction: column; gap: 4px; }
+.insight h4 { margin: 0; font-size: 13px; font-weight: 600; color: var(--turmeric); letter-spacing: .02em; }
+.insight p { margin: 0; }
+.switch { display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer; font-size: 16px; min-height: 44px; }
+.switch input { appearance: none; -webkit-appearance: none; order: 2; flex: none; width: 50px; height: 30px; border-radius: 999px; background: var(--line); position: relative; cursor: pointer; margin: 0; transition: background .15s; }
+.switch input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: var(--surface); box-shadow: 0 1px 3px rgba(0, 0, 0, .25); transition: transform .15s; }
+.switch input:checked { background: var(--basil); }
+.switch input:checked::after { transform: translateX(20px); }
+.eq { display: flex; flex-wrap: wrap; gap: 6px; }
+.eq span { font-size: 14px; padding: 3px 11px; border-radius: 8px; background: var(--basil-soft); color: var(--basil-strong); }
+.eq span.miss { background: var(--chili-soft); color: var(--chili); }
+
+/* Lists inside recipes */
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; counter-reset: s; }
+.steps li { display: flex; gap: 12px; counter-increment: s; }
+.steps li::before { content: counter(s); flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--basil-soft); color: var(--basil-strong); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+.checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.checklist label { display: flex; gap: 12px; align-items: flex-start; min-height: 46px; padding: 10px 2px; border-bottom: 1px solid var(--line); cursor: pointer; }
+.checklist li:last-child label { border-bottom: none; }
+.checklist input { accent-color: var(--basil); width: 22px; height: 22px; margin: 1px 0 0; flex: none; }
+.checklist label > span { flex: 1; min-width: 0; }
+.checklist input:checked + span { color: var(--muted); text-decoration: line-through; }
+.checklist em { font-style: normal; font-size: 12px; padding: 1px 9px; border-radius: 999px; flex: none; align-self: center; }
+.checklist em.has { background: var(--basil-soft); color: var(--basil-strong); }
+.checklist em.lack { background: var(--chili-soft); color: var(--chili); }
+.checklist.shop small { display: block; font-size: 12.5px; color: var(--muted); }
+.mi { border-top: 1px solid var(--line); }
+.mi summary { cursor: pointer; padding: 10px 0; font-weight: 500; }
+.mi summary small { color: var(--muted); font-weight: 400; margin-left: 6px; }
+.mi ul { margin: 0 0 10px; padding-left: 20px; font-size: 14.5px; }
+.copybox { width: 100%; font: inherit; font-size: 14px; padding: 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); }
+
+/* Dialogs: recipe is full-screen on phones, filters slide up from the bottom */
+dialog { border: none; padding: 0; background: var(--surface); color: var(--ink); overflow: hidden; }
+dialog[open] { display: flex; flex-direction: column; }
+dialog::backdrop { background: rgba(8, 16, 12, .55); }
+#dlg { width: 100vw; max-width: 100vw; height: 100vh; height: 100dvh; max-height: none; margin: 0; border-radius: 0; }
+#fdlg { width: 100vw; max-width: 100vw; max-height: 88vh; margin: auto 0 0; border-radius: 20px 20px 0 0; }
+@media (min-width: 700px) {
+  #dlg { width: min(680px, calc(100vw - 32px)); height: auto; max-height: calc(100vh - 48px); margin: auto; border-radius: 20px; }
+  #fdlg { width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 48px); margin: auto; border-radius: 20px; }
+}
+.sheet-top { display: flex; align-items: center; gap: 4px; padding: calc(6px + env(safe-area-inset-top, 0px)) 8px 6px; border-bottom: 1px solid var(--line); flex: none; }
+#fdlg .sheet-top { padding: 8px 8px 8px 20px; }
+.ttl { flex: 1; min-width: 0; font-family: var(--font-display); font-weight: 500; font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sheet-scroll { overflow-y: auto; flex: 1; min-height: 0; }
+.sheet-body { padding: 18px 20px 24px; display: flex; flex-direction: column; gap: 20px; }
+.hero { display: flex; align-items: center; gap: 14px; }
+.hero h2 { font-family: var(--font-display); font-weight: 600; font-size: 24px; margin: 4px 0 0; line-height: 1.25; text-wrap: balance; }
+.tag { display: inline-block; font-size: 12.5px; padding: 2px 10px; border-radius: 999px; background: var(--turmeric-soft); color: var(--turmeric); }
+.swapnote { margin: 0; font-size: 14px; color: var(--basil-strong); background: var(--basil-soft); border-radius: 10px; padding: 8px 12px; }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.facts div { padding: 10px 12px; display: flex; flex-direction: column; }
+.facts div + div { border-left: 1px solid var(--line); }
+.facts span { font-size: 12.5px; color: var(--muted); }
+.facts b { font-family: var(--font-display); font-weight: 500; font-size: 16.5px; font-variant-numeric: tabular-nums; }
+.block h3 { font-family: var(--font-display); font-weight: 500; font-size: 18px; margin: 0 0 8px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.tip { background: var(--turmeric-soft); border-radius: 12px; padding: 12px 14px; font-size: 15px; }
+.tip b { color: var(--turmeric); margin-right: 4px; }
+.sheet-foot { flex: none; padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); background: var(--surface); display: flex; gap: 10px; }
+.sheet-foot .btn { flex: 1; min-height: 52px; }
+.sheet-foot .btn.primary { flex: 1.4; }
+.fgroup { display: flex; flex-direction: column; gap: 8px; }
+.fgroup h3 { margin: 0; font-size: 13px; font-weight: 600; color: var(--muted); letter-spacing: .02em; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { min-height: 42px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 14.5px; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+.chip:hover { border-color: var(--basil); }
+.chip[aria-pressed="true"] { background: var(--basil-soft); color: var(--basil-strong); border-color: var(--basil); font-weight: 500; }
+
+/* Steak calculator and guides */
+.calc { border: 1px solid var(--basil); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; background: var(--surface-2); }
+.calc h3 { margin: 0; }
+.calc .warn { margin: 0; }
+.calcout { background: var(--basil-soft); border-radius: 12px; padding: 10px 14px; display: flex; flex-direction: column; margin-top: 4px; }
+.calcout b { font-family: var(--font-display); font-weight: 500; font-size: 19px; line-height: 1.35; color: var(--basil-strong); font-variant-numeric: tabular-nums; }
+.calcout span { font-size: 14px; color: var(--muted); }
+.swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; }
+.d0 { background: #b3262e; } .d1 { background: #d24d57; } .d2 { background: #df8a8f; } .d3 { background: #c9a59a; } .d4 { background: #8a6a55; }
+.guide { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.guide summary { cursor: pointer; padding: 12px 14px; font-family: var(--font-display); font-weight: 500; font-size: 16px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; list-style: none; }
+.guide summary::-webkit-details-marker { display: none; }
+.guide summary small { font-family: var(--font-body); font-weight: 400; font-size: 13.5px; color: var(--basil); }
+.guide p { margin: 0; padding: 0 14px 10px; font-size: 13.5px; color: var(--muted); }
+.tbl { overflow-x: auto; }
+.tbl table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.tbl.done table { min-width: 560px; }
+.tbl th, .tbl td { text-align: left; padding: 8px 14px; border-top: 1px solid var(--line); vertical-align: top; }
+.tbl th { font-size: 12.5px; font-weight: 500; color: var(--muted); background: var(--surface-2); }
+.tbl.done td { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.tbl.done td:last-child { white-space: normal; min-width: 150px; }
+.tbl td b { font-weight: 600; }
+.tbl td .swatch { margin-right: 8px; }
+.tbl tr.sel td { background: var(--basil-soft); }
+
+/* Cooking mode */
+.cook { display: flex; flex-direction: column; flex: 1; min-height: min(560px, 80vh); }
+.cook-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: calc(8px + env(safe-area-inset-top, 0px)) 8px 8px 18px; border-bottom: 1px solid var(--line); }
+.cook-top .count { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14.5px; }
+.bar { height: 5px; background: var(--line); }
+.bar i { display: block; height: 100%; background: var(--basil); transition: width .25s; }
+.tstrip { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 18px 0; }
+.tchip { font-size: 13.5px; padding: 4px 12px; border-radius: 999px; background: var(--basil-soft); color: var(--basil-strong); font-variant-numeric: tabular-nums; }
+.tchip.done { background: var(--chili-soft); color: var(--chili); }
+.cook-main { flex: 1; min-height: 0; padding: 24px 22px; display: flex; flex-direction: column; gap: 22px; justify-content: center; overflow-y: auto; }
+.cook-main.multi { justify-content: flex-start; gap: 18px; }
+.cook-name { font-size: 14.5px; color: var(--muted); margin: 0; }
+.cook-step { font-family: var(--font-display); font-weight: 400; font-size: clamp(23px, 5.6vw, 30px); line-height: 1.5; margin: 0; text-wrap: pretty; }
+.timer { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.timer .clock { font-family: var(--font-display); font-size: 38px; font-variant-numeric: tabular-nums; color: var(--basil); line-height: 1; }
+.timer .clock.done { color: var(--chili); font-size: 26px; }
+.cook-ing summary { cursor: pointer; color: var(--basil); font-size: 15.5px; padding: 6px 0; }
+.cook-ing ul { margin: 6px 0 0; padding-left: 20px; font-size: 15px; }
+.ing-dish { margin: 10px 0 0; font-weight: 600; font-size: 14.5px; }
+.dishtag { align-self: flex-start; display: inline-flex; gap: 8px; align-items: center; padding: 4px 14px 4px 8px; border-radius: 999px; font-size: 14.5px; font-weight: 500; }
+.dishtag span { font-size: 20px; line-height: 1; }
+.nextup { border: 1px dashed var(--line); border-radius: 12px; padding: 10px 14px; font-size: 14.5px; display: flex; flex-direction: column; }
+.nextup span { font-size: 12.5px; color: var(--muted); }
+.nextup p { margin: 2px 0 0; color: var(--muted); }
+.tl { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.tl button { all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: grid; grid-template-columns: 38px 24px minmax(0, 1fr); gap: 6px; padding: 8px 6px; border-radius: 8px; font-size: 14px; line-height: 1.45; }
+.tl button:hover { background: var(--surface-2); }
+.tl button:focus-visible { outline: 2px solid var(--basil); }
+.tl .past { opacity: .5; }
+.tl .now button { background: var(--basil-soft); font-weight: 500; }
+.tl-at { color: var(--muted); font-variant-numeric: tabular-nums; }
+.cook-nav { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); }
+.cook-nav .btn { min-height: 60px; font-size: 17px; }
+.done-msg { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.done-msg .big { font-size: 56px; line-height: 1; }
+
+.toast { position: fixed; left: 50%; bottom: calc(var(--nav-h) + 22px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); max-width: calc(100vw - 32px); background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 999px; font-size: 14.5px; z-index: 2147483647; text-align: center; }
+@media (min-width: 900px) { .toast { bottom: 28px; } }
+@media (prefers-reduced-motion: reduce) { .bar i, .switch input, .switch input::after { transition: none; } }
+</style>
+
+<header class="appbar">
+  <h1 id="appTitle">ชีวิตง่าย</h1>
+  <nav class="tabs" id="tabs" aria-label="หน้าหลักของแอป" hidden>
+    <button type="button" class="tab" data-view="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg>
+      <span>หน้าแรก</span>
+    </button>
+    <button type="button" class="tab" data-view="menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <span>หาเมนู</span>
+    </button>
+    <button type="button" class="tab" data-view="meal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>
+      <span>มื้อนี้</span><b class="badge" id="mealBadge" hidden>0</b>
+    </button>
+    <button type="button" class="tab" data-view="kitchen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M6 10h12M9.5 6v1.5M9.5 13v3"/></svg>
+      <span>ครัวของฉัน</span>
+    </button>
+  </nav>
+</header>
+
+<main class="wrap">
+  <section id="view-home" aria-label="หน้าแรก">
+    <div class="pagehead"><h2>วันนี้ให้ช่วยเรื่องอะไรดี</h2><p>เลือกหัวข้อที่ต้องการ</p></div>
+    <div id="homeBody"></div>
+  </section>
+
+  <section id="view-menu" aria-label="หาเมนู" hidden>
+    <div class="searchrow">
+      <div class="searchbox">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input class="search" id="q" type="search" placeholder="ค้นหาเมนูหรือวัตถุดิบ" aria-label="ค้นหาเมนูหรือวัตถุดิบ" autocomplete="off">
+      </div>
+      <button type="button" class="btn fbtn" data-act="open-filters" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="16" cy="7" r="2.5"/><circle cx="8" cy="17" r="2.5"/></svg>
+        ตัวกรอง<b class="badge" id="fBadge" hidden>0</b>
+      </button>
+    </div>
+    <div class="shortcuts" id="shortcuts" role="group" aria-label="หมวดที่ใช้บ่อย"></div>
+    <div id="notice"></div>
+    <div id="results"></div>
+  </section>
+
+  <section id="view-meal" aria-label="มื้อนี้" hidden>
+    <div class="pagehead"><h2>มื้อนี้</h2><p>รวมหลายเมนูเป็นมื้อเดียว แล้วทำพร้อมกัน หรือดูว่าต้องซื้ออะไร</p></div>
+    <div class="seg" id="mealSeg" role="group" aria-label="มุมมองของมื้อนี้" hidden>
+      <button type="button" id="segPlan" data-act="meal-plan" aria-pressed="true">เมนูในมื้อ</button>
+      <button type="button" id="segShop" data-act="meal-shop" aria-pressed="false">รายการซื้อของ</button>
+    </div>
+    <div id="mealBody" class="stack"></div>
+  </section>
+
+  <section id="view-kitchen" aria-label="ครัวของฉัน" hidden>
+    <div class="pagehead"><h2>ครัวของฉัน</h2><p id="kSum" aria-live="polite"></p></div>
+    <div class="kgrid">
+      <div class="stack">
+        <div class="card">
+          <h3>เครื่องครัวที่มี</h3>
+          <p class="hint">แตะเพื่อเลือก ส่วนมีด เขียง และตะหลิว ถือว่ามีทุกบ้าน</p>
+          <div class="pills" id="pills" role="group" aria-label="เครื่องครัวที่มี"></div>
+          <div class="links"><button type="button" class="link" data-act="equip-all">เลือกทั้งหมด</button><button type="button" class="link" data-act="equip-none">ล้างทั้งหมด</button></div>
+          <div class="insight" id="insight" hidden></div>
+        </div>
+        <div class="card">
+          <h3>อาหารที่ไม่กิน</h3>
+          <label class="switch" for="noPork"><input type="checkbox" role="switch" id="noPork"><span>ไม่กินหมู</span></label>
+          <p class="hint">เปลี่ยนหมูในสูตรเป็นไก่หรือเนื้อวัวให้อัตโนมัติ</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3>ของในตู้เย็น <small id="pantrySum"></small></h3>
+        <p class="hint">แตะของที่มีอยู่ เว็บจะเรียงเมนูที่ใช้ของที่มีขึ้นก่อน เครื่องปรุงพื้นฐาน เช่น น้ำปลา ซีอิ๊ว น้ำตาล น้ำมัน และกระเทียม ถือว่ามีอยู่แล้ว</p>
+        <div id="pantryGroups"></div>
+        <div class="links"><button type="button" class="link" data-act="pantry-clear">ล้างทั้งหมด</button></div>
+      </div>
+    </div>
+    <button type="button" class="btn primary big" data-act="go-menu">ดูเมนูที่ทำได้</button>
+  </section>
+</main>
+
+<dialog id="dlg" aria-labelledby="dlg-title"></dialog>
+<dialog id="fdlg" aria-labelledby="f-title">
+  <div class="sheet-top">
+    <span class="ttl" id="f-title">ตัวกรอง</span>
+    <button type="button" class="fav" data-act="close-filters" aria-label="ปิดตัวกรอง"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="sheet-scroll"><div class="sheet-body" id="fBody"></div></div>
+  <div class="sheet-foot">
+    <button type="button" class="btn" data-act="reset">ล้างทั้งหมด</button>
+    <button type="button" class="btn primary" id="fApply" data-act="close-filters">ดูเมนู</button>
+  </div>
+</dialog>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+const EQUIP = [
+  { id: "stove", name: "เตาแก๊ส/เตาไฟฟ้า" },
+  { id: "wok", name: "กระทะ" },
+  { id: "pot", name: "หม้อ" },
+  { id: "ricecooker", name: "หม้อหุงข้าว" },
+  { id: "kettle", name: "กาต้มน้ำ" },
+  { id: "microwave", name: "ไมโครเวฟ" },
+  { id: "steamer", name: "ซึ้งนึ่ง" },
+  { id: "airfryer", name: "หม้อทอดไร้น้ำมัน" },
+  { id: "oven", name: "เตาอบ" },
+  { id: "grill", name: "เตาปิ้งย่าง" },
+  { id: "mortar", name: "ครกสาก" },
+  { id: "blender", name: "เครื่องปั่น" }
+];
+const EQ = Object.fromEntries(EQUIP.map(e => [e.id, e.name]));
+const KINDS = ["ทั้งหมด", "เมนูหลัก", "น้ำจิ้ม / ซอส", "น้ำสต็อก", "จานเคียง", "ของหวาน / เครื่องดื่ม"];
+const PROTEINS = [["เนื้อวัว", "🐄"], ["ไก่", "🐔"], ["หมู", "🐖"], ["ปลา", "🐟"], ["กุ้ง / ทะเล", "🦐"], ["ไข่", "🥚"], ["ผัก", "🥬"]];
+const CATS = ["ทั้งหมด", "สเต็ก", "ผัด", "ต้ม / แกง", "ทอด", "ยำ / ตำ", "นึ่ง", "ปิ้ง / อบ", "จานเดียว", "ไม่ใช้ไฟ"];
+const ORIGINS = ["ทุกสัญชาติ", "ไทย", "ไทยภาคใต้", "ไทยภาคอีสาน", "ไทยภาคเหนือ", "จีน", "ญี่ปุ่น", "เกาหลี", "อินเดีย", "ตะวันออกกลาง", "ตะวันตก", "อิตาเลียน", "เม็กซิกัน"];
+const REGIONS = { "ใต้": "ไทยภาคใต้", "อีสาน": "ไทยภาคอีสาน", "เหนือ": "ไทยภาคเหนือ" };
+// Older recipes that belong to a region or to breakfast
+const REGION_OF = { "ส้มตำไทย": "อีสาน", "เสือร้องไห้": "อีสาน", "น้ำจิ้มแจ่ว": "อีสาน", "คอหมูย่าง น้ำจิ้มแจ่ว": "อีสาน" };
+const BREAKFAST = ["แพนเค้ก", "โจ๊กหม้อหุงข้าว", "แซนด์วิชทูน่า", "ไข่ตุ๋นไมโครเวฟ", "สมูทตี้กล้วยนมสด"];
+// base = minutes per side on a very hot pan for a 2.5 cm steak; low = lowest finished core temperature
+const DONENESS = [
+  { name: "แรร์", temp: "50–52°C", low: 50, base: 2, look: "แดงสด", feel: "นุ่มยวบ แทบไม่เด้ง" },
+  { name: "มีเดียมแรร์", temp: "55–57°C", low: 55, base: 3, look: "ชมพูเข้ม ฉ่ำที่สุด", feel: "นุ่ม เด้งกลับช้า ๆ" },
+  { name: "มีเดียม", temp: "60–63°C", low: 60, base: 4, look: "ชมพูอ่อน", feel: "เด้งกลับชัด" },
+  { name: "มีเดียมเวล", temp: "65–68°C", low: 65, base: 5, look: "ชมพูจาง ๆ ตรงกลาง", feel: "ค่อนข้างแน่น" },
+  { name: "เวลดัน", temp: "70°C ขึ้นไป", low: 70, base: 6, look: "สุกทั่วทั้งชิ้น", feel: "แน่นแข็ง" }
+];
+const CUTS = [
+  ["ริบอาย", "มันแทรกเยอะ นุ่มฉ่ำ เหมาะกับจี่กระทะ"],
+  ["เซอร์ลอยน์ (สันนอก)", "เนื้อแน่น รสเนื้อชัด ราคาย่อมเยากว่า"],
+  ["เทนเดอร์ลอยน์ (สันใน)", "นุ่มที่สุด มันน้อย ไม่ควรทำเกินมีเดียม"],
+  ["ทีโบน", "ได้ทั้งสันนอกและสันในในชิ้นเดียว เหมาะกับการย่าง"]
+];
+// Main ingredient and type for the original recipes (new recipes carry their own)
+const PROTEIN = {
+  "กะเพราหมูสับ": "หมู", "ผัดผักบุ้งไฟแดง": "ผัก", "ผัดซีอิ๊วหมู": "หมู", "ต้มยำกุ้งน้ำใส": "กุ้ง / ทะเล", "ต้มข่าไก่": "ไก่",
+  "แกงเขียวหวานไก่": "ไก่", "ไข่เจียวหมูสับ": "ไข่", "หมูทอดกระเทียม": "หมู", "ไก่ทอดหม้อทอดไร้น้ำมัน": "ไก่", "ส้มตำไทย": "ผัก",
+  "ยำวุ้นเส้น": "กุ้ง / ทะเล", "น้ำพริกกะปิ": "ผัก", "ปลานึ่งมะนาว": "ปลา", "ไข่ตุ๋นนึ่ง": "ไข่", "ไข่ตุ๋นไมโครเวฟ": "ไข่",
+  "คอหมูย่าง น้ำจิ้มแจ่ว": "หมู", "ไก่อบซอสเทอริยากิ": "ไก่", "มันฝรั่งอบชีส": "ผัก", "ข้าวผัดไข่": "ไข่", "ข้าวมันไก่": "ไก่",
+  "โจ๊กหม้อหุงข้าว": "หมู", "มาม่าไข่ต้นหอม": "ไข่", "แซนด์วิชทูน่า": "ปลา", "สปาเกตตีคาโบนารา": "ไข่", "แพนเค้ก": ""
+};
+const KIND = { "น้ำพริกกะปิ": "น้ำจิ้ม / ซอส", "มันฝรั่งอบชีส": "จานเคียง" };
+// What goes well together (listed one way; shown both ways)
+const PAIRS = {
+  "ริบอายสเต็ก ซอสพริกไทยดำ": ["มันบดเนย", "สลัดผักน้ำใส", "ผักผัดเนยกระเทียม", "ซอสเห็ดครีม", "เนยกระเทียมสมุนไพร"],
+  "สเต็กเซอร์ลอยน์ย่าง ซอสชิมิชูร์รี": ["ชิมิชูร์รี", "เฟรนช์ฟรายส์หม้อทอด", "สลัดผักน้ำใส", "ซัลซ่ามะเขือเทศ"],
+  "สเต็กหนาแบบรีเวิร์สเซียร์": ["ซอสพริกไทยดำ", "ซอสเห็ดครีม", "มันบดเนย", "ผักผัดเนยกระเทียม", "เนยกระเทียมสมุนไพร"],
+  "สเต็กหม้อทอดไร้น้ำมัน": ["เฟรนช์ฟรายส์หม้อทอด", "ซอสพริกไทยดำ", "เนยกระเทียมสมุนไพร", "สลัดผักน้ำใส", "ชิมิชูร์รี"],
+  "เสือร้องไห้": ["น้ำจิ้มแจ่ว", "ข้าวเหนียวนึ่ง", "ส้มตำไทย", "ต้มยำกุ้งน้ำใส"],
+  "คอหมูย่าง น้ำจิ้มแจ่ว": ["น้ำจิ้มแจ่ว", "ข้าวเหนียวนึ่ง", "ส้มตำไทย"],
+  "ไก่ทอดหม้อทอดไร้น้ำมัน": ["น้ำจิ้มไก่", "ส้มตำไทย", "ข้าวเหนียวนึ่ง", "เฟรนช์ฟรายส์หม้อทอด"],
+  "ไก่อบซอสเทอริยากิ": ["ซอสเทอริยากิ", "ข้าวสวย", "สลัดผักน้ำใส"],
+  "ปลานึ่งมะนาว": ["ข้าวสวย", "ผัดผักบุ้งไฟแดง", "ไข่เจียวหมูสับ"],
+  "ปลาทอดน้ำปลา": ["น้ำปลาพริก", "น้ำจิ้มซีฟู้ด", "ข้าวสวย", "ต้มข่าไก่", "น้ำพริกกะปิ"],
+  "แซลมอนจี่ซอสเนยมะนาว": ["มันบดเนย", "สลัดผักน้ำใส", "ผักผัดเนยกระเทียม"],
+  "ปลาซาบะย่างซีอิ๊ว": ["ข้าวสวย", "ซอสเทอริยากิ", "สลัดผักน้ำใส"],
+  "ต้มยำกุ้งน้ำใส": ["น้ำสต็อกไก่", "ข้าวสวย", "ไข่เจียวหมูสับ", "น้ำจิ้มซีฟู้ด"],
+  "ต้มข่าไก่": ["น้ำสต็อกไก่", "ข้าวสวย", "ไข่เจียวหมูสับ"],
+  "ข้าวมันไก่": ["น้ำจิ้มข้าวมันไก่", "น้ำสต็อกไก่"],
+  "โจ๊กหม้อหุงข้าว": ["น้ำสต็อกไก่"],
+  "ไข่ตุ๋นนึ่ง": ["น้ำสต็อกไก่", "ข้าวสวย"],
+  "ไข่ตุ๋นไมโครเวฟ": ["น้ำซุปดาชิ", "ข้าวสวย"],
+  "กิวด้ง ข้าวหน้าเนื้อ": ["น้ำซุปดาชิ", "ข้าวสวย"],
+  "แกงกะหรี่ญี่ปุ่นเนื้อ": ["ข้าวสวย", "น้ำสต็อกเนื้อ", "สลัดผักน้ำใส"],
+  "บีฟสตูว์": ["น้ำสต็อกเนื้อ", "มันบดเนย"],
+  "บุลโกกิเนื้อ": ["ข้าวสวย", "สลัดผักน้ำใส"],
+  "สปาเกตตีโบโลเนส": ["น้ำสต็อกเนื้อ", "สลัดผักน้ำใส"],
+  "สปาเกตตีคาโบนารา": ["สลัดผักน้ำใส"],
+  "ชีสเบอร์เกอร์เนื้อ": ["เฟรนช์ฟรายส์หม้อทอด", "ซัลซ่ามะเขือเทศ", "สลัดผักน้ำใส"],
+  "ทาโก้เนื้อ": ["ซัลซ่ามะเขือเทศ"],
+  "กะเพราหมูสับ": ["ข้าวสวย", "ไข่เจียวหมูสับ", "น้ำปลาพริก"],
+  "เนื้อผัดน้ำมันหอย": ["ข้าวสวย", "ต้มข่าไก่"],
+  "แกงเขียวหวานไก่": ["ข้าวสวย", "ไข่เจียวหมูสับ"],
+  "หมูทอดกระเทียม": ["ข้าวสวย", "น้ำจิ้มไก่"],
+  "ผัดผักบุ้งไฟแดง": ["ข้าวสวย", "ไข่เจียวหมูสับ"],
+  "ส้มตำไทย": ["ข้าวเหนียวนึ่ง"],
+  "ข้าวผัดไข่": ["น้ำปลาพริก"],
+  "ผัดซีอิ๊วหมู": ["น้ำปลาพริก"],
+  "น้ำพริกกะปิ": ["ไข่เจียวหมูสับ", "ข้าวสวย"],
+  "มันฝรั่งอบชีส": ["สลัดผักน้ำใส"],
+  "สปาเกตตีอาลิโอ โอลิโอ": ["สลัดผักน้ำใส"],
+  "สปาเกตตีซอสมะเขือเทศ": ["สลัดผักน้ำใส"],
+  "สปาเกตตีมีตบอลเนื้อ": ["สลัดผักน้ำใส"],
+  "สปาเกตตีขี้เมาเนื้อ": ["น้ำปลาพริก"],
+  "สปาเกตตีกุ้งกระเทียม": ["สลัดผักน้ำใส"],
+  "สปาเกตตีครีมเห็ดไก่": ["สลัดผักน้ำใส"],
+  "คั่วกลิ้งเนื้อ": ["ข้าวสวย", "ไก่ต้มขมิ้น", "ใบเหลียงผัดไข่"],
+  "แกงมัสมั่นเนื้อ": ["ข้าวสวย"],
+  "แกงเหลืองปลากะพง": ["ข้าวสวย", "ไข่เจียวหมูสับ", "ปลาทอดขมิ้น"],
+  "ไก่ต้มขมิ้น": ["ข้าวสวย", "น้ำปลาพริก"],
+  "สะตอผัดกะปิกุ้ง": ["ข้าวสวย", "ไก่ต้มขมิ้น"],
+  "ปลาทอดขมิ้น": ["ข้าวสวย", "น้ำพริกกุ้งเสียบ", "น้ำปลาพริก"],
+  "ไก่ทอดหาดใหญ่": ["ข้าวเหนียวนึ่ง", "น้ำจิ้มไก่"],
+  "ใบเหลียงผัดไข่": ["ข้าวสวย", "แกงเหลืองปลากะพง"],
+  "น้ำพริกกุ้งเสียบ": ["ข้าวสวย", "ไข่เจียวหมูสับ"],
+  "คาลบีย่าง": ["ข้าวสวย", "สลัดผักน้ำใส", "ซุปเนื้อหัวไชเท้า"],
+  "บิบิมบับเนื้อ": ["ซุปเนื้อหัวไชเท้า"],
+  "ซุปเนื้อหัวไชเท้า": ["ข้าวสวย"],
+  "สุกี้ยากี้เนื้อ": ["ข้าวสวย"],
+  "ยากินิกุด้ง ข้าวหน้าเนื้อย่าง": ["สลัดผักน้ำใส"],
+  "เนื้อทาทากิซอสพอนสึ": ["ข้าวสวย", "สลัดผักน้ำใส"],
+  "เนื้อผัดพริกไทยดำ": ["ข้าวสวย"],
+  "เนื้อตุ๋นยาจีน": ["ข้าวสวย"],
+  "เนื้อผัดบรอกโคลี": ["ข้าวสวย"],
+  "ลาบเนื้อ": ["ข้าวเหนียวนึ่ง", "ส้มตำไทย"],
+  "น้ำตกเนื้อ": ["ข้าวเหนียวนึ่ง", "ส้มตำไทย"],
+  "ต้มแซ่บเนื้อ": ["ข้าวเหนียวนึ่ง", "ลาบเนื้อ"],
+  "ไก่ย่างอีสาน": ["ข้าวเหนียวนึ่ง", "ส้มตำไทย", "น้ำจิ้มแจ่ว", "ซุปหน่อไม้"],
+  "ซุปหน่อไม้": ["ข้าวเหนียวนึ่ง"],
+  "ข้าวซอยไก่": ["น้ำสต็อกไก่"],
+  "แกงฮังเลเนื้อ": ["ข้าวเหนียวนึ่ง", "ข้าวสวย", "น้ำพริกหนุ่ม"],
+  "น้ำพริกหนุ่ม": ["ข้าวเหนียวนึ่ง", "ไก่ย่างอีสาน"],
+  "กุ้งอบวุ้นเส้น": ["น้ำจิ้มซีฟู้ด"],
+  "ปลาหมึกผัดไข่เค็ม": ["ข้าวสวย"],
+  "หอยลายผัดพริกเผา": ["ข้าวสวย"],
+  "กุ้งผัดพริกเกลือ": ["ข้าวสวย", "น้ำจิ้มซีฟู้ด"],
+  "ปลากะพงนึ่งซีอิ๊ว": ["ข้าวสวย", "ผัดผักบุ้งไฟแดง"],
+  "ปีกไก่ทอดน้ำปลาหม้อทอด": ["น้ำจิ้มไก่", "ข้าวเหนียวนึ่ง"],
+  "แซลมอนอบซอสมิโซะ": ["ข้าวสวย", "สลัดผักน้ำใส"],
+  "ผักอบรวมหม้อทอด": ["สเต็กหม้อทอดไร้น้ำมัน", "แซลมอนอบซอสมิโซะ", "ริบอายสเต็ก ซอสพริกไทยดำ"],
+  "แกงไก่เนยอินเดีย": ["ข้าวสวย"],
+  "เคบับเนื้อ": ["สลัดผักน้ำใส", "ซัลซ่ามะเขือเทศ"]
+};
+// No-pork versions: swap pork for chicken or beef in the name, ingredients and steps
+const NO_PORK = {
+  "กะเพราหมูสับ": { name: "กะเพราเนื้อสับ", to: "เนื้อวัว", protein: "เนื้อวัว", swap: [["หมูสับ", "เนื้อวัวสับ"]] },
+  "ผัดซีอิ๊วหมู": { name: "ผัดซีอิ๊วไก่", to: "ไก่", protein: "ไก่", swap: [["หมูหมัก", "อกไก่หั่นชิ้นหมัก"], ["หมู", "ไก่"]] },
+  "ไข่เจียวหมูสับ": { name: "ไข่เจียวไก่สับ", to: "ไก่", swap: [["หมูสับ", "ไก่สับ"]] },
+  "หมูทอดกระเทียม": { name: "ไก่ทอดกระเทียม", to: "ไก่", protein: "ไก่", swap: [["หมูสันคอหั่นชิ้น", "สะโพกไก่หั่นชิ้น"], ["หมู", "ไก่"]] },
+  "ยำวุ้นเส้น": { to: "ไก่", swap: [["หมูสับ", "ไก่สับ"]] },
+  "ไข่ตุ๋นนึ่ง": { to: "ไก่", swap: [["หมูสับ", "ไก่สับ"]] },
+  "คอหมูย่าง น้ำจิ้มแจ่ว": { name: "สะโพกไก่ย่าง น้ำจิ้มแจ่ว", to: "ไก่", protein: "ไก่", dish: "🍗", swap: [["คอหมู", "สะโพกไก่ติดหนัง"], ["เนื้อหมู", "เนื้อไก่"]] },
+  "มันฝรั่งอบชีส": { to: "เบคอนเนื้อ", swap: [["เบคอนหรือ", "เบคอนเนื้อหรือ"]] },
+  "โจ๊กหม้อหุงข้าว": { to: "ไก่", protein: "ไก่", swap: [["หมูสับ", "ไก่สับ"]] },
+  "สปาเกตตีคาโบนารา": { to: "เบคอนเนื้อ", swap: [["เบคอนหรือกวนชาเล", "เบคอนเนื้อ (beef bacon)"], ["ผัดเบคอน", "ผัดเบคอนเนื้อ"]] }
+};
+const TINT = { "สเต็ก": "t2", "ผัด": "t1", "ต้ม / แกง": "t2", "ทอด": "t1", "ยำ / ตำ": "t3", "นึ่ง": "t4", "ปิ้ง / อบ": "t2", "จานเดียว": "t3", "ไม่ใช้ไฟ": "t3", "ของหวาน / เครื่องดื่ม": "t4" };
+const DISH = {
+  "กะเพราหมูสับ": "🌿", "ผัดผักบุ้งไฟแดง": "🥬", "ผัดซีอิ๊วหมู": "🍜", "ต้มยำกุ้งน้ำใส": "🦐", "ต้มข่าไก่": "🥥",
+  "แกงเขียวหวานไก่": "🍛", "ไข่เจียวหมูสับ": "🍳", "หมูทอดกระเทียม": "🧄", "ไก่ทอดหม้อทอดไร้น้ำมัน": "🍗",
+  "ส้มตำไทย": "🥗", "ยำวุ้นเส้น": "🥢", "น้ำพริกกะปิ": "🌶️", "ปลานึ่งมะนาว": "🐟", "ไข่ตุ๋นนึ่ง": "🥚",
+  "ไข่ตุ๋นไมโครเวฟ": "🥚", "คอหมูย่าง น้ำจิ้มแจ่ว": "🥩", "ไก่อบซอสเทอริยากิ": "🍗", "มันฝรั่งอบชีส": "🥔",
+  "ข้าวผัดไข่": "🍚", "ข้าวมันไก่": "🐔", "โจ๊กหม้อหุงข้าว": "🥣", "มาม่าไข่ต้นหอม": "🍜", "แซนด์วิชทูน่า": "🥪",
+  "กล้วยบวชชี": "🍌", "เค้กกล้วยหอม": "🍰", "สมูทตี้กล้วยนมสด": "🥤",
+  "ริบอายสเต็ก ซอสพริกไทยดำ": "🥩", "สเต็กเซอร์ลอยน์ย่าง ซอสชิมิชูร์รี": "🥩", "สเต็กหนาแบบรีเวิร์สเซียร์": "🥩",
+  "สเต็กหม้อทอดไร้น้ำมัน": "🥩", "เสือร้องไห้": "🔥", "เนื้อผัดน้ำมันหอย": "🥢", "บีฟสตูว์": "🍲",
+  "แกงกะหรี่ญี่ปุ่นเนื้อ": "🍛", "กิวด้ง ข้าวหน้าเนื้อ": "🍚", "บุลโกกิเนื้อ": "🍖", "สปาเกตตีโบโลเนส": "🍝",
+  "สปาเกตตีคาโบนารา": "🍝", "ชีสเบอร์เกอร์เนื้อ": "🍔", "ทาโก้เนื้อ": "🌮", "แพนเค้ก": "🥞",
+  "น้ำจิ้มซีฟู้ด": "🌶️", "น้ำจิ้มแจ่ว": "🌶️", "น้ำจิ้มไก่": "🥫", "น้ำปลาพริก": "🌶️", "น้ำจิ้มข้าวมันไก่": "🥄",
+  "ซอสพริกไทยดำ": "🧂", "ซอสเห็ดครีม": "🍄", "ชิมิชูร์รี": "🌿", "ซัลซ่ามะเขือเทศ": "🍅", "ซอสเทอริยากิ": "🍶",
+  "เนยกระเทียมสมุนไพร": "🧈", "น้ำสต็อกไก่": "🐔", "น้ำสต็อกเนื้อ": "🦴", "น้ำสต็อกผัก": "🥕", "น้ำซุปดาชิ": "🍥",
+  "ข้าวสวย": "🍚", "ข้าวเหนียวนึ่ง": "🍙", "มันบดเนย": "🥔", "เฟรนช์ฟรายส์หม้อทอด": "🍟", "สลัดผักน้ำใส": "🥗",
+  "ผักผัดเนยกระเทียม": "🥦", "ปลาทอดน้ำปลา": "🐟", "แซลมอนจี่ซอสเนยมะนาว": "🍋", "ปลาซาบะย่างซีอิ๊ว": "🐟",
+  "สปาเกตตีอาลิโอ โอลิโอ": "🧄", "สปาเกตตีซอสมะเขือเทศ": "🍅", "สปาเกตตีมีตบอลเนื้อ": "🍝",
+  "สปาเกตตีขี้เมาเนื้อ": "🌶️", "สปาเกตตีกุ้งกระเทียม": "🦐", "สปาเกตตีครีมเห็ดไก่": "🍄",
+  "คั่วกลิ้งเนื้อ": "🌶️", "แกงมัสมั่นเนื้อ": "🍛", "แกงเหลืองปลากะพง": "🍲", "ไก่ต้มขมิ้น": "🐔", "สะตอผัดกะปิกุ้ง": "🦐",
+  "ปลาทอดขมิ้น": "🐟", "ไก่ทอดหาดใหญ่": "🍗", "ใบเหลียงผัดไข่": "🍳", "น้ำพริกกุ้งเสียบ": "🌶️",
+  "คาลบีย่าง": "🍖", "บิบิมบับเนื้อ": "🍚", "ซุปเนื้อหัวไชเท้า": "🍲", "สุกี้ยากี้เนื้อ": "🍲", "ยากินิกุด้ง ข้าวหน้าเนื้อย่าง": "🍚",
+  "เนื้อทาทากิซอสพอนสึ": "🥩", "เนื้อผัดพริกไทยดำ": "🥢", "เนื้อตุ๋นยาจีน": "🍲", "เนื้อผัดบรอกโคลี": "🥦",
+  "ลาบเนื้อ": "🌿", "น้ำตกเนื้อ": "🥩", "ต้มแซ่บเนื้อ": "🍲", "ไก่ย่างอีสาน": "🍗", "ซุปหน่อไม้": "🎋",
+  "ข้าวซอยไก่": "🍜", "แกงฮังเลเนื้อ": "🍛", "น้ำพริกหนุ่ม": "🌶️",
+  "กุ้งอบวุ้นเส้น": "🦐", "ปลาหมึกผัดไข่เค็ม": "🦑", "หอยลายผัดพริกเผา": "🐚", "กุ้งผัดพริกเกลือ": "🦐", "ปลากะพงนึ่งซีอิ๊ว": "🐟",
+  "ไข่กระทะ": "🍳", "แซนด์วิชไข่ญี่ปุ่น": "🥪", "เฟรนช์โทสต์": "🍞", "บราวนี่": "🍫", "พุดดิ้งนมสด": "🍮", "บัวลอยไข่หวาน": "🥣",
+  "ปีกไก่ทอดน้ำปลาหม้อทอด": "🍗", "แซลมอนอบซอสมิโซะ": "🍣", "ผักอบรวมหม้อทอด": "🥕", "แกงไก่เนยอินเดีย": "🍛", "เคบับเนื้อ": "🍢"
+};
+const ICON = {
+  heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg>',
+  check: '<svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>',
+  close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+  back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>',
+  alert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>',
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  dice: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="15" cy="15" r="1.2" fill="currentColor"/><circle cx="15" cy="9" r="1.2" fill="currentColor"/><circle cx="9" cy="15" r="1.2" fill="currentColor"/></svg>'
+};
+
+const RECIPES = [
+  { name: "กะเพราหมูสับ", cat: "ผัด", time: 15, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["หมูสับ 250 กรัม", "ใบกะเพรา 1 กำมือ", "กระเทียม 6 กลีบ", "พริกขี้หนู 5–10 เม็ด", "ซอสหอยนางรม 1 ช้อนโต๊ะ", "ซีอิ๊วขาว 1 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนชา", "น้ำมันพืช 1 ช้อนโต๊ะ"],
+    steps: ["โขลกหรือสับกระเทียมกับพริกให้หยาบ", "ตั้งกระทะใส่น้ำมัน ผัดกระเทียมพริกจนหอม", "ใส่หมูสับ ผัดจนสุก", "ปรุงด้วยซอสหอยนางรม ซีอิ๊วขาว น้ำตาล", "ปิดไฟ ใส่ใบกะเพรา คลุกให้เข้ากัน"],
+    tip: "ใส่กะเพราตอนปิดไฟแล้ว ใบจะไม่ดำและยังหอม" },
+  { name: "ผัดผักบุ้งไฟแดง", cat: "ผัด", time: 10, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["ผักบุ้งจีน 1 กำ", "กระเทียม 5 กลีบ", "พริกขี้หนู 3 เม็ด", "เต้าเจี้ยว 1 ช้อนโต๊ะ", "ซอสหอยนางรม 1 ช้อนโต๊ะ", "น้ำตาล ½ ช้อนชา", "น้ำมันพืช 2 ช้อนโต๊ะ"],
+    steps: ["หั่นผักบุ้งเป็นท่อน ใส่จานพร้อมกระเทียม พริก และเครื่องปรุงทั้งหมด", "ตั้งกระทะให้ร้อนจัด ใส่น้ำมัน", "เทผักลงไปทีเดียว ผัดเร็ว ๆ ประมาณ 1 นาที แล้วตักขึ้น"],
+    tip: "ไฟต้องแรงและผัดให้เร็ว ผักจะกรอบและเขียว" },
+  { name: "ผัดซีอิ๊วหมู", cat: "ผัด", time: 20, level: "ปานกลาง", serves: 2, equip: ["stove", "wok"],
+    ing: ["เส้นใหญ่ 300 กรัม", "หมูหมัก 150 กรัม", "คะน้า 2 ต้น", "ไข่ไก่ 2 ฟอง", "กระเทียมสับ 1 ช้อนโต๊ะ", "ซีอิ๊วดำ 1 ช้อนโต๊ะ", "ซีอิ๊วขาว 1 ช้อนโต๊ะ", "ซอสหอยนางรม 1 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนชา"],
+    steps: ["คลี่เส้นใหญ่ คลุกซีอิ๊วดำพักไว้", "เจียวกระเทียม ใส่หมูผัดจนสุก", "ตอกไข่ลงไป ยีให้ไข่สุก", "ใส่เส้นและคะน้า ปรุงรส ผัดให้เส้นเกรียมนิด ๆ"],
+    tip: "ทิ้งเส้นไว้ในกระทะสักพักก่อนพลิก จะได้กลิ่นหอมไหม้แบบร้านข้างทาง" },
+  { name: "ต้มยำกุ้งน้ำใส", cat: "ต้ม / แกง", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "pot"],
+    ing: ["กุ้ง 8 ตัว", "ข่า 5 แว่น", "ตะไคร้ 2 ต้น", "ใบมะกรูด 5 ใบ", "เห็ดฟาง 100 กรัม", "พริกขี้หนูบุบ 5 เม็ด", "น้ำปลา 2 ช้อนโต๊ะ", "น้ำมะนาว 3 ช้อนโต๊ะ", "น้ำ 3 ถ้วย"],
+    steps: ["ต้มน้ำให้เดือด ใส่ข่า ตะไคร้ ใบมะกรูด", "ใส่เห็ด ตามด้วยกุ้ง ต้มจนกุ้งเปลี่ยนสี", "ปรุงด้วยน้ำปลา ปิดไฟ", "ใส่น้ำมะนาวและพริกตอนปิดไฟแล้ว"],
+    tip: "ใส่มะนาวหลังปิดไฟ น้ำซุปจะไม่ขม" },
+  { name: "ต้มข่าไก่", cat: "ต้ม / แกง", time: 25, level: "ง่าย", serves: 3, equip: ["stove", "pot"],
+    ing: ["อกไก่หรือสะโพกไก่ 300 กรัม", "กะทิ 400 มล.", "น้ำ 1 ถ้วย", "ข่า 8 แว่น", "ตะไคร้ 2 ต้น", "ใบมะกรูด 5 ใบ", "เห็ดนางฟ้า 100 กรัม", "น้ำปลา 2 ช้อนโต๊ะ", "น้ำมะนาว 2 ช้อนโต๊ะ"],
+    steps: ["ตั้งกะทิกับน้ำบนไฟกลาง ใส่ข่า ตะไคร้ ใบมะกรูด", "พอเดือดเบา ๆ ใส่ไก่ ต้มจนสุก", "ใส่เห็ด ปรุงด้วยน้ำปลา", "ปิดไฟ เติมน้ำมะนาวและผักชี"],
+    tip: "อย่าให้กะทิเดือดแรง กะทิจะแตกมัน" },
+  { name: "แกงเขียวหวานไก่", cat: "ต้ม / แกง", time: 35, level: "ปานกลาง", serves: 4, equip: ["stove", "pot"],
+    ing: ["น่องไก่หรือสะโพก 400 กรัม", "พริกแกงเขียวหวาน 3 ช้อนโต๊ะ", "กะทิ 500 มล.", "มะเขือเปราะ 5 ลูก", "ใบโหระพา 1 กำ", "พริกชี้ฟ้าแดง 1 เม็ด", "น้ำปลา 2 ช้อนโต๊ะ", "น้ำตาลปี๊บ 1 ช้อนโต๊ะ"],
+    steps: ["เคี่ยวหัวกะทิครึ่งถ้วยจนแตกมัน ใส่พริกแกงผัดจนหอม", "ใส่ไก่ผัดให้เคลือบพริกแกง", "เติมกะทิที่เหลือ ต้มจนไก่นุ่ม", "ใส่มะเขือ ปรุงรส ต้มต่อ 3 นาที", "ปิดไฟ ใส่โหระพาและพริกชี้ฟ้า"],
+    tip: "ใช้พริกแกงสำเร็จรูปได้ ไม่ต้องโขลกเอง" },
+  { name: "ไข่เจียวหมูสับ", cat: "ทอด", time: 10, level: "ง่าย", serves: 1, equip: ["stove", "wok"],
+    ing: ["ไข่ไก่ 3 ฟอง", "หมูสับ 50 กรัม", "น้ำปลา 1 ช้อนชา", "น้ำมะนาว 3–4 หยด", "น้ำมันพืช ½ ถ้วย"],
+    steps: ["ตีไข่กับหมูสับ น้ำปลา และมะนาวให้ขึ้นฟู", "ตั้งน้ำมันให้ร้อนจัดจนมีควันจาง ๆ", "เทไข่จากที่สูงลงกลางกระทะ", "ทอดจนขอบกรอบ กลับด้านแล้วตักขึ้นสะเด็ดน้ำมัน"],
+    tip: "มะนาวไม่กี่หยดช่วยให้ไข่ฟูกรอบ ไม่มีกลิ่นคาว" },
+  { name: "หมูทอดกระเทียม", cat: "ทอด", time: 25, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["หมูสันคอหั่นชิ้น 300 กรัม", "กระเทียมสับ 1 หัว", "ซีอิ๊วขาว 1 ช้อนโต๊ะ", "ซอสหอยนางรม 1 ช้อนโต๊ะ", "พริกไทย ½ ช้อนชา", "น้ำตาล 1 ช้อนชา", "น้ำมันสำหรับทอด"],
+    steps: ["หมักหมูกับเครื่องปรุงและกระเทียมครึ่งหนึ่ง 15 นาที", "ทอดหมูในน้ำมันไฟกลางจนสุกเหลือง ตักขึ้น", "ทอดกระเทียมที่เหลือจนเหลืองกรอบ", "โรยกระเทียมเจียวบนหมู"],
+    tip: "" },
+  { name: "ไก่ทอดหม้อทอดไร้น้ำมัน", cat: "ทอด", time: 35, level: "ง่าย", serves: 3, equip: ["airfryer"],
+    ing: ["น่องไก่ 6 ชิ้น", "กระเทียมสับ 1 ช้อนโต๊ะ", "ซีอิ๊วขาว 1 ช้อนโต๊ะ", "ซอสหอยนางรม 1 ช้อนโต๊ะ", "พริกไทย ½ ช้อนชา", "แป้งทอดกรอบ 3 ช้อนโต๊ะ"],
+    steps: ["หมักไก่กับเครื่องปรุงอย่างน้อย 30 นาที", "คลุกแป้งทอดกรอบบาง ๆ", "อบที่ 180°C 15 นาที", "กลับด้าน อบต่ออีก 10 นาทีจนหนังกรอบ"],
+    tip: "ทาน้ำมันบาง ๆ ที่ผิวไก่ก่อนอบ จะเหลืองสวยขึ้น" },
+  { name: "ส้มตำไทย", cat: "ยำ / ตำ", time: 15, level: "ง่าย", serves: 2, equip: ["mortar"],
+    ing: ["มะละกอดิบสับเส้น 2 ถ้วย", "กระเทียม 2 กลีบ", "พริกขี้หนู 3–5 เม็ด", "ถั่วฝักยาว 2 ฝัก", "มะเขือเทศ 4 ลูก", "กุ้งแห้ง 1 ช้อนโต๊ะ", "ถั่วลิสงคั่ว 2 ช้อนโต๊ะ", "น้ำตาลปี๊บ 1 ช้อนโต๊ะ", "น้ำปลา 1½ ช้อนโต๊ะ", "น้ำมะนาว 2 ช้อนโต๊ะ"],
+    steps: ["โขลกกระเทียมกับพริกพอแหลก", "ใส่น้ำตาลปี๊บ น้ำปลา มะนาว โขลกให้ละลาย", "ใส่ถั่วฝักยาว มะเขือเทศ กุ้งแห้ง โขลกเบา ๆ", "ใส่มะละกอ ใช้สากตำสลับกับช้อนคลุก", "โรยถั่วลิสง"],
+    tip: "ตำเบา ๆ แค่ให้เส้นมะละกอช้ำ เส้นจะยังกรอบ" },
+  { name: "ยำวุ้นเส้น", cat: "ยำ / ตำ", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "pot"],
+    ing: ["วุ้นเส้นแช่น้ำ 2 ไจ", "หมูสับ 100 กรัม", "กุ้ง 6 ตัว", "หอมแดงซอย 3 หัว", "ขึ้นฉ่าย 2 ต้น", "มะเขือเทศ 2 ลูก", "น้ำปลา 2 ช้อนโต๊ะ", "น้ำมะนาว 3 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนชา", "พริกขี้หนูสับ 5 เม็ด"],
+    steps: ["ลวกหมูสับและกุ้งในน้ำเดือดจนสุก ตักขึ้น", "ลวกวุ้นเส้นสั้น ๆ ประมาณ 30 วินาที", "ผสมน้ำปลา มะนาว น้ำตาล พริก เป็นน้ำยำ", "คลุกทุกอย่างกับน้ำยำและผัก"],
+    tip: "" },
+  { name: "น้ำพริกกะปิ", cat: "ยำ / ตำ", time: 15, level: "ปานกลาง", serves: 4, equip: ["mortar"],
+    ing: ["กะปิ 1 ช้อนโต๊ะ", "กระเทียม 5 กลีบ", "พริกขี้หนูสวน 10 เม็ด", "น้ำตาลปี๊บ 1 ช้อนโต๊ะ", "น้ำมะนาว 2 ช้อนโต๊ะ", "น้ำปลา 1 ช้อนชา", "มะเขือพวงเล็กน้อย", "ผักสดสำหรับจิ้ม"],
+    steps: ["โขลกกระเทียมให้ละเอียด ใส่กะปิโขลกต่อ", "ใส่พริก บุบพอแตก", "ปรุงด้วยน้ำตาล มะนาว น้ำปลา โขลกให้เข้ากัน", "ใส่มะเขือพวง บุบเบา ๆ เสิร์ฟกับผักสด"],
+    tip: "ถ้ามีเตา ห่อกะปิด้วยใบตองหรือฟอยล์แล้วย่างก่อน จะหอมกว่า" },
+  { name: "ปลานึ่งมะนาว", cat: "นึ่ง", time: 30, level: "ปานกลาง", serves: 3, equip: ["stove", "steamer"],
+    ing: ["ปลากะพง 1 ตัว (ประมาณ 600 กรัม)", "ตะไคร้ 2 ต้น", "กระเทียม 1 หัว", "พริกขี้หนู 10 เม็ด", "น้ำมะนาว 5 ช้อนโต๊ะ", "น้ำปลา 3 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนโต๊ะ", "น้ำซุปร้อน ½ ถ้วย", "ผักชี"],
+    steps: ["บั้งปลา ยัดตะไคร้ทุบในท้อง", "นึ่งน้ำเดือดจัด 12–15 นาที", "สับกระเทียมพริก ผสมมะนาว น้ำปลา น้ำตาล น้ำซุปร้อน", "ราดน้ำยำบนปลาตอนร้อน โรยผักชี"],
+    tip: "ต้มน้ำในซึ้งให้เดือดจัดก่อนวางปลา เนื้อจะไม่เละ" },
+  { name: "ไข่ตุ๋นนึ่ง", cat: "นึ่ง", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "steamer"],
+    ing: ["ไข่ไก่ 3 ฟอง", "น้ำซุปหรือน้ำเปล่า 1 ถ้วย", "หมูสับ 50 กรัม", "ซีอิ๊วขาว 1 ช้อนชา", "ต้นหอมซอย"],
+    steps: ["ตีไข่กับน้ำซุปและซีอิ๊วขาวเบา ๆ ไม่ให้เกิดฟอง", "กรองผ่านกระชอนลงถ้วย ใส่หมูสับ", "นึ่งไฟอ่อน 12–15 นาที", "โรยต้นหอม"],
+    tip: "ใช้ไฟอ่อนและปิดฝาให้มีช่องเล็ก ๆ ไข่จะเนียนไม่เป็นรู" },
+  { name: "ไข่ตุ๋นไมโครเวฟ", cat: "นึ่ง", time: 8, level: "ง่าย", serves: 1, equip: ["microwave"],
+    ing: ["ไข่ไก่ 2 ฟอง", "น้ำ ¾ ถ้วย", "ซีอิ๊วขาว 1 ช้อนชา", "ต้นหอมซอย"],
+    steps: ["ตีไข่กับน้ำและซีอิ๊ว กรองใส่ถ้วยทนความร้อน", "ปิดด้วยฟิล์มสำหรับไมโครเวฟ เจาะรูเล็ก ๆ", "เข้าไมโครเวฟไฟกลาง (ประมาณ 400–500 วัตต์) 3–4 นาที", "พักไว้ 1 นาทีก่อนเปิด โรยต้นหอม"],
+    tip: "ใช้ไฟกลาง ถ้าไฟแรงไข่จะฟูแล้วยุบเป็นรู" },
+  { name: "คอหมูย่าง น้ำจิ้มแจ่ว", cat: "ปิ้ง / อบ", time: 40, level: "ปานกลาง", serves: 3, equip: ["grill"],
+    ing: ["คอหมู 500 กรัม", "ซีอิ๊วขาว 2 ช้อนโต๊ะ", "ซอสหอยนางรม 1 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนโต๊ะ", "นมสด 2 ช้อนโต๊ะ", "พริกป่น ข้าวคั่ว น้ำปลา มะนาว (สำหรับแจ่ว)"],
+    steps: ["หมักคอหมูกับซีอิ๊ว ซอสหอยนางรม น้ำตาล นมสด 1 ชั่วโมง", "ย่างไฟกลางด้านละ 6–8 นาทีจนสุกเกรียม", "พักเนื้อ 5 นาทีแล้วหั่นชิ้น", "ผสมน้ำปลา มะนาว พริกป่น ข้าวคั่ว เป็นน้ำจิ้มแจ่ว"],
+    tip: "นมสดช่วยให้เนื้อหมูนุ่ม" },
+  { name: "ไก่อบซอสเทอริยากิ", cat: "ปิ้ง / อบ", time: 45, level: "ง่าย", serves: 3, equip: ["oven"],
+    ing: ["สะโพกไก่ 4 ชิ้น", "ซอสถั่วเหลืองญี่ปุ่น 3 ช้อนโต๊ะ", "มิริน 2 ช้อนโต๊ะ", "น้ำผึ้ง 1 ช้อนโต๊ะ", "ขิงขูด 1 ช้อนชา", "งาขาว"],
+    steps: ["ผสมซอส มิริน น้ำผึ้ง ขิง หมักไก่ 30 นาที", "วางไก่หนังขึ้นบนถาด อบ 200°C 25 นาที", "ทาซอสที่เหลือ อบต่อ 10 นาทีจนผิวเงา", "โรยงา"],
+    tip: "" },
+  { name: "มันฝรั่งอบชีส", cat: "ปิ้ง / อบ", time: 12, level: "ง่าย", serves: 1, equip: ["microwave"],
+    ing: ["มันฝรั่ง 1 หัวใหญ่", "เนย 1 ช้อนโต๊ะ", "ชีสขูด 2 ช้อนโต๊ะ", "เกลือ พริกไทย", "เบคอนหรือต้นหอม (ไม่ใส่ก็ได้)"],
+    steps: ["ล้างมันฝรั่ง ใช้ส้อมจิ้มรอบ ๆ", "เข้าไมโครเวฟไฟแรง 5 นาที กลับด้าน อีก 3–4 นาที", "ผ่ากลาง ใส่เนย เกลือ พริกไทย ชีส", "เข้าไมโครเวฟอีก 30 วินาทีให้ชีสละลาย"],
+    tip: "" },
+  { name: "ข้าวผัดไข่", cat: "จานเดียว", time: 10, level: "ง่าย", serves: 1, equip: ["stove", "wok"],
+    ing: ["ข้าวสวยค้างคืน 1½ ถ้วย", "ไข่ไก่ 2 ฟอง", "กระเทียมสับ 1 ช้อนชา", "ซีอิ๊วขาว 1 ช้อนโต๊ะ", "น้ำตาล ½ ช้อนชา", "ต้นหอมซอย", "น้ำมันพืช 1 ช้อนโต๊ะ"],
+    steps: ["เจียวกระเทียมในน้ำมันจนหอม", "ตอกไข่ ยีให้สุกครึ่งหนึ่ง", "ใส่ข้าว ผัดให้ร่วน ปรุงด้วยซีอิ๊วและน้ำตาล", "ใส่ต้นหอม ผัดอีกครั้ง เสิร์ฟกับแตงกวาและมะนาว"],
+    tip: "ข้าวค้างคืนผัดแล้วร่วนกว่าข้าวหุงใหม่" },
+  { name: "ข้าวมันไก่", cat: "จานเดียว", time: 60, level: "ปานกลาง", serves: 4, equip: ["stove", "pot", "ricecooker"],
+    ing: ["ไก่ทั้งตัวหรือน่องสะโพก 1 กก.", "ข้าวสาร 2 ถ้วย", "กระเทียม 1 หัว", "ขิง 1 แง่ง", "ใบเตย 2 ใบ", "เต้าเจี้ยว ขิงสับ พริก น้ำส้มสายชู (น้ำจิ้ม)"],
+    steps: ["ต้มไก่กับขิงและเกลือไฟอ่อน 30–40 นาที เก็บน้ำซุปไว้", "เจียวกระเทียมกับมันไก่ ใส่ข้าวผัดให้ทั่ว", "เทข้าวลงหม้อหุงข้าว ใช้น้ำซุปไก่แทนน้ำ ใส่ใบเตย กดหุง", "ผสมเต้าเจี้ยว ขิง พริก น้ำส้มสายชู เป็นน้ำจิ้ม", "หั่นไก่ เสิร์ฟกับข้าวและน้ำซุป"],
+    tip: "แช่ไก่ในน้ำเย็นหลังต้ม หนังจะเด้งและเนื้อไม่แห้ง" },
+  { name: "โจ๊กหม้อหุงข้าว", cat: "จานเดียว", time: 50, level: "ง่าย", serves: 2, equip: ["ricecooker"],
+    ing: ["ข้าวสาร ½ ถ้วย", "น้ำ 4 ถ้วย", "หมูสับปั้นก้อน 150 กรัม", "ขิงซอย ต้นหอม", "ซีอิ๊วขาว พริกไทย", "ไข่ไก่ 2 ฟอง (ไม่ใส่ก็ได้)"],
+    steps: ["ใส่ข้าวและน้ำในหม้อหุงข้าว กดหุง", "พอเดือดให้คนเป็นระยะ และใส่หมูสับปั้นก้อน", "ปล่อยไว้ในโหมดอุ่น 20 นาทีจนข้าวบาน", "ปรุงรส ตอกไข่ลงชาม ตักโจ๊กร้อนราด โรยขิงและต้นหอม"],
+    tip: "ใช้ข้าวสวยเหลือแทนข้าวสารได้ จะเร็วขึ้นครึ่งหนึ่ง" },
+  { name: "มาม่าไข่ต้นหอม", cat: "จานเดียว", time: 5, level: "ง่าย", serves: 1, equip: ["kettle"],
+    ing: ["บะหมี่กึ่งสำเร็จรูป 1 ซอง", "ไข่ไก่ 1 ฟอง", "ต้นหอมซอย", "มะนาว (ไม่ใส่ก็ได้)"],
+    steps: ["ใส่เส้นและเครื่องปรุงในชาม ตอกไข่ลงไป", "เทน้ำเดือดจากกาให้ท่วม ปิดฝา 3 นาที", "คนให้ไข่กระจาย โรยต้นหอม"],
+    tip: "อยากได้ไข่สุกกว่านี้ ให้ตีไข่ก่อนแล้วค่อยเทน้ำร้อนลงไปพร้อมคน" },
+  { name: "แซนด์วิชทูน่า", cat: "จานเดียว", time: 5, level: "ง่าย", serves: 2, equip: [],
+    ing: ["ขนมปังแผ่น 4 แผ่น", "ทูน่ากระป๋อง 1 กระป๋อง", "มายองเนส 2 ช้อนโต๊ะ", "หอมใหญ่สับ 2 ช้อนโต๊ะ", "ผักกาดหอม", "พริกไทย"],
+    steps: ["สะเด็ดน้ำทูน่า คลุกกับมายองเนส หอมใหญ่ พริกไทย", "วางผักกาดบนขนมปัง ตักทูน่าวาง", "ปิดด้วยขนมปังอีกแผ่น ตัดครึ่ง"],
+    tip: "เมนูนี้ไม่ต้องใช้เครื่องครัวอะไรเลย" },
+  { name: "กล้วยบวชชี", cat: "ของหวาน / เครื่องดื่ม", time: 20, level: "ง่าย", serves: 3, equip: ["stove", "pot"],
+    ing: ["กล้วยน้ำว้าห่ามนิด ๆ 5 ลูก", "กะทิ 400 มล.", "น้ำตาลทราย 4 ช้อนโต๊ะ", "เกลือ ½ ช้อนชา", "ใบเตย 2 ใบ"],
+    steps: ["ปอกกล้วย ผ่าครึ่งตามยาวและหั่นท่อน", "ต้มกะทิกับใบเตยไฟกลาง ใส่น้ำตาลและเกลือ", "พอเดือดเบา ๆ ใส่กล้วย ต้มจนกล้วยนิ่ม ประมาณ 5 นาที"],
+    tip: "แช่กล้วยในน้ำเกลืออ่อน ๆ ก่อนต้ม สีจะไม่คล้ำ" },
+  { name: "เค้กกล้วยหอม", cat: "ของหวาน / เครื่องดื่ม", time: 60, level: "ปานกลาง", serves: 8, equip: ["oven"],
+    ing: ["กล้วยหอมสุกงอม 3 ลูก", "แป้งเค้ก 200 กรัม", "ผงฟู 1 ช้อนชา", "ไข่ไก่ 2 ฟอง", "น้ำตาล 120 กรัม", "เนยละลาย 100 กรัม", "เกลือเล็กน้อย"],
+    steps: ["บดกล้วยด้วยส้อม ผสมไข่ น้ำตาล เนยละลาย", "ร่อนแป้ง ผงฟู เกลือ ลงไป ตะล่อมพอเข้ากัน", "เทใส่พิมพ์ทาเนย อบ 170°C 45–50 นาที", "ใช้ไม้จิ้ม ถ้าไม่มีแป้งติดแสดงว่าสุก"],
+    tip: "ใช้กล้วยที่เปลือกมีจุดดำเยอะ ๆ เค้กจะหอมและหวานกว่า" },
+  { name: "สมูทตี้กล้วยนมสด", cat: "ของหวาน / เครื่องดื่ม", time: 5, level: "ง่าย", serves: 1, equip: ["blender"],
+    ing: ["กล้วยหอมแช่แข็ง 1 ลูก", "นมสด 1 ถ้วย", "น้ำผึ้ง 1 ช้อนโต๊ะ", "น้ำแข็ง ½ ถ้วย"],
+    steps: ["หั่นกล้วยใส่เครื่องปั่นพร้อมนม น้ำผึ้ง น้ำแข็ง", "ปั่นจนเนียน ประมาณ 30–45 วินาที"],
+    tip: "ใช้กล้วยแช่แข็งแทนน้ำแข็ง จะข้นกว่าและรสไม่จาง" },
+
+  /* ---------- สเต็กและเมนูเนื้อ / อาหารต่างชาติ ---------- */
+  { name: "ริบอายสเต็ก ซอสพริกไทยดำ", cat: "สเต็ก", origin: "ตะวันตก", beef: true, guide: true, time: 40, level: "ปานกลาง", serves: 2, equip: ["stove", "wok"],
+    ing: ["ริบอาย 2 ชิ้น (ชิ้นละประมาณ 300 กรัม)", "เกลือทะเล และพริกไทยดำบดหยาบ", "น้ำมันพืช 1 ช้อนโต๊ะ", "เนยจืด 30 กรัม", "กระเทียมทุบ 4 กลีบ", "โรสแมรีหรือไทม์ 2 ก้าน (ใช้ทารากอนสด 1 ช้อนโต๊ะแทนได้ ใส่ตอนราดเนย)", "ซอส: พริกไทยดำบดหยาบ 1 ช้อนโต๊ะ", "ซอส: น้ำซุปเนื้อ 50 มล. และวิปปิ้งครีม 100 มล."],
+    steps: ["เอาเนื้อออกจากตู้เย็นพักไว้ 30 นาที ซับให้แห้ง โรยเกลือและพริกไทยทั้งสองด้าน", "ตั้งกระทะไฟแรงจนร้อนจัด ใส่น้ำมัน วางเนื้อลงไปแล้วอย่าขยับ จี่ด้านแรก {sear}", "กลับด้าน จี่อีก {sear2}", "ลดเป็นไฟกลาง ใส่เนย กระเทียม โรสแมรี เอียงกระทะแล้วตักเนยราดบนเนื้อ 30 วินาที แล้วยกออกทันที สำหรับความสุก{done} กลางชิ้นควรอยู่ที่ {pull}°C", "ยกเนื้อขึ้นพักบนเขียง {rest} นาทีก่อนหั่น", "ทำซอสในกระทะเดิม: ผัดพริกไทยดำพอหอม เติมน้ำซุปและครีม เคี่ยว 2 นาทีจนข้น ปรุงเกลือ"],
+    tip: "หั่นเนื้อขวางแนวเส้นใย จะเคี้ยวง่ายและนุ่มกว่า" },
+  { name: "สเต็กเซอร์ลอยน์ย่าง ซอสชิมิชูร์รี", cat: "สเต็ก", origin: "ตะวันตก", beef: true, guide: true, time: 40, level: "ปานกลาง", serves: 2, equip: ["grill"],
+    ing: ["สันนอก (เซอร์ลอยน์) 2 ชิ้น", "เกลือ พริกไทย น้ำมันมะกอก", "ชิมิชูร์รี: พาร์สลีย์สับ 1 ถ้วย", "ชิมิชูร์รี: กระเทียมสับ 3 กลีบ", "ชิมิชูร์รี: ออริกาโนแห้ง 1 ช้อนชา และพริกป่น ½ ช้อนชา", "ชิมิชูร์รี: น้ำส้มสายชูไวน์แดง 2 ช้อนโต๊ะ", "ชิมิชูร์รี: น้ำมันมะกอก ½ ถ้วย และเกลือเล็กน้อย"],
+    steps: ["ผสมส่วนผสมชิมิชูร์รีทั้งหมด พักไว้อย่างน้อย 20 นาทีให้รสเข้ากัน", "ทาน้ำมันบาง ๆ บนเนื้อ โรยเกลือและพริกไทย", "ย่างไฟแรงด้านแรก {sear}", "กลับด้าน ย่างอีก {sear} สำหรับความสุก{done} ถ้ามีเทอร์โมมิเตอร์ ให้ยกออกที่ {pull}°C", "พักเนื้อ {rest} นาที หั่นเป็นชิ้น ราดชิมิชูร์รี"],
+    tip: "ชิมิชูร์รีเป็นซอสสมุนไพรของอาร์เจนตินา ทำไว้ล่วงหน้าแล้วเก็บในตู้เย็นได้ 3 วัน" },
+  { name: "สเต็กหนาแบบรีเวิร์สเซียร์", cat: "สเต็ก", origin: "ตะวันตก", beef: true, guide: true, time: 60, level: "ยาก", serves: 2, equip: ["oven", "stove", "wok"],
+    ing: ["สเต็กหนา 3 ซม. ขึ้นไป 1 ชิ้น (ประมาณ 500 กรัม) เช่น ริบอายหรือทีโบน", "เกลือทะเล และพริกไทยดำ", "น้ำมันพืช 1 ช้อนโต๊ะ", "เนยจืด 20 กรัม", "เทอร์โมมิเตอร์วัดอุณหภูมิอาหาร"],
+    steps: ["อุ่นเตาอบที่ 120°C โรยเกลือพริกไทยบนเนื้อ วางบนตะแกรงอบ", "อบประมาณ {oven} นาที จนอุณหภูมิกลางชิ้นถึง {pull5}°C ซึ่งต่ำกว่าเป้าหมายของความสุก{done}ประมาณ 5°C ให้เชื่ออุณหภูมิมากกว่าเวลา", "ตั้งกระทะไฟแรงจนร้อนจัด ใส่น้ำมัน จี่เนื้อด้านละ 1 นาที", "ใส่เนย ราดบนเนื้อ 30 วินาที แล้วหั่นเสิร์ฟได้เลย"],
+    tip: "วิธีนี้ทำให้เนื้อสุกเท่ากันตั้งแต่ขอบถึงกลางชิ้น เหมาะกับสเต็กหนา และไม่ต้องพักเนื้อนาน" },
+  { name: "สเต็กหม้อทอดไร้น้ำมัน", cat: "สเต็ก", origin: "ตะวันตก", beef: true, guide: true, time: 25, level: "ง่าย", serves: 1, equip: ["airfryer"],
+    ing: ["สเต็ก 1 ชิ้น", "เกลือ พริกไทยดำ", "น้ำมัน 1 ช้อนชา", "เนยผสมกระเทียมสับ 1 ช้อนโต๊ะ"],
+    steps: ["อุ่นหม้อทอดที่ 200°C 5 นาที", "ทาน้ำมันบนเนื้อ โรยเกลือและพริกไทย", "อบ 200°C {air1}", "กลับด้าน อบต่ออีก {air2} สำหรับความสุก{done} ถ้ามีเทอร์โมมิเตอร์ ให้ยกออกที่ {pull}°C", "พักเนื้อ {rest} นาที วางเนยกระเทียมด้านบนให้ละลาย"],
+    tip: "หม้อทอดแต่ละรุ่นร้อนไม่เท่ากัน ครั้งแรกให้ผ่าดูกลางชิ้นก่อนเสิร์ฟ" },
+  { name: "เสือร้องไห้", cat: "ปิ้ง / อบ", origin: "ไทย", beef: true, guide: true, time: 50, level: "ปานกลาง", serves: 3, equip: ["grill"],
+    ing: ["เนื้อสันนอกหรือพับใน 400 กรัม", "ซีอิ๊วขาว 1 ช้อนโต๊ะ", "ซอสหอยนางรม 1 ช้อนโต๊ะ", "พริกไทย และน้ำตาล 1 ช้อนชา", "แจ่ว: น้ำปลา 3 ช้อนโต๊ะ น้ำมะนาว 3 ช้อนโต๊ะ", "แจ่ว: น้ำมะขามเปียก 1 ช้อนโต๊ะ น้ำตาล 1 ช้อนชา", "แจ่ว: พริกป่น 1 ช้อนโต๊ะ ข้าวคั่ว 1 ช้อนโต๊ะ", "หอมแดงซอย ผักชีฝรั่ง ข้าวเหนียว ผักสด"],
+    steps: ["หมักเนื้อกับซีอิ๊ว ซอสหอยนางรม พริกไทย น้ำตาล 30 นาที", "ย่างไฟกลางค่อนแรง ด้านแรก {sear}", "กลับด้าน ย่างอีก {sear} สำหรับความสุก{done}", "พักเนื้อ {rest} นาที หั่นชิ้นพอดีคำขวางเส้นใย", "ผสมน้ำจิ้มแจ่ว เสิร์ฟกับข้าวเหนียวและผักสด"],
+    tip: "" },
+  { name: "เนื้อผัดน้ำมันหอย", cat: "ผัด", origin: "ไทย", beef: true, time: 25, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["เนื้อสะโพกสไลซ์บาง 300 กรัม", "แป้งมัน 1 ช้อนชา", "ซอสหอยนางรม 2 ช้อนโต๊ะ", "ซีอิ๊วขาว 1 ช้อนชา", "น้ำตาล 1 ช้อนชา", "กระเทียมสับ 1 ช้อนโต๊ะ", "หอมใหญ่ ½ หัว และต้นหอม 2 ต้น", "น้ำมันพืช 2 ช้อนโต๊ะ"],
+    steps: ["หมักเนื้อกับแป้งมันและซีอิ๊วขาว 15 นาที", "เจียวกระเทียม ใส่เนื้อผัดไฟแรงจนเกือบสุก", "ใส่หอมใหญ่ ซอสหอยนางรม น้ำตาล ผัดอีก 1 นาที", "ใส่ต้นหอม ปิดไฟ"],
+    tip: "ผัดเนื้อไฟแรงและเร็ว ถ้าผัดนาน เนื้อจะเหนียว" },
+  { name: "บีฟสตูว์", cat: "ต้ม / แกง", origin: "ตะวันตก", beef: true, time: 150, level: "ปานกลาง", serves: 4, equip: ["stove", "pot"],
+    ing: ["เนื้อน่องหรือสะโพกหั่นเต๋า 800 กรัม", "แป้งสาลี 2 ช้อนโต๊ะ", "หอมใหญ่ 1 หัว และกระเทียม 4 กลีบ", "แครอท 2 หัว และมันฝรั่ง 3 หัว", "ขึ้นฉ่ายฝรั่ง 2 ก้าน", "ซอสมะเขือเทศเข้มข้น (tomato paste) 2 ช้อนโต๊ะ", "น้ำซุปเนื้อ 1 ลิตร", "ใบกระวาน 2 ใบ และซอสวูสเตอร์ 1 ช้อนโต๊ะ"],
+    steps: ["คลุกเนื้อกับเกลือ พริกไทย และแป้ง", "ใช้หม้อก้นหนา จี่เนื้อทีละน้อยจนผิวเป็นสีน้ำตาล ตักขึ้นพักไว้", "ผัดหอมใหญ่ กระเทียม ขึ้นฉ่าย ใส่ tomato paste ผัดต่อ 2 นาที", "ใส่เนื้อกลับลงหม้อ เติมน้ำซุป ใบกระวาน ซอสวูสเตอร์ ปิดฝาเคี่ยวไฟอ่อน 90 นาที", "ใส่แครอทและมันฝรั่ง เคี่ยวต่อ 30 นาทีจนนุ่ม ปรุงเกลือพริกไทย"],
+    tip: "จี่เนื้อทีละน้อย ถ้าใส่ทีเดียวเยอะ เนื้อจะคายน้ำแทนที่จะเป็นสีน้ำตาล" },
+  { name: "แกงกะหรี่ญี่ปุ่นเนื้อ", cat: "ต้ม / แกง", origin: "ญี่ปุ่น", beef: true, time: 80, level: "ง่าย", serves: 4, equip: ["stove", "pot"],
+    ing: ["เนื้อวัวหั่นเต๋า 400 กรัม", "หอมใหญ่ 2 หัว", "แครอท 1 หัว และมันฝรั่ง 2 หัว", "ก้อนแกงกะหรี่ญี่ปุ่น ½ กล่อง (ประมาณ 100 กรัม)", "น้ำ 700 มล.", "น้ำมันพืช 1 ช้อนโต๊ะ", "ข้าวสวย"],
+    steps: ["ผัดหอมใหญ่ซอยไฟกลาง 10 นาทีจนเป็นสีน้ำตาลอ่อน", "ใส่เนื้อผัดจนผิวเปลี่ยนสี", "เติมน้ำ เคี่ยวไฟอ่อน 40 นาทีจนเนื้อนุ่ม", "ใส่แครอทและมันฝรั่ง เคี่ยวต่อ 15 นาที", "ปิดไฟ ใส่ก้อนแกงคนให้ละลาย แล้วเปิดไฟอ่อนคนต่อ 5 นาทีจนข้น"],
+    tip: "ปิดไฟก่อนใส่ก้อนแกง จะละลายเนียน ไม่เป็นก้อน" },
+  { name: "กิวด้ง ข้าวหน้าเนื้อ", cat: "จานเดียว", origin: "ญี่ปุ่น", beef: true, time: 20, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["เนื้อสไลซ์บางแบบชาบู 250 กรัม", "หอมใหญ่ 1 หัว", "น้ำซุปดาชิ 150 มล.", "ซีอิ๊วญี่ปุ่น 2 ช้อนโต๊ะ", "มิริน 2 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนโต๊ะ", "ข้าวญี่ปุ่นสุก 2 ถ้วย", "ขิงดองแดง และไข่ออนเซ็น (ไม่ใส่ก็ได้)"],
+    steps: ["ต้มดาชิ ซีอิ๊ว มิริน น้ำตาล ในกระทะ", "ใส่หอมใหญ่ซอย เคี่ยว 5 นาทีจนนิ่ม", "ใส่เนื้อ คลี่ให้ทั่ว ต้ม 2 นาทีจนสุก ช้อนฟองออก", "ตักราดบนข้าว โปะไข่และขิงดอง"],
+    tip: "อย่าต้มเนื้อนาน เนื้อสไลซ์บางสุกเร็วมาก" },
+  { name: "บุลโกกิเนื้อ", cat: "ผัด", origin: "เกาหลี", beef: true, time: 45, level: "ง่าย", serves: 3, equip: ["stove", "wok"],
+    ing: ["เนื้อสันในหรือริบอายสไลซ์บาง 400 กรัม", "ซีอิ๊วญี่ปุ่น 4 ช้อนโต๊ะ", "น้ำตาล 1½ ช้อนโต๊ะ", "สาลี่ขูด ½ ลูก", "กระเทียมสับ 1 ช้อนโต๊ะ", "น้ำมันงา 1 ช้อนโต๊ะ", "หอมใหญ่ ½ หัว", "ต้นหอม และงาขาว"],
+    steps: ["ผสมซีอิ๊ว น้ำตาล สาลี่ กระเทียม น้ำมันงา หมักเนื้อ 30 นาที", "ผัดเนื้อกับหอมใหญ่ไฟแรง 3–4 นาที", "โรยต้นหอมและงา กินกับข้าวสวยหรือห่อผักกาด"],
+    tip: "สาลี่ขูดช่วยให้เนื้อนุ่ม ถ้าไม่มีใช้แอปเปิลแทนได้" },
+  { name: "สปาเกตตีโบโลเนส", cat: "จานเดียว", origin: "อิตาเลียน", beef: true, time: 50, level: "ง่าย", serves: 3, equip: ["stove", "pot", "wok"],
+    ing: ["เส้นสปาเกตตี 250 กรัม", "เนื้อวัวบด 300 กรัม", "หอมใหญ่ แครอท ขึ้นฉ่ายฝรั่ง สับละเอียด อย่างละ 1", "กระเทียมสับ 3 กลีบ", "มะเขือเทศกระป๋อง 400 กรัม", "ซอสมะเขือเทศเข้มข้น 1 ช้อนโต๊ะ", "นมสด ½ ถ้วย", "ออริกาโน และพาร์มีซานขูด"],
+    steps: ["ผัดหอมใหญ่ แครอท ขึ้นฉ่าย กระเทียม จนนิ่ม", "ใส่เนื้อบด ผัดจนสุกร่วน", "ใส่ tomato paste มะเขือเทศกระป๋อง นมสด เคี่ยวไฟอ่อน 30 นาที", "ระหว่างนั้นต้มเส้นในน้ำเดือดใส่เกลือ ตามเวลาข้างซอง", "คลุกเส้นกับซอส โรยพาร์มีซาน"],
+    tip: "นมสดทำให้ซอสกลมกล่อมและเนื้อนุ่ม ตามสูตรดั้งเดิมของโบโลญญา" },
+  { name: "สปาเกตตีคาโบนารา", cat: "จานเดียว", origin: "อิตาเลียน", time: 20, level: "ปานกลาง", serves: 2, equip: ["stove", "pot", "wok"],
+    ing: ["เส้นสปาเกตตี 200 กรัม", "เบคอนหรือกวนชาเล 100 กรัม", "ไข่แดง 3 ฟอง และไข่ทั้งฟอง 1 ฟอง", "พาร์มีซานหรือเปโกริโนขูด 50 กรัม", "พริกไทยดำบดหยาบ"],
+    steps: ["ตีไข่กับชีสและพริกไทยในชาม", "ต้มเส้นในน้ำเดือดใส่เกลือ ตักน้ำต้มเส้นเก็บไว้ ½ ถ้วย", "ผัดเบคอนจนกรอบ แล้วปิดไฟ", "ใส่เส้นลงกระทะ รอ 30 วินาทีให้กระทะคลายร้อน", "เทไข่ลงไป คลุกเร็ว ๆ เติมน้ำต้มเส้นทีละน้อยจนซอสเนียนเป็นครีม"],
+    tip: "ห้ามเปิดไฟตอนใส่ไข่ ไม่อย่างนั้นจะกลายเป็นไข่คน" },
+  { name: "ชีสเบอร์เกอร์เนื้อ", cat: "จานเดียว", origin: "ตะวันตก", beef: true, time: 25, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["เนื้อวัวบด (มันประมาณ 20%) 300 กรัม", "เกลือ พริกไทย", "ขนมปังเบอร์เกอร์ 2 ก้อน", "ชีสเชดดาร์ 2 แผ่น", "ผักกาดหอม มะเขือเทศ หอมใหญ่", "ซอสมะเขือเทศ มัสตาร์ด มายองเนส"],
+    steps: ["แบ่งเนื้อเป็น 2 ก้อน ปั้นแบนหนา 1.5 ซม. กดตรงกลางให้บุ๋มเล็กน้อย", "โรยเกลือพริกไทยด้านนอกตอนก่อนลงกระทะ", "จี่ไฟแรงด้านละ 3 นาที วางชีสบนเนื้อหลังกลับด้าน", "ปิ้งขนมปังด้านที่ตัดในกระทะเดิม", "ประกอบเบอร์เกอร์กับผักและซอส"],
+    tip: "อย่ากดเนื้อตอนจี่ น้ำในเนื้อจะไหลออกและแห้ง" },
+  { name: "ทาโก้เนื้อ", cat: "จานเดียว", origin: "เม็กซิกัน", beef: true, time: 25, level: "ง่าย", serves: 3, equip: ["stove", "wok"],
+    ing: ["เนื้อวัวบด 300 กรัม", "หอมใหญ่สับ ½ หัว และกระเทียม 2 กลีบ", "ผงยี่หร่า 1 ช้อนชา และปาปริกา 1 ช้อนชา", "พริกป่น ½ ช้อนชา และเกลือ", "แป้งตอร์ตียา 6 แผ่น", "ผักกาดหอมซอย มะเขือเทศหั่นเต๋า ชีสขูด", "มะนาว และผักชี"],
+    steps: ["ผัดหอมใหญ่และกระเทียม ใส่เนื้อผัดจนสุก", "ใส่เครื่องเทศ เกลือ และน้ำ 3 ช้อนโต๊ะ ผัดต่อ 3 นาที", "อุ่นแป้งตอร์ตียาในกระทะแห้งด้านละ 30 วินาที", "ใส่ไส้เนื้อ ผัก ชีส บีบมะนาว โรยผักชี"],
+    tip: "" },
+  { name: "แพนเค้ก", cat: "ของหวาน / เครื่องดื่ม", origin: "ตะวันตก", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["แป้งสาลีอเนกประสงค์ 1 ถ้วย", "ผงฟู 2 ช้อนชา", "น้ำตาล 1 ช้อนโต๊ะ และเกลือ ¼ ช้อนชา", "นมสด ¾ ถ้วย", "ไข่ไก่ 1 ฟอง", "เนยละลาย 2 ช้อนโต๊ะ", "เมเปิลไซรัปหรือน้ำผึ้ง"],
+    steps: ["ผสมแป้ง ผงฟู น้ำตาล เกลือ ในชาม", "ผสมนม ไข่ เนยละลาย ในอีกชาม", "เทของเหลวลงของแห้ง คนพอเข้ากัน มีก้อนเล็กน้อยได้ พักไว้ 5 นาที", "ตั้งกระทะไฟอ่อนค่อนกลาง ทาเนยบาง ๆ ตักแป้งครั้งละ ¼ ถ้วย", "พอมีฟองผุดทั่วหน้า (1–2 นาที) กลับด้าน ทอดต่ออีก 1 นาที"],
+    tip: "อย่าคนแป้งนานเกินไป แพนเค้กจะแข็งไม่ฟู" }
+];
+
+/* ---------- น้ำจิ้ม / ซอส ---------- */
+RECIPES.push(
+  { name: "น้ำจิ้มซีฟู้ด", kind: "น้ำจิ้ม / ซอส", cat: "ไม่ใช้ไฟ", origin: "ไทย", time: 10, level: "ง่าย", yield: "ประมาณ ½ ถ้วย", equip: [],
+    ing: ["พริกขี้หนูสวน 10 เม็ด", "กระเทียม 5 กลีบ", "รากผักชี 1 ราก (ไม่ใส่ก็ได้)", "น้ำปลา 3 ช้อนโต๊ะ", "น้ำมะนาว 4 ช้อนโต๊ะ", "น้ำตาลทราย 1 ช้อนโต๊ะ", "ผักชีซอย"],
+    steps: ["สับหรือโขลกพริก กระเทียม รากผักชี ให้ละเอียด", "ผสมน้ำปลา น้ำมะนาว น้ำตาล คนจนน้ำตาลละลาย", "ใส่พริกกระเทียม ชิมให้ได้รสเปรี้ยว เค็ม หวาน ตามชอบ", "โรยผักชี"],
+    tip: "ใช้ได้ทั้งกุ้ง ปลา หมึก และเนื้อย่าง" },
+  { name: "น้ำจิ้มแจ่ว", kind: "น้ำจิ้ม / ซอส", cat: "ไม่ใช้ไฟ", origin: "ไทย", time: 5, level: "ง่าย", yield: "ประมาณ ⅓ ถ้วย", equip: [],
+    ing: ["น้ำปลา 3 ช้อนโต๊ะ", "น้ำมะนาว 2 ช้อนโต๊ะ", "น้ำมะขามเปียก 1 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนชา", "พริกป่น 1 ช้อนโต๊ะ", "ข้าวคั่ว 1 ช้อนโต๊ะ", "หอมแดงซอย และผักชีฝรั่งซอย"],
+    steps: ["ผสมน้ำปลา มะนาว น้ำมะขาม น้ำตาล คนให้ละลาย", "ใส่พริกป่น หอมแดง ผักชีฝรั่ง", "ใส่ข้าวคั่วตอนจะกิน"],
+    tip: "ใส่ข้าวคั่วตอนท้าย จะหอมและไม่อืด" },
+  { name: "น้ำจิ้มไก่", kind: "น้ำจิ้ม / ซอส", cat: "ต้ม / แกง", origin: "ไทย", time: 20, level: "ง่าย", yield: "ประมาณ 1 ถ้วย", equip: ["stove", "pot"],
+    ing: ["พริกชี้ฟ้าแดง 5 เม็ด", "กระเทียม 6 กลีบ", "น้ำส้มสายชู ½ ถ้วย", "น้ำตาลทราย ¾ ถ้วย", "น้ำ ¼ ถ้วย", "เกลือ 1 ช้อนชา"],
+    steps: ["สับพริกกับกระเทียมให้ละเอียด", "ต้มน้ำส้มสายชู น้ำตาล น้ำ และเกลือจนเดือด", "ใส่พริกกระเทียม เคี่ยวไฟอ่อน 10 นาทีจนข้น", "พักให้เย็น ซอสจะข้นขึ้นอีก"],
+    tip: "เก็บในขวดสะอาดในตู้เย็นได้ 1 เดือน" },
+  { name: "น้ำปลาพริก", kind: "น้ำจิ้ม / ซอส", cat: "ไม่ใช้ไฟ", origin: "ไทย", time: 3, level: "ง่าย", yield: "ประมาณ ¼ ถ้วย", equip: [],
+    ing: ["น้ำปลา 3 ช้อนโต๊ะ", "พริกขี้หนูซอย 5 เม็ด", "กระเทียมซอย 2 กลีบ", "น้ำมะนาว 1 ช้อนโต๊ะ"],
+    steps: ["ผสมทุกอย่างในถ้วย", "พักไว้ 5 นาทีให้พริกและกระเทียมออกรส"], tip: "" },
+  { name: "น้ำจิ้มข้าวมันไก่", kind: "น้ำจิ้ม / ซอส", cat: "ไม่ใช้ไฟ", origin: "ไทย", time: 10, level: "ง่าย", yield: "ประมาณ ⅓ ถ้วย", equip: [],
+    ing: ["เต้าเจี้ยว 3 ช้อนโต๊ะ", "ขิงสับ 1 ช้อนโต๊ะ", "กระเทียมสับ 1 ช้อนชา", "พริกขี้หนูสับ 3 เม็ด", "น้ำส้มสายชู 1 ช้อนโต๊ะ", "ซีอิ๊วดำ 1 ช้อนชา", "น้ำตาล 1 ช้อนชา"],
+    steps: ["บดเต้าเจี้ยวให้เม็ดแตก", "ผสมทุกอย่างให้เข้ากัน ชิมแล้วปรับรส"], tip: "" },
+  { name: "ซอสพริกไทยดำ", kind: "น้ำจิ้ม / ซอส", cat: "ผัด", origin: "ตะวันตก", time: 15, level: "ง่าย", yield: "สำหรับสเต็ก 2 ชิ้น", equip: ["stove", "wok"],
+    ing: ["เนย 20 กรัม", "หอมแดงสับ 2 หัว", "พริกไทยดำบดหยาบ 1 ช้อนโต๊ะ", "น้ำสต็อกเนื้อ ½ ถ้วย", "วิปปิ้งครีม ½ ถ้วย", "ซอสวูสเตอร์ 1 ช้อนชา", "เกลือ"],
+    steps: ["ละลายเนย ผัดหอมแดงจนนิ่ม", "ใส่พริกไทย ผัด 30 วินาทีจนหอม", "เติมน้ำสต็อก เคี่ยว 3 นาทีจนเหลือครึ่งหนึ่ง", "ใส่ครีมและซอสวูสเตอร์ เคี่ยว 2 นาทีจนข้น ปรุงเกลือ"],
+    tip: "ทำในกระทะที่เพิ่งจี่สเต็ก ซอสจะได้รสเนื้อด้วย" },
+  { name: "ซอสเห็ดครีม", kind: "น้ำจิ้ม / ซอส", cat: "ผัด", origin: "ตะวันตก", time: 15, level: "ง่าย", yield: "สำหรับ 2–3 ที่", equip: ["stove", "wok"],
+    ing: ["เห็ดแชมปิญองหรือเห็ดออรินจิหั่น 150 กรัม", "เนย 20 กรัม", "กระเทียมสับ 2 กลีบ", "วิปปิ้งครีม ½ ถ้วย", "น้ำสต็อกไก่ ¼ ถ้วย", "ไทม์ เกลือ พริกไทย"],
+    steps: ["ผัดเห็ดกับเนยไฟแรง 5 นาทีจนเป็นสีน้ำตาล", "ใส่กระเทียม ผัดพอหอม", "เติมน้ำสต็อกและครีม เคี่ยว 3 นาทีจนข้น ปรุงรส"],
+    tip: "ใส่เกลือหลังเห็ดเป็นสีน้ำตาลแล้ว ถ้าใส่ก่อน เห็ดจะคายน้ำ" },
+  { name: "ชิมิชูร์รี", kind: "น้ำจิ้ม / ซอส", cat: "ไม่ใช้ไฟ", origin: "ตะวันตก", time: 10, level: "ง่าย", yield: "ประมาณ 1 ถ้วย", equip: [],
+    ing: ["พาร์สลีย์ 1 กำ", "กระเทียม 3 กลีบ", "ออริกาโนแห้ง 1 ช้อนชา", "พริกป่น ½ ช้อนชา", "น้ำส้มสายชูไวน์แดง 2 ช้อนโต๊ะ", "น้ำมันมะกอก ½ ถ้วย", "เกลือเล็กน้อย"],
+    steps: ["สับพาร์สลีย์และกระเทียมให้ละเอียด", "ผสมกับออริกาโน พริกป่น น้ำส้มสายชู น้ำมันมะกอก เกลือ", "พักไว้ 20 นาทีก่อนใช้"],
+    tip: "ซอสสมุนไพรของอาร์เจนตินา เก็บในตู้เย็นได้ 3 วัน" },
+  { name: "ซัลซ่ามะเขือเทศ", kind: "น้ำจิ้ม / ซอส", cat: "ไม่ใช้ไฟ", origin: "เม็กซิกัน", time: 10, level: "ง่าย", yield: "ประมาณ 1½ ถ้วย", equip: [],
+    ing: ["มะเขือเทศหั่นเต๋า 3 ลูก", "หอมใหญ่สับ ½ หัว", "พริกจาลาปิโนหรือพริกชี้ฟ้าสับ 1 เม็ด", "ผักชีสับ ¼ ถ้วย", "น้ำมะนาว 1 ช้อนโต๊ะ", "เกลือ"],
+    steps: ["ผสมทุกอย่างในชาม", "พักในตู้เย็น 15 นาทีให้รสเข้ากัน"], tip: "" },
+  { name: "ซอสเทอริยากิ", kind: "น้ำจิ้ม / ซอส", cat: "ต้ม / แกง", origin: "ญี่ปุ่น", time: 10, level: "ง่าย", yield: "ประมาณ ½ ถ้วย", equip: ["stove", "pot"],
+    ing: ["ซีอิ๊วญี่ปุ่น 4 ช้อนโต๊ะ", "มิริน 4 ช้อนโต๊ะ", "สาเกหรือน้ำ 2 ช้อนโต๊ะ", "น้ำตาล 2 ช้อนโต๊ะ"],
+    steps: ["ใส่ทุกอย่างในหม้อเล็ก ต้มให้เดือด", "เคี่ยวไฟอ่อน 5 นาทีจนข้นเล็กน้อย"],
+    tip: "ราดไก่ แซลมอน หรือเนื้อย่างได้หมด" },
+  { name: "เนยกระเทียมสมุนไพร", kind: "น้ำจิ้ม / ซอส", cat: "ไม่ใช้ไฟ", origin: "ตะวันตก", time: 10, level: "ง่าย", yield: "ประมาณ 100 กรัม", equip: [],
+    ing: ["เนยจืดนิ่ม 100 กรัม", "กระเทียมสับ 2 กลีบ", "พาร์สลีย์สับ 1 ช้อนโต๊ะ", "โรสแมรีสับ 1 ช้อนชา", "เกลือ ¼ ช้อนชา", "น้ำมะนาว ½ ช้อนชา"],
+    steps: ["บี้เนยให้นิ่ม ผสมทุกอย่างให้เข้ากัน", "ม้วนในพลาสติกแรปเป็นแท่ง แช่เย็น 30 นาที", "หั่นเป็นแว่น วางบนสเต็กร้อน ๆ"],
+    tip: "แช่แข็งได้ 2 เดือน หั่นใช้ทีละแว่น" },
+
+/* ---------- น้ำสต็อก ---------- */
+  { name: "น้ำสต็อกไก่", kind: "น้ำสต็อก", protein: "ไก่", cat: "ต้ม / แกง", origin: "ไทย", time: 110, level: "ง่าย", yield: "ประมาณ 2 ลิตร", equip: ["stove", "pot"],
+    ing: ["โครงไก่ 1 กก.", "น้ำเย็น 3 ลิตร", "หอมใหญ่ 1 หัว", "แครอท 1 หัว", "ขึ้นฉ่าย 2 ต้น", "รากผักชี 3 ราก", "กระเทียม 5 กลีบ", "พริกไทยเม็ด 1 ช้อนชา"],
+    steps: ["ลวกโครงไก่ในน้ำเดือด 3 นาที เทน้ำทิ้ง แล้วล้างให้สะอาด", "ใส่โครงไก่ น้ำเย็น และผักทั้งหมดลงหม้อ ตั้งไฟกลาง", "พอเดือด ลดไฟอ่อนที่สุด เคี่ยว 90 นาที ช้อนฟองออกเป็นระยะ", "กรองผ่านผ้าขาวบาง พักให้เย็น"],
+    tip: "อย่าให้เดือดแรง น้ำซุปจะขุ่น แบ่งใส่ถุงแช่แข็งเก็บได้ 3 เดือน" },
+  { name: "น้ำสต็อกเนื้อ", kind: "น้ำสต็อก", protein: "เนื้อวัว", cat: "ต้ม / แกง", origin: "ตะวันตก", time: 240, level: "ปานกลาง", yield: "ประมาณ 2.5 ลิตร", equip: ["oven", "stove", "pot"],
+    ing: ["กระดูกเนื้อวัวที่มีเนื้อติด 1.5 กก.", "หอมใหญ่ 2 หัว", "แครอท 2 หัว", "ขึ้นฉ่ายฝรั่ง 2 ก้าน", "ซอสมะเขือเทศเข้มข้น (tomato paste) 2 ช้อนโต๊ะ", "ใบกระวาน 2 ใบ และพริกไทยเม็ด", "น้ำเย็น 4 ลิตร"],
+    steps: ["อบกระดูกที่ 220°C 40 นาทีจนเป็นสีน้ำตาลเข้ม", "ทา tomato paste บนกระดูก ใส่ผักลงถาด อบต่อ 15 นาที", "ย้ายทั้งหมดลงหม้อ เติมน้ำเย็น ใบกระวาน พริกไทย", "เคี่ยวไฟอ่อน 3 ชั่วโมง ช้อนฟองและไขมันออก", "กรองแล้วพักให้เย็น"],
+    tip: "การอบกระดูกก่อนทำให้น้ำสต็อกสีเข้มและรสลึก เหมาะกับสตูว์และซอสสเต็ก" },
+  { name: "น้ำสต็อกผัก", kind: "น้ำสต็อก", protein: "ผัก", cat: "ต้ม / แกง", origin: "ตะวันตก", time: 60, level: "ง่าย", yield: "ประมาณ 2 ลิตร", equip: ["stove", "pot"],
+    ing: ["หอมใหญ่ 2 หัว", "แครอท 2 หัว", "ขึ้นฉ่าย 3 ต้น", "เห็ดหอมแห้ง 4 ดอก", "กระเทียม 1 หัว", "มะเขือเทศ 2 ลูก", "ใบกระวาน 1 ใบ", "น้ำ 2.5 ลิตร"],
+    steps: ["หั่นผักเป็นชิ้นใหญ่", "ใส่ทุกอย่างลงหม้อ ต้มให้เดือด", "ลดไฟอ่อน เคี่ยว 45 นาที", "กรองเก็บ"],
+    tip: "เห็ดหอมแห้งให้รสกลมกล่อมแทนกระดูก" },
+  { name: "น้ำซุปดาชิ", kind: "น้ำสต็อก", protein: "ปลา", cat: "ต้ม / แกง", origin: "ญี่ปุ่น", time: 40, level: "ง่าย", yield: "ประมาณ 1 ลิตร", equip: ["stove", "pot"],
+    ing: ["สาหร่ายคมบุ 10 กรัม (ขนาดประมาณ 10×10 ซม.)", "ปลาโอแห้งขูด (คัตสึโอบูชิ) 20 กรัม", "น้ำ 1 ลิตร"],
+    steps: ["แช่คมบุในน้ำ 30 นาที (ถ้ารีบ ข้ามได้)", "ตั้งไฟกลาง เอาคมบุออกก่อนน้ำเดือด", "พอเดือด ใส่ปลาโอแห้ง ปิดไฟ ทิ้งไว้ 3 นาที", "กรองผ่านผ้าขาวบาง"],
+    tip: "ใช้ทำกิวด้ง ซุปมิโซะ และไข่ตุ๋นญี่ปุ่น" },
+
+/* ---------- จานเคียง ---------- */
+  { name: "ข้าวสวย", kind: "จานเคียง", cat: "นึ่ง", origin: "ไทย", time: 35, level: "ง่าย", serves: 4, equip: ["ricecooker"],
+    ing: ["ข้าวหอมมะลิ 2 ถ้วย", "น้ำ 2½ ถ้วย (ถ้าเป็นข้าวใหม่ ใช้ 2 ถ้วย)"],
+    steps: ["ซาวข้าว 2–3 รอบจนน้ำใสขึ้น", "ใส่น้ำตามสัดส่วน กดหุง", "พอสุก อุ่นทิ้งไว้ 10 นาที แล้วซุยให้ร่วน"], tip: "" },
+  { name: "ข้าวเหนียวนึ่ง", kind: "จานเคียง", cat: "นึ่ง", origin: "ไทย", time: 30, level: "ง่าย", serves: 4, equip: ["stove", "steamer"],
+    ing: ["ข้าวเหนียว 2 ถ้วย", "น้ำสำหรับแช่"],
+    steps: ["แช่ข้าวเหนียวในน้ำอย่างน้อย 4 ชั่วโมง หรือข้ามคืน", "สะเด็ดน้ำ เทใส่ซึ้งที่รองผ้าขาวบาง", "นึ่งน้ำเดือดจัด 20 นาที", "กลับข้าว นึ่งต่ออีก 10 นาทีจนเม็ดใส"],
+    tip: "เวลาทำ 30 นาที ยังไม่รวมเวลาแช่ข้าว" },
+  { name: "มันบดเนย", kind: "จานเคียง", protein: "ผัก", cat: "ต้ม / แกง", origin: "ตะวันตก", time: 30, level: "ง่าย", serves: 3, equip: ["stove", "pot"],
+    ing: ["มันฝรั่ง 500 กรัม", "เนย 40 กรัม", "นมสดอุ่น ½ ถ้วย", "เกลือ พริกไทย", "ลูกจันทน์เทศป่น (ไม่ใส่ก็ได้)"],
+    steps: ["ปอกมันฝรั่ง หั่นชิ้นเท่ากัน ใส่หม้อพร้อมน้ำเย็นและเกลือ", "พอเดือด ต้มต่อ 15 นาทีจนจิ้มส้อมทะลุง่าย", "เทน้ำออก ตั้งไฟอ่อน 1 นาทีให้น้ำระเหย", "บดกับเนย ค่อย ๆ เติมนมอุ่น ปรุงรส"],
+    tip: "อย่าใช้เครื่องปั่น มันบดจะเหนียวเป็นกาว" },
+  { name: "เฟรนช์ฟรายส์หม้อทอด", kind: "จานเคียง", protein: "ผัก", cat: "ทอด", origin: "ตะวันตก", time: 35, level: "ง่าย", serves: 2, equip: ["airfryer"],
+    ing: ["มันฝรั่ง 2 หัวใหญ่", "น้ำมัน 1 ช้อนโต๊ะ", "เกลือ", "ปาปริกา (ไม่ใส่ก็ได้)"],
+    steps: ["หั่นมันฝรั่งเป็นแท่งหนา 1 ซม. แช่น้ำเย็น 15 นาที", "ซับให้แห้งสนิท คลุกน้ำมัน", "อบ 200°C 18 นาที เขย่าตะกร้าทุก 6 นาที", "โรยเกลือตอนยังร้อน"],
+    tip: "การแช่น้ำช่วยล้างแป้งออก ทำให้กรอบขึ้น" },
+  { name: "สลัดผักน้ำใส", kind: "จานเคียง", protein: "ผัก", cat: "ไม่ใช้ไฟ", origin: "ตะวันตก", time: 10, level: "ง่าย", serves: 2, equip: [],
+    ing: ["ผักสลัดรวม 2 กำมือ", "มะเขือเทศเชอร์รี 8 ลูก", "แตงกวา ½ ลูก", "หอมแดงซอย", "น้ำสลัด: น้ำมันมะกอก 3 ช้อนโต๊ะ", "น้ำสลัด: น้ำส้มสายชูหมัก 1 ช้อนโต๊ะ (ใช้น้ำมะนาวแทนได้)", "น้ำสลัด: มัสตาร์ด ½ ช้อนชา น้ำผึ้ง ½ ช้อนชา เกลือ พริกไทย"],
+    steps: ["ล้างผัก แช่น้ำเย็น แล้วสะเด็ดให้แห้ง", "เขย่าส่วนผสมน้ำสลัดในขวดจนเข้ากัน", "คลุกผักกับน้ำสลัดตอนจะเสิร์ฟ"],
+    tip: "ผักต้องแห้ง น้ำสลัดถึงจะเกาะใบ" },
+  { name: "ผักผัดเนยกระเทียม", kind: "จานเคียง", protein: "ผัก", cat: "ผัด", origin: "ตะวันตก", time: 15, level: "ง่าย", serves: 2, equip: ["stove", "wok", "pot"],
+    ing: ["แครอท 1 หัว", "บรอกโคลี 1 หัว", "ข้าวโพดอ่อน 6 ฝัก", "เนย 20 กรัม", "กระเทียมสับ 2 กลีบ", "เกลือ พริกไทย"],
+    steps: ["ลวกแครอทและบรอกโคลี 2 นาที", "ละลายเนยในกระทะ ผัดกระเทียมพอหอม", "ใส่ผัก ผัดไฟกลาง 3 นาทีจนผิวเกรียม ปรุงรส"], tip: "" },
+
+/* ---------- ปลา ---------- */
+  { name: "ปลาทอดน้ำปลา", protein: "ปลา", cat: "ทอด", origin: "ไทย", time: 25, level: "ง่าย", serves: 3, equip: ["stove", "wok"],
+    ing: ["ปลานิลหรือปลาทับทิม 1 ตัว (ประมาณ 600 กรัม)", "น้ำปลา 2 ช้อนโต๊ะ", "น้ำมันสำหรับทอด"],
+    steps: ["บั้งปลาทั้งสองด้าน ซับให้แห้ง", "ทาน้ำปลาให้ทั่วตัว พักไว้ 10 นาที", "ทอดในน้ำมันร้อนไฟกลาง ด้านละ 7 นาทีจนกรอบ อย่าเพิ่งรีบพลิก", "ตักขึ้นสะเด็ดน้ำมัน"],
+    tip: "ปลาต้องแห้งก่อนลงน้ำมัน น้ำมันจะไม่กระเด็น" },
+  { name: "แซลมอนจี่ซอสเนยมะนาว", protein: "ปลา", cat: "ทอด", origin: "ตะวันตก", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["แซลมอนติดหนัง 2 ชิ้น (ชิ้นละ 150 กรัม)", "เกลือ พริกไทย", "น้ำมัน 1 ช้อนโต๊ะ", "เนย 30 กรัม", "กระเทียมสับ 1 กลีบ", "น้ำมะนาว 1 ช้อนโต๊ะ", "พาร์สลีย์หรือผักชีลาวสับ"],
+    steps: ["ซับแซลมอนให้แห้ง โรยเกลือพริกไทย", "จี่ด้านหนังลงในกระทะร้อน ไฟกลางค่อนแรง 4 นาที", "กลับด้าน จี่ต่อ 2 นาที แล้วตักขึ้น", "ลดไฟ ใส่เนยและกระเทียม พอเนยเป็นฟอง ใส่มะนาวและสมุนไพร ราดบนปลา"],
+    tip: "อย่าขยับปลาช่วงแรก หนังจะกรอบ" },
+  { name: "ปลาซาบะย่างซีอิ๊ว", protein: "ปลา", cat: "ปิ้ง / อบ", origin: "ญี่ปุ่น", time: 20, level: "ง่าย", serves: 2, equip: ["airfryer"],
+    ing: ["ปลาซาบะแล่ 2 ชิ้น", "ซีอิ๊วญี่ปุ่น 1 ช้อนโต๊ะ", "มิริน 1 ช้อนโต๊ะ", "มะนาวหรือเลมอน", "ไชเท้าขูด (ไม่ใส่ก็ได้)"],
+    steps: ["ซับปลาให้แห้ง ทาซีอิ๊วผสมมิริน พักไว้ 10 นาที", "อบในหม้อทอดไร้น้ำมัน 200°C 10 นาที หันด้านหนังขึ้น", "เสิร์ฟกับมะนาวและไชเท้าขูด"], tip: "" },
+
+/* ---------- สปาเกตตี ---------- */
+  { name: "สปาเกตตีอาลิโอ โอลิโอ", protein: "ผัก", cat: "จานเดียว", origin: "อิตาเลียน", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "pot", "wok"],
+    ing: ["เส้นสปาเกตตี 200 กรัม", "กระเทียมสไลซ์บาง 6 กลีบ", "น้ำมันมะกอก 4 ช้อนโต๊ะ", "พริกป่นหยาบ ½ ช้อนชา", "พาร์สลีย์สับ 2 ช้อนโต๊ะ", "เกลือ", "พาร์มีซานขูด (ไม่ใส่ก็ได้)"],
+    steps: ["ต้มเส้นในน้ำเดือดใส่เกลือ ให้สุกน้อยกว่าเวลาข้างซอง 1 นาที (ประมาณ 8 นาที) แล้วตักน้ำต้มเส้นเก็บไว้ 1 ถ้วย", "ใส่น้ำมันมะกอกและกระเทียมในกระทะที่ยังเย็น เปิดไฟอ่อน ผัด 3 นาทีจนกระเทียมเหลืองอ่อน", "ใส่พริกป่น แล้วเติมน้ำต้มเส้นครึ่งถ้วย", "ใส่เส้น ผัดไฟกลาง 1 นาทีจนซอสข้นเคลือบเส้น ถ้าแห้งไปให้เติมน้ำต้มเส้น", "ปิดไฟ ใส่พาร์สลีย์ ชิมแล้วปรุงเกลือ"],
+    tip: "เริ่มผัดกระเทียมจากกระทะเย็น กระเทียมจะหอมและไม่ไหม้ขม" },
+  { name: "สปาเกตตีซอสมะเขือเทศ", protein: "ผัก", cat: "จานเดียว", origin: "อิตาเลียน", time: 30, level: "ง่าย", serves: 2, equip: ["stove", "pot", "wok"],
+    ing: ["เส้นสปาเกตตี 200 กรัม", "มะเขือเทศกระป๋อง 400 กรัม", "กระเทียมสับ 3 กลีบ", "น้ำมันมะกอก 3 ช้อนโต๊ะ", "ใบโหระพา 1 กำเล็ก", "น้ำตาล ½ ช้อนชา", "เกลือ พริกไทย", "พาร์มีซานขูด 2 ช้อนโต๊ะ"],
+    steps: ["ผัดกระเทียมกับน้ำมันมะกอกไฟอ่อนจนหอม", "ใส่มะเขือเทศกระป๋อง บี้ให้แตก ใส่น้ำตาลและเกลือ เคี่ยวไฟอ่อน 15 นาทีจนข้น", "ระหว่างนั้นต้มเส้นในน้ำเดือดใส่เกลือตามเวลาข้างซอง (ประมาณ 8–10 นาที)", "ใส่เส้นลงในซอส เติมน้ำต้มเส้นเล็กน้อย คลุกไฟกลาง 1 นาที", "ปิดไฟ ฉีกใบโหระพาใส่ โรยพาร์มีซาน"],
+    tip: "น้ำตาลเล็กน้อยช่วยตัดความเปรี้ยวของมะเขือเทศกระป๋อง" },
+  { name: "สปาเกตตีมีตบอลเนื้อ", beef: true, cat: "จานเดียว", origin: "ตะวันตก", time: 45, level: "ปานกลาง", serves: 3, equip: ["stove", "pot", "wok"],
+    ing: ["เส้นสปาเกตตี 250 กรัม", "เนื้อวัวบด 300 กรัม", "เกล็ดขนมปัง 3 ช้อนโต๊ะ", "นมสด 2 ช้อนโต๊ะ", "ไข่ไก่ 1 ฟอง", "กระเทียมสับ 3 กลีบ", "พาร์มีซานขูด 3 ช้อนโต๊ะ", "มะเขือเทศกระป๋อง 400 กรัม", "หอมใหญ่สับ ½ หัว", "ออริกาโนแห้ง 1 ช้อนชา เกลือ พริกไทย", "น้ำมันมะกอก 2 ช้อนโต๊ะ"],
+    steps: ["ผสมเนื้อบด เกล็ดขนมปัง นม ไข่ กระเทียมครึ่งหนึ่ง พาร์มีซาน เกลือ พริกไทย แล้วปั้นเป็นลูกขนาดลูกปิงปอง ได้ประมาณ 12 ลูก", "จี่มีตบอลในกระทะไฟกลาง 5 นาที กลิ้งให้ผิวเป็นสีน้ำตาลรอบลูก ตักขึ้นพักไว้", "ผัดหอมใหญ่และกระเทียมที่เหลือในกระทะเดิม ใส่มะเขือเทศกระป๋องและออริกาโน", "ใส่มีตบอลกลับลงไป ปิดฝาเคี่ยวไฟอ่อน 15 นาที", "ระหว่างนั้นต้มเส้นในน้ำเดือดใส่เกลือตามเวลาข้างซอง (ประมาณ 8–10 นาที)", "ตักซอสและมีตบอลราดบนเส้น"],
+    tip: "นมกับเกล็ดขนมปังทำให้มีตบอลนุ่ม ไม่แน่นแข็ง" },
+  { name: "สปาเกตตีขี้เมาเนื้อ", beef: true, cat: "จานเดียว", origin: "ไทย", time: 25, level: "ง่าย", serves: 2, equip: ["stove", "pot", "wok"],
+    ing: ["เส้นสปาเกตตี 200 กรัม", "เนื้อวัวสไลซ์บาง 200 กรัม", "กระเทียม 5 กลีบ", "พริกขี้หนู 5–8 เม็ด", "ใบกะเพรา 1 กำ", "พริกไทยอ่อน 2 ช่อ", "ข้าวโพดอ่อน 4 ฝัก", "ซอสหอยนางรม 1½ ช้อนโต๊ะ", "ซีอิ๊วขาว 1 ช้อนโต๊ะ", "ซีอิ๊วดำ 1 ช้อนชา", "น้ำตาล 1 ช้อนชา", "น้ำมันพืช 2 ช้อนโต๊ะ"],
+    steps: ["ต้มเส้นในน้ำเดือดใส่เกลือตามเวลาข้างซอง (ประมาณ 8–10 นาที) สะเด็ดน้ำ คลุกน้ำมันเล็กน้อย", "โขลกกระเทียมกับพริกให้หยาบ", "ตั้งกระทะไฟแรง ผัดกระเทียมพริกจนหอม ใส่เนื้อผัดจนเกือบสุก", "ใส่ข้าวโพดอ่อน พริกไทยอ่อน เส้น และเครื่องปรุงทั้งหมด ผัดให้เข้ากัน 2 นาที", "ปิดไฟ ใส่ใบกะเพรา คลุกให้ใบสลด"],
+    tip: "ต้มเส้นให้แข็งกว่าปกตินิดหนึ่ง เพราะต้องผัดต่อในกระทะ" },
+  { name: "สปาเกตตีกุ้งกระเทียม", protein: "กุ้ง / ทะเล", cat: "จานเดียว", origin: "ตะวันตก", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "pot", "wok"],
+    ing: ["เส้นสปาเกตตี 200 กรัม", "กุ้งแกะเปลือก 10 ตัว", "กระเทียมสับ 5 กลีบ", "เนย 20 กรัม", "น้ำมันมะกอก 2 ช้อนโต๊ะ", "พริกป่นหยาบ ¼ ช้อนชา", "น้ำมะนาว 1 ช้อนโต๊ะ", "พาร์สลีย์สับ 1 ช้อนโต๊ะ", "เกลือ พริกไทย"],
+    steps: ["ต้มเส้นในน้ำเดือดใส่เกลือตามเวลาข้างซอง (ประมาณ 8–10 นาที) แล้วตักน้ำต้มเส้นเก็บไว้ครึ่งถ้วย", "ซับกุ้งให้แห้ง โรยเกลือพริกไทย จี่ในน้ำมันมะกอกไฟแรงด้านละ 1 นาที แล้วตักขึ้น", "ลดไฟ ใส่เนย กระเทียม พริกป่น ผัดจนหอม", "ใส่เส้นและน้ำต้มเส้น ผัด 1 นาที", "ใส่กุ้งกลับลงไป บีบมะนาว โรยพาร์สลีย์"],
+    tip: "ตักกุ้งขึ้นก่อนแล้วค่อยใส่กลับตอนท้าย กุ้งจะไม่เหนียว" },
+  { name: "สปาเกตตีครีมเห็ดไก่", protein: "ไก่", cat: "จานเดียว", origin: "ตะวันตก", time: 30, level: "ง่าย", serves: 2, equip: ["stove", "pot", "wok"],
+    ing: ["เส้นสปาเกตตี 200 กรัม", "อกไก่หั่นชิ้น 200 กรัม", "เห็ดแชมปิญองหั่น 150 กรัม", "กระเทียมสับ 3 กลีบ", "เนย 20 กรัม", "วิปปิ้งครีม 200 มล.", "พาร์มีซานขูด 3 ช้อนโต๊ะ", "เกลือ พริกไทย", "พาร์สลีย์สับ (ไม่ใส่ก็ได้)"],
+    steps: ["ต้มเส้นในน้ำเดือดใส่เกลือตามเวลาข้างซอง (ประมาณ 8–10 นาที) แล้วตักน้ำต้มเส้นเก็บไว้ครึ่งถ้วย", "โรยเกลือพริกไทยบนไก่ จี่กับเนยไฟกลาง 5 นาทีจนสุก แล้วตักขึ้น", "ผัดเห็ดในกระทะเดิมไฟแรง 4 นาทีจนเป็นสีน้ำตาล แล้วใส่กระเทียม", "เติมครีม เคี่ยวไฟอ่อน 3 นาทีจนข้น ใส่พาร์มีซาน", "ใส่เส้นและไก่ คลุกให้เข้ากัน ถ้าซอสข้นไปให้เติมน้ำต้มเส้น"],
+    tip: "อย่าคนเห็ดบ่อย ปล่อยให้ผิวสัมผัสกระทะ เห็ดจะหอมและไม่แฉะ" },
+
+/* ---------- อาหารใต้ ---------- */
+  { name: "คั่วกลิ้งเนื้อ", beef: true, region: "ใต้", cat: "ผัด", origin: "ไทย", time: 25, level: "ปานกลาง", serves: 3, equip: ["stove", "wok"],
+    ing: ["เนื้อวัวสับหยาบ 300 กรัม", "พริกแกงคั่วกลิ้ง 2 ช้อนโต๊ะ", "ใบมะกรูดซอยฝอย 6 ใบ", "ตะไคร้ซอยบาง 1 ต้น", "พริกขี้หนู 5 เม็ด", "น้ำปลา 1 ช้อนชา", "น้ำตาล ½ ช้อนชา", "น้ำมันพืช 1 ช้อนชา", "ผักสดกินแกล้ม เช่น แตงกวา ถั่วฝักยาว"],
+    steps: ["ตั้งกระทะไฟกลาง ใส่น้ำมันเล็กน้อย ผัดพริกแกงจนหอม", "ใส่เนื้อสับ ยีให้กระจาย ผัดจนสุกและแห้ง ประมาณ 6–8 นาที", "ใส่ตะไคร้และใบมะกรูดครึ่งหนึ่ง ปรุงด้วยน้ำปลาและน้ำตาล ผัดต่อ 1 นาที", "โรยใบมะกรูดที่เหลือและพริกขี้หนู เสิร์ฟกับผักสดและข้าวสวย"],
+    tip: "พริกแกงคั่วกลิ้งเผ็ดมาก ครั้งแรกลองใส่ 1 ช้อนโต๊ะก่อน แล้วค่อยเพิ่ม" },
+  { name: "แกงมัสมั่นเนื้อ", beef: true, region: "ใต้", cat: "ต้ม / แกง", origin: "ไทย", time: 120, level: "ปานกลาง", serves: 4, equip: ["stove", "pot"],
+    ing: ["เนื้อน่องลายหั่นชิ้นใหญ่ 600 กรัม", "พริกแกงมัสมั่น 3 ช้อนโต๊ะ", "กะทิ 500 มล.", "น้ำ 1 ถ้วย", "มันฝรั่ง 2 หัว", "หอมใหญ่ 1 หัว", "ถั่วลิสงคั่ว 3 ช้อนโต๊ะ", "น้ำมะขามเปียก 2 ช้อนโต๊ะ", "น้ำตาลปี๊บ 2 ช้อนโต๊ะ", "น้ำปลา 2 ช้อนโต๊ะ", "อบเชย 1 แท่ง และลูกกระวาน 3 ลูก"],
+    steps: ["เคี่ยวกะทิ 1 ถ้วยในหม้อไฟกลางจนแตกมัน ใส่พริกแกงผัดจนหอม", "ใส่เนื้อ ผัดให้เคลือบพริกแกง", "เติมกะทิที่เหลือ น้ำ อบเชย และลูกกระวาน ปิดฝาเคี่ยวไฟอ่อน 90 นาทีจนเนื้อนุ่ม", "ใส่มันฝรั่ง หอมใหญ่ และถั่วลิสง เคี่ยวต่อ 20 นาที", "ปรุงด้วยน้ำมะขาม น้ำตาลปี๊บ และน้ำปลา ให้ได้รสหวานนำ เค็มตาม เปรี้ยวปลาย"],
+    tip: "ทำทิ้งไว้ข้ามคืนแล้วอุ่นกิน รสจะเข้าเนื้อมากขึ้น" },
+  { name: "แกงเหลืองปลากะพง", protein: "ปลา", region: "ใต้", cat: "ต้ม / แกง", origin: "ไทย", time: 30, level: "ง่าย", serves: 3, equip: ["stove", "pot"],
+    ing: ["ปลากะพงหั่นชิ้น 400 กรัม", "พริกแกงส้มใต้ 2 ช้อนโต๊ะ (บางร้านเรียกพริกแกงเหลือง)", "หน่อไม้ดอง 200 กรัม", "น้ำ 3 ถ้วย", "กะปิ 1 ช้อนชา", "น้ำปลา 1 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนชา", "น้ำมะนาว 2 ช้อนโต๊ะ"],
+    steps: ["ล้างหน่อไม้ดอง 2 น้ำ เพื่อลดความเปรี้ยวและกลิ่น", "ต้มน้ำให้เดือด ละลายพริกแกงและกะปิ", "ใส่หน่อไม้ดอง ต้ม 5 นาที", "ใส่ปลาตอนน้ำเดือดจัด ต้ม 5 นาทีจนปลาสุก ระหว่างนี้อย่าคน", "ปรุงด้วยน้ำปลาและน้ำตาล ปิดไฟแล้วใส่น้ำมะนาว"],
+    tip: "คนใต้เรียกแกงนี้ว่าแกงส้ม ใส่ปลาตอนน้ำเดือดจัดและอย่าคน ปลาจะไม่คาวและไม่เละ" },
+  { name: "ไก่ต้มขมิ้น", protein: "ไก่", region: "ใต้", cat: "ต้ม / แกง", origin: "ไทย", time: 40, level: "ง่าย", serves: 3, equip: ["stove", "pot"],
+    ing: ["สะโพกไก่สับชิ้น 500 กรัม", "ขมิ้นสด 2 แง่ง (ยาวแง่งละประมาณ 5 ซม.)", "ตะไคร้ 2 ต้น", "ข่า 4 แว่น", "หอมแดงบุบ 5 หัว", "กระเทียมบุบ 5 กลีบ", "น้ำ 5 ถ้วย", "เกลือ 1 ช้อนชา", "น้ำปลา 1 ช้อนโต๊ะ"],
+    steps: ["ทุบขมิ้น ตะไคร้ และข่าให้แตก", "ต้มน้ำให้เดือด ใส่สมุนไพร หอมแดง และกระเทียม ต้ม 5 นาที", "ใส่ไก่ ลดไฟอ่อน ต้ม 25 นาทีจนไก่นุ่ม ช้อนฟองออกเป็นระยะ", "ปรุงด้วยเกลือและน้ำปลา"],
+    tip: "ขมิ้นสดติดมือและเขียง ใส่ถุงมือหรือรองพลาสติกตอนทุบ" },
+  { name: "สะตอผัดกะปิกุ้ง", protein: "กุ้ง / ทะเล", region: "ใต้", cat: "ผัด", origin: "ไทย", time: 15, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["สะตอแกะเม็ด 1 ถ้วย", "กุ้งสดแกะเปลือก 10 ตัว", "กะปิ 1 ช้อนโต๊ะ", "กระเทียม 5 กลีบ", "พริกขี้หนู 5 เม็ด", "น้ำตาล 1 ช้อนชา", "น้ำมะนาว 1 ช้อนชา", "น้ำมันพืช 2 ช้อนโต๊ะ", "น้ำ 2 ช้อนโต๊ะ"],
+    steps: ["สับกระเทียมกับพริกให้หยาบ แล้วคลุกกับกะปิ", "ตั้งกระทะไฟกลาง ผัดเครื่องกะปิกับน้ำมันจนหอม", "ใส่กุ้ง ผัดจนเปลี่ยนสี", "ใส่สะตอ น้ำ และน้ำตาล ผัดไฟแรง 1 นาที ให้สะตอยังกรอบ", "ปิดไฟ บีบมะนาว"],
+    tip: "ผัดสะตอแค่ช่วงสั้น ๆ ถ้าผัดนาน สะตอจะเหนียวและขม" },
+  { name: "ปลาทอดขมิ้น", protein: "ปลา", region: "ใต้", cat: "ทอด", origin: "ไทย", time: 30, level: "ง่าย", serves: 3, equip: ["stove", "wok"],
+    ing: ["ปลาทรายหรือปลากะพงหั่นชิ้น 500 กรัม", "ขมิ้นสด 3 แง่ง", "กระเทียม 1 หัว", "เกลือ 1 ช้อนชา", "พริกไทยเม็ด ½ ช้อนชา", "น้ำมันสำหรับทอด"],
+    steps: ["สับขมิ้น กระเทียม และพริกไทยให้หยาบ ผสมกับเกลือ", "คลุกกับปลา หมักไว้ 15 นาที", "ปัดเครื่องหมักออกจากปลาเก็บไว้ ทอดปลาในน้ำมันร้อนไฟกลางด้านละ 4 นาทีจนเหลืองกรอบ ตักขึ้น", "ทอดเครื่องขมิ้นกระเทียมที่เก็บไว้ 1 นาทีจนกรอบ แล้วโรยบนปลา"],
+    tip: "ทอดขมิ้นกับกระเทียมแยกตอนท้าย จะกรอบและไม่ไหม้" },
+  { name: "ไก่ทอดหาดใหญ่", protein: "ไก่", region: "ใต้", cat: "ทอด", origin: "ไทย", time: 60, level: "ปานกลาง", serves: 4, equip: ["stove", "wok"],
+    ing: ["น่องไก่และปีกไก่ 1 กก.", "กระเทียม 8 กลีบ", "รากผักชี 3 ราก", "เม็ดผักชีและยี่หร่าป่น อย่างละ 1 ช้อนชา", "พริกไทย 1 ช้อนชา", "ซีอิ๊วขาว 2 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนโต๊ะ", "แป้งข้าวเจ้า 3 ช้อนโต๊ะ", "หอมแดงซอยบาง 10 หัว", "น้ำมันสำหรับทอด"],
+    steps: ["สับกระเทียมกับรากผักชีให้ละเอียด ผสมกับเม็ดผักชี ยี่หร่า และพริกไทย", "คลุกไก่กับเครื่องที่ผสมไว้ ซีอิ๊วขาว น้ำตาล และแป้งข้าวเจ้า หมักไว้ 30 นาที", "ทอดหอมแดงซอยในน้ำมันไฟอ่อนจนเหลืองอ่อน ตักขึ้นพักบนกระดาษซับมัน", "ทอดไก่ในน้ำมันเดิมไฟกลาง 12–15 นาทีจนสุกเหลือง", "โรยหอมเจียวบนไก่ เสิร์ฟกับข้าวเหนียวและน้ำจิ้มไก่"],
+    tip: "ตักหอมเจียวขึ้นตอนยังเหลืองอ่อน เพราะสีจะเข้มขึ้นอีกหลังตักขึ้น" },
+  { name: "ใบเหลียงผัดไข่", protein: "ไข่", region: "ใต้", cat: "ผัด", origin: "ไทย", time: 10, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["ใบเหลียง 2 กำมือ", "ไข่ไก่ 2 ฟอง", "กระเทียมสับ 3 กลีบ", "น้ำปลา 1 ช้อนชา", "ซอสหอยนางรม 1 ช้อนชา", "น้ำมันพืช 1 ช้อนโต๊ะ"],
+    steps: ["เด็ดใบเหลียงเอาแต่ใบอ่อน ล้างแล้วสะเด็ดน้ำ", "เจียวกระเทียมจนหอม ตอกไข่ลงไป ยีพอหยาบ", "ใส่ใบเหลียง ปรุงด้วยน้ำปลาและซอสหอยนางรม ผัดไฟแรง 1 นาทีพอใบสลด"],
+    tip: "ถ้าหาใบเหลียงไม่ได้ ใช้ผักหวานบ้านแทนได้" },
+  { name: "น้ำพริกกุ้งเสียบ", kind: "น้ำจิ้ม / ซอส", region: "ใต้", cat: "ยำ / ตำ", origin: "ไทย", time: 15, level: "ง่าย", yield: "ประมาณ 1 ถ้วย", equip: ["mortar"],
+    ing: ["กุ้งเสียบ ½ ถ้วย", "กะปิ 1 ช้อนโต๊ะ", "กระเทียม 5 กลีบ", "หอมแดง 3 หัว", "พริกขี้หนู 10 เม็ด", "น้ำตาลปี๊บ 1 ช้อนโต๊ะ", "น้ำมะนาว 2 ช้อนโต๊ะ", "ผักสดสำหรับจิ้ม"],
+    steps: ["โขลกกระเทียม หอมแดง และพริกพอหยาบ", "ใส่กะปิ โขลกให้เข้ากัน", "ปรุงด้วยน้ำตาลปี๊บและน้ำมะนาว", "ใส่กุ้งเสียบ คลุกเบา ๆ ให้กุ้งยังเป็นตัว เสิร์ฟกับผักสด"],
+    tip: "คั่วกุ้งเสียบในกระทะแห้ง 1 นาทีก่อนใส่ จะหอมและกรอบขึ้น" },
+
+/* ---------- เนื้อแบบเกาหลี ญี่ปุ่น จีน ---------- */
+  { name: "คาลบีย่าง", beef: true, cat: "ปิ้ง / อบ", origin: "เกาหลี", time: 50, level: "ง่าย", serves: 3, equip: ["grill"],
+    ing: ["ซี่โครงเนื้อวัวสไลซ์แบบแอลเอ 600 กรัม", "ซีอิ๊วญี่ปุ่น 5 ช้อนโต๊ะ", "น้ำตาลทรายแดง 2 ช้อนโต๊ะ", "สาลี่ขูด ½ ลูก", "กระเทียมสับ 1 ช้อนโต๊ะ", "น้ำมันงา 1 ช้อนโต๊ะ", "ต้นหอมซอย และงาขาว", "ผักกาดหอมสำหรับห่อ"],
+    steps: ["ผสมซีอิ๊ว น้ำตาล สาลี่ กระเทียม และน้ำมันงา", "หมักเนื้อ 30 นาที ถ้าหมักข้ามคืนในตู้เย็นจะนุ่มขึ้นอีก", "ย่างไฟแรงด้านละ 2 นาทีจนขอบเกรียม", "โรยต้นหอมและงา ห่อผักกาดหอมกิน"],
+    tip: "ซับน้ำหมักออกเล็กน้อยก่อนย่าง น้ำตาลจะไม่ไหม้เร็วเกินไป" },
+  { name: "บิบิมบับเนื้อ", beef: true, cat: "จานเดียว", origin: "เกาหลี", time: 35, level: "ปานกลาง", serves: 2, equip: ["stove", "wok"],
+    ing: ["ข้าวสวย 2 ถ้วย", "เนื้อวัวสับ 150 กรัม", "แครอทซอยเส้น ½ หัว", "ผักโขม 1 กำ", "ถั่วงอก 1 ถ้วย", "เห็ดหอมสดซอย 4 ดอก", "ไข่ไก่ 2 ฟอง", "โคชูจัง 2 ช้อนโต๊ะ", "ซีอิ๊วญี่ปุ่น 1 ช้อนโต๊ะ", "น้ำมันงา 1 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนชา", "กระเทียมสับ 1 ช้อนชา"],
+    steps: ["หมักเนื้อสับกับซีอิ๊ว น้ำตาล และกระเทียม แล้วผัดจนสุก ตักขึ้น", "ผัดแครอทและเห็ดทีละอย่างกับน้ำมันงาและเกลือเล็กน้อย อย่างละ 2 นาที", "ลวกผักโขมและถั่วงอกในน้ำเดือด 30 วินาที บีบน้ำออก คลุกน้ำมันงา", "ทอดไข่ดาวให้ไข่แดงยังเยิ้ม", "ตักข้าวใส่ชาม เรียงผักและเนื้อรอบ ๆ วางไข่ตรงกลาง ใส่โคชูจัง แล้วคลุกก่อนกิน"],
+    tip: "โคชูจังเผ็ดและเค็ม เริ่มที่ 1 ช้อนโต๊ะก่อน แล้วค่อยเพิ่มตามชอบ" },
+  { name: "ซุปเนื้อหัวไชเท้า", beef: true, cat: "ต้ม / แกง", origin: "เกาหลี", time: 40, level: "ง่าย", serves: 3, equip: ["stove", "pot"],
+    ing: ["เนื้อวัวหั่นชิ้นบาง 200 กรัม", "หัวไชเท้าหั่นแผ่นบาง 300 กรัม", "กระเทียมสับ 1 ช้อนโต๊ะ", "น้ำมันงา 1 ช้อนโต๊ะ", "ซีอิ๊วขาว 1 ช้อนโต๊ะ", "น้ำ 5 ถ้วย", "เกลือ พริกไทย", "ต้นหอมซอย"],
+    steps: ["ผัดเนื้อกับน้ำมันงาในหม้อไฟกลางจนเปลี่ยนสี", "ใส่หัวไชเท้า ผัดต่อ 2 นาที", "เติมน้ำ ต้มให้เดือด ช้อนฟองออก ลดไฟอ่อน ต้ม 20 นาทีจนหัวไชเท้าใส", "ปรุงด้วยกระเทียม ซีอิ๊วขาว และเกลือ โรยต้นหอมและพริกไทย"], tip: "" },
+  { name: "สุกี้ยากี้เนื้อ", beef: true, cat: "ต้ม / แกง", origin: "ญี่ปุ่น", time: 30, level: "ง่าย", serves: 3, equip: ["stove", "wok"],
+    ing: ["เนื้อวัวสไลซ์บาง 300 กรัม", "เต้าหู้ขาวแข็ง 1 ก้อน", "ผักกาดขาว ¼ หัว", "ต้นหอมญี่ปุ่น 1 ต้น", "เห็ดเข็มทอง 1 ห่อ", "วุ้นเส้น 1 ไจ", "ซีอิ๊วญี่ปุ่น 4 ช้อนโต๊ะ", "มิริน 4 ช้อนโต๊ะ", "น้ำตาล 2 ช้อนโต๊ะ", "น้ำ ½ ถ้วย", "ไข่ไก่สดสำหรับจิ้ม (ไม่ใส่ก็ได้)"],
+    steps: ["ผสมซีอิ๊ว มิริน น้ำตาล และน้ำ เป็นน้ำซุปสุกี้ยากี้", "ตั้งกระทะไฟกลาง จี่เนื้อ 2–3 ชิ้นกับน้ำซุปเล็กน้อยให้หอม", "เรียงผัก เต้าหู้ เห็ด และวุ้นเส้นลงกระทะ เทน้ำซุปที่เหลือ", "ปิดฝาต้ม 8 นาทีจนผักนุ่ม ใส่เนื้อที่เหลือ ต้มอีก 1 นาที", "กินร้อน ๆ จากกระทะ"],
+    tip: "ถ้าจะจิ้มไข่ดิบแบบญี่ปุ่น ให้ใช้ไข่สดใหม่ที่ระบุว่ากินดิบได้" },
+  { name: "ยากินิกุด้ง ข้าวหน้าเนื้อย่าง", beef: true, cat: "จานเดียว", origin: "ญี่ปุ่น", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["เนื้อวัวสไลซ์ 250 กรัม", "หอมใหญ่ ½ หัว", "ซีอิ๊วญี่ปุ่น 2 ช้อนโต๊ะ", "มิริน 1 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนโต๊ะ", "กระเทียมขูด 1 ช้อนชา", "ขิงขูด 1 ช้อนชา", "น้ำมันงา 1 ช้อนชา", "ข้าวญี่ปุ่นสุก 2 ถ้วย", "งาขาว และต้นหอมซอย"],
+    steps: ["ผสมซีอิ๊ว มิริน น้ำตาล กระเทียม ขิง และน้ำมันงา เป็นซอสยากินิกุ", "ผัดหอมใหญ่ไฟแรง 1 นาที ใส่เนื้อ ผัดจนเกือบสุก", "เทซอสลงไป ผัดต่อ 1 นาทีจนซอสเคลือบเนื้อ", "ตักราดบนข้าว โรยงาและต้นหอม"], tip: "" },
+  { name: "เนื้อทาทากิซอสพอนสึ", beef: true, cat: "สเต็ก", origin: "ญี่ปุ่น", time: 30, level: "ปานกลาง", serves: 2, equip: ["stove", "wok"],
+    ing: ["เนื้อสันนอกทั้งก้อน 300 กรัม (หนาประมาณ 4 ซม.)", "เกลือ พริกไทย", "น้ำมันพืช 1 ช้อนโต๊ะ", "ซีอิ๊วญี่ปุ่น 3 ช้อนโต๊ะ", "น้ำมะนาว 2 ช้อนโต๊ะ", "มิริน 1 ช้อนโต๊ะ", "หอมใหญ่ซอยบาง ½ หัว", "ต้นหอมซอย", "ไชเท้าขูด (ไม่ใส่ก็ได้)"],
+    steps: ["โรยเกลือพริกไทยบนเนื้อ", "ตั้งกระทะไฟแรง จี่เนื้อด้านละ 1 นาทีให้ครบทุกด้าน ข้างในจะยังแดง", "ห่อเนื้อด้วยฟอยล์ พักในตู้เย็น 15 นาทีให้เนื้อเซตตัว", "ผสมซีอิ๊ว น้ำมะนาว และมิริน เป็นซอสพอนสึ", "หั่นเนื้อบาง ๆ วางบนหอมใหญ่ ราดซอส โรยต้นหอม"],
+    tip: "เมนูนี้ข้างในดิบ ให้ใช้เนื้อก้อนที่สดและแช่เย็นมาตลอด ถ้าไม่กินดิบ ให้จี่นานขึ้นเป็นด้านละ 2–3 นาที" },
+  { name: "เนื้อผัดพริกไทยดำ", beef: true, cat: "ผัด", origin: "จีน", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["เนื้อสะโพกสไลซ์ 300 กรัม", "แป้งมัน 1 ช้อนชา", "ซีอิ๊วขาว 1 ช้อนโต๊ะ", "พริกไทยดำบดหยาบ 1½ ช้อนชา", "ซอสหอยนางรม 1½ ช้อนโต๊ะ", "น้ำตาล 1 ช้อนชา", "หอมใหญ่ ½ หัว", "พริกหวาน 1 ลูก", "กระเทียมสับ 1 ช้อนโต๊ะ", "น้ำมันพืช 2 ช้อนโต๊ะ"],
+    steps: ["หมักเนื้อกับแป้งมันและซีอิ๊วขาว 10 นาที", "ผัดเนื้อไฟแรงจนเกือบสุก ตักขึ้น", "ผัดกระเทียม หอมใหญ่ และพริกหวาน 1 นาที", "ใส่เนื้อกลับ ปรุงด้วยซอสหอยนางรม น้ำตาล และพริกไทยดำ ผัดเร็ว ๆ 1 นาที"],
+    tip: "ใส่พริกไทยดำตอนท้าย กลิ่นจะหอมฉุนกว่าใส่ตั้งแต่แรก" },
+  { name: "เนื้อตุ๋นยาจีน", beef: true, cat: "ต้ม / แกง", origin: "จีน", time: 150, level: "ง่าย", serves: 4, equip: ["stove", "pot"],
+    ing: ["เนื้อน่องลายหั่นชิ้นใหญ่ 700 กรัม", "เครื่องยาจีนสำหรับตุ๋น 1 ห่อ (มีโป๊ยกั๊ก อบเชย เก๋ากี้)", "รากผักชี 3 ราก", "กระเทียม 1 หัว", "พริกไทยเม็ด 1 ช้อนชา", "ซีอิ๊วขาว 3 ช้อนโต๊ะ", "ซีอิ๊วดำ 1 ช้อนโต๊ะ", "น้ำตาลกรวด 1 ช้อนโต๊ะ", "น้ำ 2 ลิตร", "หัวไชเท้า 1 หัว", "ขึ้นฉ่าย 2 ต้น"],
+    steps: ["ลวกเนื้อในน้ำเดือด 3 นาที เทน้ำทิ้ง แล้วล้างให้สะอาด", "ใส่เนื้อ น้ำ เครื่องยาจีน รากผักชี กระเทียม และพริกไทยลงหม้อ ต้มให้เดือด", "ปรุงด้วยซีอิ๊วขาว ซีอิ๊วดำ และน้ำตาลกรวด ลดไฟอ่อน ปิดฝาตุ๋น 2 ชั่วโมง", "ใส่หัวไชเท้า ตุ๋นต่อ 20 นาที", "โรยขึ้นฉ่ายก่อนเสิร์ฟ"],
+    tip: "ลวกเนื้อก่อนตุ๋น น้ำซุปจะใสและไม่มีกลิ่นคาว" },
+  { name: "เนื้อผัดบรอกโคลี", beef: true, cat: "ผัด", origin: "จีน", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["เนื้อวัวสไลซ์ 250 กรัม", "บรอกโคลี 1 หัว", "กระเทียมสับ 1 ช้อนโต๊ะ", "ขิงสับ 1 ช้อนชา", "ซอสหอยนางรม 2 ช้อนโต๊ะ", "ซีอิ๊วขาว 1 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนชา", "แป้งมัน 2 ช้อนชา", "น้ำ ½ ถ้วย", "น้ำมันพืช 2 ช้อนโต๊ะ"],
+    steps: ["หมักเนื้อกับซีอิ๊วขาวและแป้งมัน 1 ช้อนชา 10 นาที", "ลวกบรอกโคลีในน้ำเดือด 1 นาที ตักขึ้น", "ผัดเนื้อไฟแรงจนเกือบสุก ตักขึ้น", "ผัดกระเทียมและขิง ใส่ซอสหอยนางรม น้ำตาล และน้ำที่ละลายแป้งมันที่เหลือ เคี่ยวจนข้น", "ใส่เนื้อและบรอกโคลี คลุกให้ซอสเคลือบ"], tip: "" },
+
+/* ---------- อาหารอีสาน ---------- */
+  { name: "ลาบเนื้อ", beef: true, region: "อีสาน", cat: "ยำ / ตำ", origin: "ไทย", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "pot"],
+    ing: ["เนื้อวัวสับ 300 กรัม", "น้ำ 3 ช้อนโต๊ะ", "น้ำปลา 2 ช้อนโต๊ะ", "น้ำมะนาว 3 ช้อนโต๊ะ", "พริกป่น 1 ช้อนโต๊ะ", "ข้าวคั่ว 2 ช้อนโต๊ะ", "หอมแดงซอย 4 หัว", "ต้นหอมและผักชีฝรั่งซอย", "ใบสะระแหน่ 1 กำ", "ผักสดกินแกล้ม"],
+    steps: ["รวนเนื้อกับน้ำในหม้อไฟกลาง 4 นาทีจนสุก แล้วปิดไฟ", "ปรุงด้วยน้ำปลา น้ำมะนาว และพริกป่น", "ใส่หอมแดง ข้าวคั่ว ต้นหอม และผักชีฝรั่ง คลุกให้เข้ากัน", "โรยใบสะระแหน่ เสิร์ฟกับผักสดและข้าวเหนียว"],
+    tip: "ใส่ข้าวคั่วหลังปิดไฟและตอนจะกิน ข้าวคั่วจะหอมและไม่อืด" },
+  { name: "น้ำตกเนื้อ", beef: true, guide: true, region: "อีสาน", cat: "ยำ / ตำ", origin: "ไทย", time: 30, level: "ง่าย", serves: 2, equip: ["grill"],
+    ing: ["เนื้อสันนอก 300 กรัม", "ซีอิ๊วขาว 1 ช้อนโต๊ะ", "น้ำปลา 1½ ช้อนโต๊ะ", "น้ำมะนาว 2 ช้อนโต๊ะ", "พริกป่น 1 ช้อนโต๊ะ", "ข้าวคั่ว 1½ ช้อนโต๊ะ", "หอมแดงซอย 4 หัว", "ต้นหอมและผักชีฝรั่งซอย", "ใบสะระแหน่ 1 กำ"],
+    steps: ["ทาซีอิ๊วขาวบนเนื้อ พักไว้ 10 นาที", "ย่างไฟแรงด้านแรก {sear}", "กลับด้าน ย่างอีก {sear} สำหรับความสุก{done}", "พักเนื้อ {rest} นาที แล้วหั่นชิ้นบางขวางเส้นใย", "คลุกเนื้อกับน้ำปลา น้ำมะนาว พริกป่น ข้าวคั่ว หอมแดง และผักทั้งหมด"],
+    tip: "ตามตำรับจะย่างให้ข้างในยังชมพู น้ำจากเนื้อที่หยดลงไฟคือที่มาของชื่อน้ำตก" },
+  { name: "ต้มแซ่บเนื้อ", beef: true, region: "อีสาน", cat: "ต้ม / แกง", origin: "ไทย", time: 90, level: "ง่าย", serves: 3, equip: ["stove", "pot"],
+    ing: ["เนื้อน่องลายหั่นชิ้น 500 กรัม", "น้ำ 6 ถ้วย", "ข่า 5 แว่น", "ตะไคร้ 2 ต้น", "ใบมะกรูด 5 ใบ", "หอมแดงบุบ 4 หัว", "พริกป่น 1 ช้อนโต๊ะ", "น้ำปลา 3 ช้อนโต๊ะ", "น้ำมะนาว 3 ช้อนโต๊ะ", "ข้าวคั่ว 1 ช้อนโต๊ะ", "ผักชีฝรั่ง และใบโหระพา"],
+    steps: ["ต้มน้ำกับข่า ตะไคร้ ใบมะกรูด และหอมแดงให้เดือด", "ใส่เนื้อ ลดไฟอ่อน ต้ม 60 นาทีจนเนื้อนุ่ม ช้อนฟองออกเป็นระยะ", "ปรุงด้วยน้ำปลา พริกป่น และข้าวคั่ว", "ปิดไฟ ใส่น้ำมะนาว ผักชีฝรั่ง และใบโหระพา"], tip: "" },
+  { name: "ไก่ย่างอีสาน", protein: "ไก่", region: "อีสาน", cat: "ปิ้ง / อบ", origin: "ไทย", time: 70, level: "ปานกลาง", serves: 4, equip: ["grill"],
+    ing: ["สะโพกไก่ติดกระดูก 4 ชิ้น (ประมาณ 1 กก.)", "กระเทียม 8 กลีบ", "รากผักชี 3 ราก", "พริกไทยเม็ด 1 ช้อนชา", "ตะไคร้ซอย 1 ต้น", "น้ำปลา 2 ช้อนโต๊ะ", "ซีอิ๊วขาว 1 ช้อนโต๊ะ", "น้ำตาลปี๊บ 1 ช้อนโต๊ะ", "ขมิ้นผง ½ ช้อนชา"],
+    steps: ["สับกระเทียม รากผักชี พริกไทย และตะไคร้ให้ละเอียด", "คลุกไก่กับเครื่องที่สับและเครื่องปรุงทั้งหมด หมักไว้ 30 นาที", "ย่างไฟอ่อนค่อนกลาง หันด้านหนังขึ้นก่อน 15 นาที", "กลับด้าน ย่างต่ออีก 15 นาทีจนสุกถึงกระดูก น้ำที่ไหลออกมาต้องใส", "เสิร์ฟกับข้าวเหนียว ส้มตำ และน้ำจิ้มแจ่ว"],
+    tip: "ย่างไฟอ่อนและใจเย็น ไฟแรงจะทำให้หนังไหม้ก่อนข้างในสุก" },
+  { name: "ซุปหน่อไม้", protein: "ผัก", region: "อีสาน", cat: "ยำ / ตำ", origin: "ไทย", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "pot"],
+    ing: ["หน่อไม้รวกต้มขูดเส้น 300 กรัม", "น้ำใบย่านาง 1 ถ้วย", "น้ำปลาร้าต้มสุก 2 ช้อนโต๊ะ", "น้ำปลา 1 ช้อนโต๊ะ", "น้ำมะนาว 2 ช้อนโต๊ะ", "พริกป่น 1 ช้อนโต๊ะ", "ข้าวคั่ว 1 ช้อนโต๊ะ", "งาขาวคั่ว 1 ช้อนชา", "หอมแดงซอย 3 หัว", "ต้นหอม ผักชีฝรั่ง และใบสะระแหน่"],
+    steps: ["ต้มหน่อไม้กับน้ำใบย่านางและน้ำปลาร้า 5 นาทีจนน้ำงวด", "ปิดไฟ ปรุงด้วยน้ำปลา น้ำมะนาว และพริกป่น", "ใส่ข้าวคั่ว งา หอมแดง และผักทั้งหมด คลุกให้เข้ากัน"],
+    tip: "ถ้าไม่มีน้ำปลาร้า ใช้น้ำปลาเพิ่มอีก 1 ช้อนโต๊ะแทนได้" },
+
+/* ---------- อาหารเหนือ ---------- */
+  { name: "ข้าวซอยไก่", protein: "ไก่", region: "เหนือ", cat: "ต้ม / แกง", origin: "ไทย", time: 60, level: "ปานกลาง", serves: 3, equip: ["stove", "pot"],
+    ing: ["น่องไก่ 6 ชิ้น", "เส้นข้าวซอย 300 กรัม (ใช้บะหมี่ไข่เส้นแบนแทนได้)", "พริกแกงข้าวซอย 3 ช้อนโต๊ะ (ใช้พริกแกงเผ็ดผสมผงกะหรี่ 1 ช้อนชาแทนได้)", "กะทิ 500 มล.", "น้ำสต็อกไก่ 2 ถ้วย", "น้ำปลา 2 ช้อนโต๊ะ", "น้ำตาลปี๊บ 1 ช้อนโต๊ะ", "ซีอิ๊วดำ 1 ช้อนชา", "เครื่องเคียง: หอมแดงซอย ผักกาดดอง มะนาว พริกเผา"],
+    steps: ["เคี่ยวกะทิ 1 ถ้วยในหม้อจนแตกมัน ใส่พริกแกงผัดจนหอม", "ใส่ไก่ ผัดให้เคลือบพริกแกง เติมกะทิที่เหลือและน้ำสต็อก", "เคี่ยวไฟอ่อน 35 นาทีจนไก่นุ่ม ปรุงด้วยน้ำปลา น้ำตาลปี๊บ และซีอิ๊วดำ", "ลวกเส้นตามเวลาข้างซอง (ประมาณ 3 นาที) และทอดเส้นส่วนหนึ่งให้กรอบไว้โรยหน้า", "ตักเส้นใส่ชาม ราดน้ำแกงและไก่ โรยเส้นกรอบ กินกับเครื่องเคียง"],
+    tip: "บีบมะนาวและใส่ผักกาดดองตอนกิน รสเปรี้ยวช่วยตัดความมันของกะทิ" },
+  { name: "แกงฮังเลเนื้อ", beef: true, region: "เหนือ", cat: "ต้ม / แกง", origin: "ไทย", time: 130, level: "ปานกลาง", serves: 4, equip: ["stove", "pot"],
+    ing: ["เนื้อน่องลายหั่นชิ้น 600 กรัม", "พริกแกงฮังเล 3 ช้อนโต๊ะ", "ผงฮังเล 1 ช้อนโต๊ะ (ใช้ผงกะหรี่แทนได้)", "ขิงซอย 3 ช้อนโต๊ะ", "กระเทียมดอง 2 หัว", "หอมแดง 6 หัว", "น้ำมะขามเปียก 3 ช้อนโต๊ะ", "น้ำตาลปี๊บ 2 ช้อนโต๊ะ", "ซีอิ๊วดำ 1 ช้อนชา", "น้ำปลา 1 ช้อนโต๊ะ", "น้ำ 3 ถ้วย", "ถั่วลิสงคั่ว 2 ช้อนโต๊ะ"],
+    steps: ["คลุกเนื้อกับพริกแกง ผงฮังเล และซีอิ๊วดำ หมักไว้ 30 นาที", "ผัดเนื้อในหม้อไฟกลางจนหอมและตึงตัว", "เติมน้ำ เคี่ยวไฟอ่อน 75 นาทีจนเนื้อนุ่ม", "ใส่ขิง กระเทียมดอง หอมแดง และถั่วลิสง ปรุงด้วยน้ำมะขาม น้ำตาลปี๊บ และน้ำปลา เคี่ยวต่อ 15 นาทีจนน้ำขลุกขลิก"],
+    tip: "เนื้อน่องลายมีเอ็นเยอะ ต้องเคี่ยวนานให้เอ็นนุ่ม รสแกงควรออกเปรี้ยวหวานเค็ม" },
+  { name: "น้ำพริกหนุ่ม", kind: "น้ำจิ้ม / ซอส", region: "เหนือ", cat: "ยำ / ตำ", origin: "ไทย", time: 25, level: "ง่าย", yield: "ประมาณ 1 ถ้วย", equip: ["stove", "wok", "mortar"],
+    ing: ["พริกหนุ่ม 8 เม็ด", "หอมแดง 5 หัว", "กระเทียม 8 กลีบ", "เกลือ ½ ช้อนชา", "น้ำปลา 1 ช้อนชา", "ผักชีซอย", "ผักต้มหรือผักสดสำหรับจิ้ม"],
+    steps: ["คั่วพริกหนุ่ม หอมแดง และกระเทียมทั้งเปลือกในกระทะแห้งไฟกลาง 10 นาทีจนผิวไหม้เป็นจุดและนิ่ม", "ลอกเปลือกที่ไหม้ออก", "โขลกกระเทียมกับเกลือ ใส่หอมแดงและพริก โขลกพอหยาบให้ยังเป็นเส้น", "ปรุงด้วยน้ำปลา โรยผักชี"], tip: "" },
+
+/* ---------- อาหารทะเล ---------- */
+  { name: "กุ้งอบวุ้นเส้น", protein: "กุ้ง / ทะเล", cat: "ปิ้ง / อบ", origin: "ไทย", time: 30, level: "ปานกลาง", serves: 2, equip: ["stove", "pot"],
+    ing: ["กุ้งแม่น้ำหรือกุ้งขาว 6 ตัว", "วุ้นเส้นแช่น้ำ 2 ไจ", "ขิงแก่หั่นแว่น 5 แว่น", "รากผักชี 3 ราก", "กระเทียม 5 กลีบ", "พริกไทยเม็ด 1 ช้อนชา", "ขึ้นฉ่าย 2 ต้น", "ซอสหอยนางรม 2 ช้อนโต๊ะ", "ซีอิ๊วขาว 1 ช้อนโต๊ะ", "ซีอิ๊วดำ 1 ช้อนชา", "น้ำตาล 1 ช้อนชา", "น้ำมันงา 1 ช้อนโต๊ะ", "น้ำซุป ½ ถ้วย"],
+    steps: ["คลุกวุ้นเส้นกับซอสหอยนางรม ซีอิ๊วขาว ซีอิ๊วดำ น้ำตาล และน้ำมันงา", "บุบรากผักชี กระเทียม และพริกไทย ผัดกับน้ำมันเล็กน้อยในหม้อพร้อมขิงจนหอม", "วางกุ้งลงไป ตามด้วยวุ้นเส้น เทน้ำซุป", "ปิดฝา อบไฟอ่อน 8 นาที", "เปิดฝา คลุกเบา ๆ โรยขึ้นฉ่าย ปิดฝาต่ออีก 1 นาที"],
+    tip: "ใช้หม้อก้นหนาและไฟอ่อน วุ้นเส้นจะไม่ติดก้นหม้อ" },
+  { name: "ปลาหมึกผัดไข่เค็ม", protein: "กุ้ง / ทะเล", cat: "ผัด", origin: "ไทย", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["ปลาหมึกกล้วยหั่นแว่น 300 กรัม", "ไข่แดงเค็มดิบ 3 ฟอง", "นมข้นจืด 3 ช้อนโต๊ะ", "กระเทียมสับ 1 ช้อนโต๊ะ", "พริกชี้ฟ้าแดงหั่นแฉลบ 1 เม็ด", "ขึ้นฉ่าย 2 ต้น", "ต้นหอม 2 ต้น", "ซอสหอยนางรม 1 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนชา", "น้ำมันพืช 2 ช้อนโต๊ะ"],
+    steps: ["บี้ไข่แดงเค็มกับนมข้นจืดให้เข้ากัน", "ลวกปลาหมึกในน้ำเดือด 20 วินาที ตักขึ้น", "ผัดกระเทียมจนหอม ใส่ไข่เค็มที่บี้ไว้ ผัดไฟอ่อนจนเป็นฟอง", "ใส่ปลาหมึก ซอสหอยนางรม และน้ำตาล ผัดไฟแรง 1 นาที", "ใส่พริกชี้ฟ้า ขึ้นฉ่าย และต้นหอม คลุกแล้วปิดไฟ"],
+    tip: "ลวกปลาหมึกก่อนผัด ปลาหมึกจะไม่คายน้ำและไม่เหนียว" },
+  { name: "หอยลายผัดพริกเผา", protein: "กุ้ง / ทะเล", cat: "ผัด", origin: "ไทย", time: 45, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["หอยลาย 500 กรัม", "น้ำพริกเผา 2 ช้อนโต๊ะ", "กระเทียมสับ 1 ช้อนโต๊ะ", "พริกชี้ฟ้าแดง 2 เม็ด", "ใบโหระพา 1 กำ", "ซอสหอยนางรม 1 ช้อนโต๊ะ", "น้ำปลา 1 ช้อนชา", "น้ำตาล 1 ช้อนชา", "น้ำมันพืช 2 ช้อนโต๊ะ"],
+    steps: ["แช่หอยลายในน้ำเกลือ 30 นาทีให้คายทราย แล้วล้างให้สะอาด", "ผัดกระเทียมกับน้ำพริกเผาไฟกลางจนหอม", "ใส่หอยลาย ผัดไฟแรง 3 นาทีจนหอยอ้าปาก", "ปรุงด้วยซอสหอยนางรม น้ำปลา และน้ำตาล ใส่พริกชี้ฟ้าและใบโหระพา คลุกแล้วปิดไฟ"],
+    tip: "หอยตัวที่ไม่อ้าปากหลังผัด ให้คัดทิ้ง" },
+  { name: "กุ้งผัดพริกเกลือ", protein: "กุ้ง / ทะเล", cat: "ทอด", origin: "ไทย", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["กุ้งขาวตัดหนวด 12 ตัว", "แป้งมัน 2 ช้อนโต๊ะ", "กระเทียมสับ 2 ช้อนโต๊ะ", "พริกขี้หนูซอย 5 เม็ด", "ต้นหอมซอย 2 ต้น", "เกลือ ½ ช้อนชา", "พริกไทยป่น ½ ช้อนชา", "น้ำตาล ¼ ช้อนชา", "น้ำมันสำหรับทอด"],
+    steps: ["ซับกุ้งให้แห้ง คลุกแป้งมันบาง ๆ", "ทอดกุ้งในน้ำมันร้อนไฟแรง 2 นาทีจนเปลือกกรอบ ตักขึ้น", "เทน้ำมันออกให้เหลือ 1 ช้อนโต๊ะ ผัดกระเทียมและพริกจนเหลืองหอม", "ใส่กุ้งกลับ โรยเกลือ พริกไทย น้ำตาล และต้นหอม ผัดเร็ว ๆ 30 วินาที"],
+    tip: "ทอดทั้งเปลือกด้วยไฟแรง เปลือกจะกรอบจนกินได้ทั้งตัว" },
+  { name: "ปลากะพงนึ่งซีอิ๊ว", protein: "ปลา", cat: "นึ่ง", origin: "จีน", time: 25, level: "ง่าย", serves: 3, equip: ["stove", "steamer", "wok"],
+    ing: ["ปลากะพง 1 ตัว (ประมาณ 600 กรัม)", "ขิงซอยเส้น 1 แง่ง", "ต้นหอมซอยเส้น 3 ต้น", "ซีอิ๊วขาว 3 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนชา", "น้ำร้อน 2 ช้อนโต๊ะ", "น้ำมันพืช 2 ช้อนโต๊ะ", "น้ำมันงา 1 ช้อนชา", "ผักชี"],
+    steps: ["บั้งปลา วางขิงครึ่งหนึ่งบนจาน แล้ววางปลาทับ", "นึ่งน้ำเดือดจัด 12 นาที แล้วเทน้ำที่ออกมาในจานทิ้ง", "ผสมซีอิ๊วขาว น้ำตาล และน้ำร้อน ราดบนปลา วางขิงที่เหลือและต้นหอม", "ตั้งน้ำมันพืชกับน้ำมันงาในกระทะให้ร้อนจัด ราดบนต้นหอมให้ดังฉ่า โรยผักชี"],
+    tip: "เทน้ำที่ออกจากปลาตอนนึ่งทิ้ง น้ำส่วนนี้คือที่มาของกลิ่นคาว" },
+
+/* ---------- อาหารเช้า ---------- */
+  { name: "ไข่กระทะ", protein: "ไข่", meal: "เช้า", cat: "ทอด", origin: "ไทย", time: 10, level: "ง่าย", serves: 1, equip: ["stove", "wok"],
+    ing: ["ไข่ไก่ 2 ฟอง", "ไก่ยอหั่นแว่น 4 ชิ้น", "ไส้กรอกไก่หั่น 1 ชิ้น", "เนย 1 ช้อนชา", "ซอสปรุงรส", "พริกไทย", "ต้นหอมซอย", "ขนมปังปิ้ง"],
+    steps: ["ละลายเนยในกระทะใบเล็กไฟอ่อน", "ตอกไข่ลงไป วางไก่ยอและไส้กรอกรอบ ๆ", "ปิดฝา ทอด 3 นาทีให้ไข่ขาวสุก ไข่แดงยังเยิ้ม", "เหยาะซอสปรุงรส โรยพริกไทยและต้นหอม กินกับขนมปังปิ้ง"], tip: "" },
+  { name: "แซนด์วิชไข่ญี่ปุ่น", protein: "ไข่", meal: "เช้า", cat: "จานเดียว", origin: "ญี่ปุ่น", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "pot"],
+    ing: ["ไข่ไก่ 4 ฟอง", "ขนมปังแผ่นนุ่ม 4 แผ่น", "มายองเนสญี่ปุ่น 3 ช้อนโต๊ะ", "นมสด 1 ช้อนชา", "น้ำตาล ¼ ช้อนชา", "เกลือ พริกไทย", "เนยนิ่ม 1 ช้อนโต๊ะ"],
+    steps: ["ต้มไข่ในน้ำเดือด 10 นาที แช่น้ำเย็นแล้วปอก", "บดไข่ด้วยส้อมให้หยาบ ผสมมายองเนส นม น้ำตาล เกลือ และพริกไทย", "ทาเนยบาง ๆ บนขนมปัง ตักไส้ไข่ให้หนา แล้วประกบ", "ตัดขอบแล้วหั่นครึ่ง"],
+    tip: "ทาเนยบนขนมปังก่อนใส่ไส้ ขนมปังจะไม่แฉะ" },
+  { name: "เฟรนช์โทสต์", protein: "ไข่", meal: "เช้า", cat: "ทอด", origin: "ตะวันตก", time: 15, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["ขนมปังแผ่นหนา 4 แผ่น", "ไข่ไก่ 2 ฟอง", "นมสด ½ ถ้วย", "น้ำตาล 1 ช้อนโต๊ะ", "ผงอบเชย ¼ ช้อนชา", "เนย 20 กรัม", "น้ำผึ้งหรือเมเปิลไซรัป"],
+    steps: ["ตีไข่กับนม น้ำตาล และอบเชย", "แช่ขนมปังด้านละ 20 วินาทีให้ชุ่ม", "ละลายเนยในกระทะไฟอ่อนค่อนกลาง ทอดขนมปังด้านละ 2 นาทีจนเหลือง", "ราดน้ำผึ้ง"],
+    tip: "ใช้ขนมปังค้างคืน จะดูดไข่ได้ดีและไม่เละ" },
+
+/* ---------- ของหวาน ---------- */
+  { name: "บราวนี่", cat: "ของหวาน / เครื่องดื่ม", origin: "ตะวันตก", time: 45, level: "ง่าย", yield: "9 ชิ้น", equip: ["oven"],
+    ing: ["ดาร์กช็อกโกแลต 150 กรัม", "เนยจืด 100 กรัม", "น้ำตาลทราย 150 กรัม", "ไข่ไก่ 2 ฟอง", "แป้งสาลีอเนกประสงค์ 70 กรัม", "ผงโกโก้ 2 ช้อนโต๊ะ", "เกลือ ¼ ช้อนชา"],
+    steps: ["อุ่นเตาอบที่ 170°C รองพิมพ์ขนาด 20×20 ซม. ด้วยกระดาษไข", "ละลายช็อกโกแลตกับเนยในชามทนร้อนที่วางบนหม้อน้ำเดือดเบา ๆ คนให้เนียน", "ใส่น้ำตาล คนให้เข้ากัน ตอกไข่ทีละฟอง คนจนเนื้อเงา", "ร่อนแป้ง โกโก้ และเกลือลงไป ตะล่อมพอเข้ากัน", "เทใส่พิมพ์ อบ 22–25 นาทีให้ตรงกลางยังนุ่ม พักให้เย็นก่อนตัด"],
+    tip: "อย่าอบจนไม้จิ้มออกมาสะอาด บราวนี่ที่ดีตรงกลางต้องยังชื้น" },
+  { name: "พุดดิ้งนมสด", cat: "ของหวาน / เครื่องดื่ม", origin: "ตะวันตก", time: 20, level: "ง่าย", serves: 4, equip: ["stove", "pot"],
+    ing: ["นมสด 500 มล.", "วิปปิ้งครีม 100 มล.", "น้ำตาลทราย 4 ช้อนโต๊ะ", "ผงเจลาติน 2 ช้อนชา (ประมาณ 7 กรัม)", "น้ำเย็น 3 ช้อนโต๊ะ", "กลิ่นวานิลลา ½ ช้อนชา"],
+    steps: ["โรยผงเจลาตินลงในน้ำเย็น ทิ้งไว้ 5 นาทีให้พองตัว", "อุ่นนม ครีม และน้ำตาลไฟอ่อนจนน้ำตาลละลาย อย่าให้เดือด", "ปิดไฟ ใส่เจลาตินและวานิลลา คนจนละลายหมด", "กรองใส่ถ้วย แช่ตู้เย็น 3 ชั่วโมงจนเซตตัว"],
+    tip: "เวลาทำ 20 นาที ยังไม่รวมเวลาแช่เย็น 3 ชั่วโมง" },
+  { name: "บัวลอยไข่หวาน", cat: "ของหวาน / เครื่องดื่ม", origin: "ไทย", time: 40, level: "ปานกลาง", serves: 4, equip: ["stove", "pot"],
+    ing: ["แป้งข้าวเหนียว 1 ถ้วย", "น้ำอุ่น ⅓ ถ้วย", "กะทิ 500 มล.", "น้ำตาลทราย ½ ถ้วย", "เกลือ ½ ช้อนชา", "ใบเตย 2 ใบ", "ไข่ไก่ 4 ฟอง", "ฟักทองนึ่งบด ¼ ถ้วย สำหรับผสมแป้งให้มีสี (ไม่ใส่ก็ได้)"],
+    steps: ["นวดแป้งกับน้ำอุ่นจนเนียนไม่ติดมือ ปั้นเป็นเม็ดเล็กขนาดปลายนิ้วก้อย", "ต้มน้ำให้เดือด ใส่บัวลอย พอลอยขึ้น (ประมาณ 2 นาที) ให้ตักใส่น้ำเย็น", "ต้มกะทิกับใบเตย น้ำตาล และเกลือไฟอ่อนจนน้ำตาลละลาย", "ตอกไข่ใส่ทีละฟอง อย่าคน รอ 3 นาทีให้ไข่สุก", "ใส่บัวลอยลงในน้ำกะทิ"],
+    tip: "ค่อย ๆ เติมน้ำอุ่นทีละน้อยตอนนวด แป้งแต่ละยี่ห้อดูดน้ำไม่เท่ากัน" },
+
+/* ---------- หม้อทอดไร้น้ำมัน ---------- */
+  { name: "ปีกไก่ทอดน้ำปลาหม้อทอด", protein: "ไก่", cat: "ทอด", origin: "ไทย", time: 35, level: "ง่าย", serves: 2, equip: ["airfryer"],
+    ing: ["ปีกกลางไก่ 500 กรัม", "น้ำปลา 1½ ช้อนโต๊ะ", "น้ำตาล 1 ช้อนชา", "พริกไทย ½ ช้อนชา", "กระเทียมสับ 1 ช้อนโต๊ะ", "แป้งทอดกรอบ 2 ช้อนโต๊ะ"],
+    steps: ["หมักปีกไก่กับน้ำปลา น้ำตาล พริกไทย และกระเทียม 15 นาที", "คลุกแป้งทอดกรอบบาง ๆ", "อบ 180°C 10 นาที", "กลับด้าน เพิ่มเป็น 200°C อบต่อ 8 นาทีจนหนังกรอบ"],
+    tip: "เรียงปีกไก่ชั้นเดียว ไม่ซ้อนกัน ลมร้อนจะเข้าถึงและกรอบทั่ว" },
+  { name: "แซลมอนอบซอสมิโซะ", protein: "ปลา", cat: "ปิ้ง / อบ", origin: "ญี่ปุ่น", time: 20, level: "ง่าย", serves: 2, equip: ["airfryer"],
+    ing: ["แซลมอนติดหนัง 2 ชิ้น (ชิ้นละ 150 กรัม)", "มิโซะขาว 1 ช้อนโต๊ะ", "มิริน 1 ช้อนโต๊ะ", "ซีอิ๊วญี่ปุ่น 1 ช้อนชา", "น้ำผึ้ง 1 ช้อนชา", "งาขาว และต้นหอมซอย"],
+    steps: ["ผสมมิโซะ มิริน ซีอิ๊ว และน้ำผึ้ง ทาบนเนื้อปลา พักไว้ 10 นาที", "วางปลาด้านหนังลง อบ 180°C 8 นาที", "ใช้ส้อมแยกเนื้อปลาดู ถ้ายังไม่แยกเป็นกลีบง่าย ให้อบต่ออีก 2 นาที", "โรยงาและต้นหอม"],
+    tip: "ซอสมีน้ำผึ้งจึงไหม้ง่าย ถ้าหน้าเข้มเร็วไป ให้ลดเป็น 170°C" },
+  { name: "ผักอบรวมหม้อทอด", kind: "จานเคียง", protein: "ผัก", cat: "ปิ้ง / อบ", origin: "ตะวันตก", time: 25, level: "ง่าย", serves: 2, equip: ["airfryer"],
+    ing: ["ฟักทองหั่นเต๋า 200 กรัม", "แครอท 1 หัว", "บรอกโคลี ½ หัว", "หอมใหญ่ ½ หัว", "น้ำมันมะกอก 1½ ช้อนโต๊ะ", "เกลือ พริกไทย", "ออริกาโนแห้ง ½ ช้อนชา"],
+    steps: ["หั่นผักให้ขนาดใกล้กัน คลุกน้ำมัน เกลือ พริกไทย และออริกาโน", "ใส่ฟักทองและแครอทก่อน อบ 190°C 8 นาที", "ใส่บรอกโคลีและหอมใหญ่ เขย่าตะกร้า อบต่ออีก 7 นาที"],
+    tip: "ใส่ผักเนื้อแข็งก่อน ผักทุกอย่างจะสุกพร้อมกัน" },
+
+/* ---------- อินเดียและตะวันออกกลาง ---------- */
+  { name: "แกงไก่เนยอินเดีย", protein: "ไก่", cat: "ต้ม / แกง", origin: "อินเดีย", time: 50, level: "ปานกลาง", serves: 3, equip: ["stove", "pot"],
+    ing: ["สะโพกไก่หั่นชิ้น 500 กรัม", "โยเกิร์ตรสธรรมชาติ ½ ถ้วย", "ผงการัมมาซาลาหรือผงกะหรี่ 1 ช้อนโต๊ะ", "ขิงขูดและกระเทียมขูด อย่างละ 1 ช้อนชา", "เนย 40 กรัม", "หอมใหญ่สับ 1 หัว", "ซอสมะเขือเทศเข้มข้น 2 ช้อนโต๊ะ", "มะเขือเทศกระป๋อง 200 กรัม", "วิปปิ้งครีม ½ ถ้วย", "น้ำตาล 1 ช้อนชา และเกลือ", "ข้าวสวยหรือแป้งนาน"],
+    steps: ["หมักไก่กับโยเกิร์ต ผงเครื่องเทศครึ่งหนึ่ง ขิง กระเทียม และเกลือ 20 นาที", "จี่ไก่กับเนยครึ่งหนึ่งไฟกลาง 5 นาทีจนผิวเหลือง ตักขึ้น", "ใส่เนยที่เหลือ ผัดหอมใหญ่จนนิ่ม ใส่ผงเครื่องเทศที่เหลือ ซอสมะเขือเทศเข้มข้น และมะเขือเทศกระป๋อง เคี่ยว 10 นาที", "ใส่ไก่กลับ เติมครีมและน้ำตาล เคี่ยวไฟอ่อน 10 นาที", "เสิร์ฟกับข้าวสวยหรือแป้งนาน"],
+    tip: "โยเกิร์ตช่วยให้ไก่นุ่ม ถ้ามีเวลา หมักข้ามคืนในตู้เย็นจะดีกว่า" },
+  { name: "เคบับเนื้อ", beef: true, cat: "ปิ้ง / อบ", origin: "ตะวันออกกลาง", time: 30, level: "ง่าย", serves: 3, equip: ["grill"],
+    ing: ["เนื้อวัวบด 400 กรัม", "หอมใหญ่สับละเอียด ½ หัว", "กระเทียมสับ 2 กลีบ", "พาร์สลีย์สับ 2 ช้อนโต๊ะ", "ผงยี่หร่า 1 ช้อนชา", "ผงปาปริกา 1 ช้อนชา", "เกลือ 1 ช้อนชา", "พริกไทย ½ ช้อนชา", "ไม้เสียบ 6 ไม้", "ซอสโยเกิร์ต: โยเกิร์ตรสธรรมชาติ ½ ถ้วย และน้ำมะนาว 1 ช้อนชา"],
+    steps: ["บีบน้ำออกจากหอมใหญ่สับ ผสมกับเนื้อบด กระเทียม พาร์สลีย์ เครื่องเทศ เกลือ และพริกไทย นวดจนเหนียว", "แบ่งเป็น 6 ส่วน ปั้นหุ้มไม้เสียบเป็นแท่งยาว แช่เย็น 10 นาที", "ย่างไฟกลางค่อนแรง 8 นาที พลิกทุก 2 นาทีจนสุกทั่ว", "ผสมโยเกิร์ตกับน้ำมะนาวเป็นซอส"],
+    tip: "นวดเนื้อให้เหนียวและแช่เย็นก่อนย่าง เนื้อจะไม่หลุดจากไม้" }
+);
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+function load(key, fallback) { try { const v = JSON.parse(localStorage.getItem(key)); return Array.isArray(v) ? v : fallback; } catch (e) { return fallback; } }
+function store(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
+
+const dlg = $("dlg"), fdlg = $("fdlg");
+const savedEquip = load("krua-equip-v1", null);
+let have = new Set(savedEquip || ["stove", "wok", "pot", "ricecooker", "microwave", "kettle"]);
+let favs = new Set(load("krua-fav-v1", []));
+let meal = load("krua-meal-v1", []);
+let pantry = new Set(load("krua-pantry-v1", []));
+let bought = new Set(load("krua-shop-v1", []));
+const DEFAULTS = { kind: "ทั้งหมด", protein: "", cat: "ทั้งหมด", origin: "ทุกสัญชาติ", tag: "", fav: false, fast: false, easy: false, stocked: false };
+const state = { ...DEFAULTS };
+// One-tap shortcuts: each one is a ready-made filter, so nobody has to learn the filter sheet to find beef or pasta
+const PRESETS = [
+  { id: "all", label: "ทั้งหมด", icon: "", set: {} },
+  { id: "fav", label: "เมนูโปรด", icon: "❤️", set: { fav: true } },
+  { id: "fast", label: "ไม่เกิน 15 นาที", icon: "⚡", set: { fast: true } },
+  { id: "beef", label: "เนื้อวัว", icon: "🐄", set: { protein: "เนื้อวัว" } },
+  { id: "steak", label: "สเต็ก", icon: "🥩", set: { cat: "สเต็ก" } },
+  { id: "chicken", label: "ไก่", icon: "🐔", set: { protein: "ไก่" } },
+  { id: "pork", label: "หมู", icon: "🐖", set: { protein: "หมู" } },
+  { id: "fish", label: "ปลา", icon: "🐟", set: { protein: "ปลา" } },
+  { id: "shrimp", label: "กุ้ง ทะเล", icon: "🦐", set: { protein: "กุ้ง / ทะเล" } },
+  { id: "egg", label: "ไข่", icon: "🥚", set: { protein: "ไข่" } },
+  { id: "veg", label: "ผัก", icon: "🥬", set: { protein: "ผัก" } },
+  { id: "pasta", label: "สปาเกตตี", icon: "🍝", set: { tag: "pasta" } },
+  { id: "south", label: "อาหารใต้", icon: "🌶️", set: { origin: "ไทยภาคใต้" } },
+  { id: "isan", label: "อาหารอีสาน", icon: "🥗", set: { origin: "ไทยภาคอีสาน" } },
+  { id: "north", label: "อาหารเหนือ", icon: "🍜", set: { origin: "ไทยภาคเหนือ" } },
+  { id: "breakfast", label: "อาหารเช้า", icon: "🍳", set: { tag: "breakfast" } },
+  { id: "air", label: "หม้อทอด", icon: "♨️", set: { tag: "air" } },
+  { id: "sauce", label: "น้ำจิ้ม ซอส", icon: "🥣", set: { kind: "น้ำจิ้ม / ซอส" } },
+  { id: "stock", label: "น้ำสต็อก", icon: "🍲", set: { kind: "น้ำสต็อก" } },
+  { id: "side", label: "จานเคียง", icon: "🍚", set: { kind: "จานเคียง" } },
+  { id: "sweet", label: "ของหวาน", icon: "🍰", set: { kind: "ของหวาน / เครื่องดื่ม" } }
+];
+
+RECIPES.forEach(r => {
+  r.origin = r.origin || "ไทย";
+  if (!r.region && REGION_OF[r.name]) r.region = REGION_OF[r.name];
+  if (BREAKFAST.includes(r.name)) r.meal = "เช้า";
+  if (r.protein === undefined) r.protein = r.beef ? "เนื้อวัว" : (PROTEIN[r.name] || "");
+  r.kind = r.kind || KIND[r.name] || (r.cat === "ของหวาน / เครื่องดื่ม" ? "ของหวาน / เครื่องดื่ม" : "เมนูหลัก");
+});
+let noPork = load("krua-nopork-v1", [true])[0] !== false;
+
+/* ---------- Steak timing: depends on how thick the cut really is ---------- */
+const THICK = [1, 1.5, 2, 2.5, 3, 4];
+const AIR = [7, 9, 11, 13, 15]; // air fryer minutes in total at 200°C for a 2.5 cm steak, rare to well done
+const STEAK_METHOD = { "สเต็กเซอร์ลอยน์ย่าง ซอสชิมิชูร์รี": "grill", "เสือร้องไห้": "grill", "น้ำตกเนื้อ": "grill", "สเต็กหม้อทอดไร้น้ำมัน": "air", "สเต็กหนาแบบรีเวิร์สเซียร์": "reverse" };
+const savedSteak = load("krua-steak-v1", [1.5, 1]);
+let steak = { th: THICK.includes(+savedSteak[0]) ? +savedSteak[0] : 1.5, done: DONENESS[+savedSteak[1]] ? +savedSteak[1] : 1 };
+function r15(s) { return Math.max(15, Math.round(s / 15) * 15); }
+function dur(s) { const m = Math.floor(s / 60), x = s % 60; return (m ? `${m} นาที` : "") + (m && x ? " " : "") + (x ? `${x} วินาที` : ""); }
+// Thinner cuts cook much faster than a straight proportion, so the time scales with thickness to the power 1.3
+function searSecs(done, th) { return r15(DONENESS[done].base * 60 * Math.pow(th / 2.5, 1.3)); }
+function steakCalc() {
+  const d = DONENESS[steak.done], sear = searSecs(steak.done, steak.th);
+  const airTotal = Math.max(120, Math.round(AIR[steak.done] * 60 * Math.pow(steak.th / 2.5, 1.1) / 30) * 30);
+  const air1 = Math.ceil(airTotal * .55 / 30) * 30;
+  return { sear, sear2: Math.max(15, sear - 30), air1, air2: Math.max(30, airTotal - air1), done: d.name,
+    pull: d.low - 3, pull5: d.low - 5, rest: steak.th <= 1.5 ? 3 : steak.th <= 2.5 ? 5 : 7,
+    oven: Math.max(15, Math.round(40 * steak.th / 4 + (steak.done - 1) * 5)) };
+}
+function fillSteak(text) {
+  const c = steakCalc();
+  return text.replace(/\{(\w+)\}/g, (_, k) => ["sear", "sear2", "air1", "air2"].includes(k) ? dur(c[k]) : c[k]);
+}
+const BASE = RECIPES.map(r => ({ ...r, key: r.name }));
+// Steak recipes read their step times from the calculator each time they are shown
+BASE.forEach(r => { if (!r.guide) return; const raw = r.steps; Object.defineProperty(r, "steps", { get: () => raw.map(fillSteak), enumerable: true, configurable: true }); });
+function adapt(r) {
+  const p = NO_PORK[r.key]; if (!p) return r;
+  const sw = s => p.swap.reduce((t, [a, b]) => t.split(a).join(b), s);
+  return { ...r, name: p.name || r.name, ing: r.ing.map(sw), steps: r.steps.map(sw), tip: sw(r.tip || ""),
+    protein: p.protein || r.protein, dish: p.dish, swapped: p.to };
+}
+function applyDiet() { RECIPES.length = 0; BASE.forEach(r => RECIPES.push(noPork ? adapt(r) : r)); }
+applyDiet();
+
+const byKey = k => RECIPES.find(r => r.key === k);
+const missing = r => r.equip.filter(e => !have.has(e));
+const canMake = r => missing(r).length === 0;
+const emoji = r => r.dish || DISH[r.key] || "🍽️";
+const timeText = m => m < 60 ? `${m} นาที` : `${Math.floor(m / 60)} ชม.${m % 60 ? ` ${m % 60} นาที` : ""}`;
+// Southern dishes are Thai too: "ไทย" shows them all, "ไทยภาคใต้" narrows to the region
+const originLabel = r => REGIONS[r.region] || r.origin;
+const originOk = r => state.origin === "ทุกสัญชาติ" || (Object.values(REGIONS).includes(state.origin) ? REGIONS[r.region] === state.origin : r.origin === state.origin);
+const tagOk = r => !state.tag || (state.tag === "pasta" ? r.name.includes("สปาเกตตี") : state.tag === "air" ? r.equip.includes("airfryer") : state.tag === "breakfast" ? r.meal === "เช้า" : true);
+const KORDER = Object.fromEntries(KINDS.map((k, i) => [k, i]));
+function shuffle(a) { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+/* ---------- Fridge: fresh items the cook can tick; seasonings count as always in the house ---------- */
+const PANTRY = [
+  ["เนื้อสัตว์และไข่", [
+    ["mince", "เนื้อวัวบด", /เนื้อวัวบด|เนื้อวัวสับ/],
+    ["beef", "เนื้อวัว", /ริบอาย|สันนอก|สเต็ก|เนื้อสัน|เนื้อสะโพก|เนื้อน่อง|เนื้อสไลซ์|เนื้อวัว/],
+    ["chicken", "ไก่", /ไก่/], ["pork", "หมู", /หมู/], ["squid", "ปลาหมึก", /ปลาหมึก[ก-๙]*/], ["fish", "ปลา", /ปลา|แซลมอน/],
+    ["shrimp", "กุ้ง", /กุ้ง/], ["clam", "หอยลาย", /หอยลาย/], ["egg", "ไข่", /ไข่/], ["bacon", "เบคอน", /เบคอน/]]],
+  ["ผักและผลไม้", [
+    ["onion", "หอมใหญ่", /หอมใหญ่/], ["shallot", "หอมแดง", /หอมแดง/], ["scallion", "ต้นหอม ผักชี", /ต้นหอม|ผักชี(?!ฝรั่ง|ลาว)/],
+    ["chili", "พริกสด", /พริก(?!ไทย|ป่น|แกง|หวาน|เผา)/], ["lime", "มะนาว", /มะนาว|เลมอน/], ["tomato", "มะเขือเทศ", /มะเขือเทศ/],
+    ["potato", "มันฝรั่ง", /มันฝรั่ง/], ["carrot", "แครอท", /แครอท/], ["celery", "ขึ้นฉ่าย", /ขึ้นฉ่าย/],
+    ["lettuce", "ผักกาดหอม ผักสลัด", /ผักกาดหอม|ผักสลัด/], ["morning", "ผักบุ้ง", /ผักบุ้ง/], ["mushroom", "เห็ด", /เห็ด/],
+    ["papaya", "มะละกอดิบ", /มะละกอ/], ["banana", "กล้วย", /กล้วย/]]],
+  ["สมุนไพร", [
+    ["tomyum", "ข่า ตะไคร้ ใบมะกรูด", /ข่า|ตะไคร้|มะกรูด/], ["basil", "กะเพรา โหระพา", /กะเพรา|โหระพา/],
+    ["ginger", "ขิง", /ขิง/], ["herb", "โรสแมรี ไทม์ พาร์สลีย์", /โรสแมรี|ไทม์|พาร์สลีย์/]]],
+  ["ข้าว เส้น แป้ง", [
+    ["rice", "ข้าวสาร ข้าวสวย", /ข้าวสาร|ข้าวสวย|ข้าวหอมมะลิ|ข้าวญี่ปุ่น/], ["sticky", "ข้าวเหนียว", /ข้าวเหนียว/],
+    ["pasta", "เส้นสปาเกตตี", /สปาเกตตี/], ["flat", "เส้นใหญ่", /เส้นใหญ่/], ["glass", "วุ้นเส้น", /วุ้นเส้น/],
+    ["instant", "บะหมี่กึ่งสำเร็จรูป", /บะหมี่/], ["bread", "ขนมปัง", /ขนมปัง/], ["flour", "แป้งสาลี", /แป้งสาลี|แป้งเค้ก/]]],
+  ["นม เนย กะทิ", [
+    ["butter", "เนย", /เนย/], ["milk", "นมสด", /นมสด/], ["cream", "วิปปิ้งครีม", /ครีม/],
+    ["cheese", "ชีส", /ชีส|พาร์มีซาน/], ["coconut", "กะทิ", /กะทิ/]]]
+];
+const PITEMS = PANTRY.flatMap(([g, list]) => list.map(([id, name, re]) => ({ id, name, re, group: g })));
+const PNAME = id => id === "bacon" && noPork ? "เบคอนเนื้อ" : PITEMS.find(p => p.id === id).name;
+// Words that contain an item's name but are something else (fish sauce is not fish, chicken stock is not chicken)
+const NOISE = /น้ำปลา|ซอสมะเขือเทศ[ก-๙]*|มะเขือเทศกระป๋อง|น้ำซุป[ก-๙]*|น้ำสต็อก[ก-๙]*|โครงไก่|กระดูกเนื้อวัว[ก-๙]*|กุ้งแห้ง|ปลาโอแห้ง[ก-๙]*|เห็ดหอมแห้ง|เกล็ดขนมปัง|กุ้งเสียบ|เม็ดผักชี|ไข่แดงเค็ม[ก-๙]*|ไก่ยอ[ก-๙]*|ไส้กรอกไก่[ก-๙]*|แป้งข้าวเหนียว/g;
+const lineCache = new Map();
+function lineInfo(text) {
+  let v = lineCache.get(text); if (v) return v;
+  const ids = [];
+  if (!text.includes("ไม่ใส่ก็ได้")) {
+    let s = text.replace(/\([^)]*\)/g, " ").replace(/ไข่ไก่/g, "ไข่").replace(NOISE, " ");
+    PITEMS.forEach(p => { if (p.re.test(s)) { ids.push(p.id); s = s.split(p.re).join(" "); } });
+  }
+  v = { ids }; lineCache.set(text, v); return v;
+}
+function needOf(r) {
+  if (!r._need) { const set = new Set(); r.ing.forEach(x => lineInfo(x).ids.forEach(id => set.add(id))); r._need = [...set]; }
+  return r._need;
+}
+const pantryOn = () => pantry.size > 0;
+const lacking = r => needOf(r).filter(id => !pantry.has(id));
+function stockLine(r) {
+  const need = needOf(r); if (!pantryOn() || !need.length) return "";
+  const lack = lacking(r);
+  if (!lack.length) return `<div class="stock ok">${ICON.check}มีวัตถุดิบครบ</div>`;
+  const names = lack.slice(0, 2).map(PNAME).join(", ") + (lack.length > 2 ? ` +${lack.length - 2}` : "");
+  return `<div class="stock">มีวัตถุดิบ ${need.length - lack.length}/${need.length} · ขาด ${esc(names)}</div>`;
+}
+const sortList = (a, b) => KORDER[a.kind] - KORDER[b.kind]
+  || (pantryOn() ? (lacking(a).length - lacking(b).length || needOf(b).length - needOf(a).length) : 0)
+  || a.time - b.time;
+
+// The toast must sit inside an open dialog, because a modal dialog covers everything outside it
+function toast(msg) {
+  let t = $("toast");
+  if (!t) { t = document.createElement("div"); t.id = "toast"; t.className = "toast"; t.setAttribute("role", "status"); }
+  const host = fdlg.open ? fdlg : dlg.open ? dlg : document.body;
+  if (t.parentNode !== host) host.appendChild(t);
+  t.textContent = msg; t.hidden = false;
+  clearTimeout(toast.h); toast.h = setTimeout(() => { t.hidden = true; }, 2000);
+}
+
+/* ---------- Views and tab bar ---------- */
+// Every topic of the app is listed here. To add one later: add its views and tabs to the page, then describe it in this list.
+const APP_NAME = "ชีวิตง่าย";
+const TOPICS = [
+  { id: "kitchen", name: "ครัวบ้านเรา", icon: "🍳", tint: "t1", start: "menu", views: ["menu", "meal", "kitchen"],
+    desc: "หาเมนูจากของที่มี จัดมื้อ และทำตามทีละขั้น",
+    stat: () => `ทำได้ ${RECIPES.filter(canMake).length} จาก ${RECIPES.length} สูตร` + (mealItems().length ? ` · มื้อนี้ ${mealItems().length} เมนู` : ""),
+    quick: [["shuffle", "สุ่มจัดมื้อ"], ["go-meal", "มื้อนี้"], ["go-kitchen", "ครัวของฉัน"]] }
+];
+const topicOf = v => TOPICS.find(t => t.views.includes(v));
+const VIEWS = ["home", ...TOPICS.flatMap(t => t.views)];
+let view = "home";
+// Installing to the phone's home screen is only possible on the standalone site, which carries a web app manifest
+let installEvt = null, installHidden = load("life-install-hide-v1", [false])[0] === true;
+const isStandalone = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+window.addEventListener("beforeinstallprompt", ev => { ev.preventDefault(); installEvt = ev; if (view === "home") renderHome(); });
+window.addEventListener("appinstalled", () => { installEvt = null; installHidden = true; store("life-install-hide-v1", [true]); if (view === "home") renderHome(); });
+function installCard() {
+  if (!document.querySelector('link[rel="manifest"]') || isStandalone() || installHidden) return "";
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const how = installEvt ? "ติดตั้งแล้วจะมีไอคอนบนหน้าจอ เปิดได้ทันที และใช้ได้แม้ไม่มีเน็ต"
+    : ios ? "แตะปุ่มแชร์ของ Safari แล้วเลือก “เพิ่มไปยังหน้าจอโฮม” จะได้ไอคอนบนหน้าจอเหมือนแอป"
+    : "เปิดเมนูของเบราว์เซอร์ แล้วเลือก “ติดตั้งแอป” หรือ “เพิ่มไปยังหน้าจอหลัก” จะได้ไอคอนบนหน้าจอเหมือนแอป";
+  return `<div class="card hello" style="margin-top:14px"><h3>ใช้แบบแอปบนมือถือ</h3><p>${how}</p>
+    <div class="rowbtns">${installEvt ? `<button type="button" class="btn primary" data-act="install">ติดตั้งแอป</button>` : ""}<button type="button" class="btn" data-act="hide-install">${installEvt ? "ไว้ทีหลัง" : "รับทราบ"}</button></div></div>`;
+}
+function renderHome() {
+  $("homeBody").innerHTML = `<div class="topics">` + TOPICS.map(t => `
+    <article class="topic">
+      <button type="button" class="topic-main" data-view-go="${t.start}">
+        <span class="thumb big ${t.tint}" aria-hidden="true">${t.icon}</span>
+        <span class="topic-text"><b>${t.name}</b><span>${t.desc}</span><em>${t.stat()}</em></span>
+      </button>
+      <div class="rowbtns">${t.quick.map(([a, label]) => `<button type="button" class="btn small" data-act="${a}">${label}</button>`).join("")}</div>
+    </article>`).join("") + `
+    <div class="topic soon"><b>หัวข้อใหม่จะมาอยู่ตรงนี้</b><span>แอปนี้เพิ่มเรื่องอื่นได้อีก เช่น รายจ่าย งานบ้าน หรือสุขภาพ</span></div>
+  </div>` + installCard();
+}
+const scrollPos = {};
+function go(v, setHash = true) {
+  if (!VIEWS.includes(v)) v = "home";
+  scrollPos[view] = window.scrollY;
+  view = v; store("life-last-view", [v]);
+  const topic = topicOf(v);
+  VIEWS.forEach(x => { $("view-" + x).hidden = x !== v; });
+  $("appTitle").textContent = topic ? topic.name : APP_NAME;
+  $("tabs").hidden = !topic; // the tab bar belongs to a topic; the home screen shows the topics themselves
+  document.querySelectorAll(".tab").forEach(t => {
+    t.hidden = !!topic && t.dataset.view !== "home" && !topic.views.includes(t.dataset.view);
+    t.dataset.view === v ? t.setAttribute("aria-current", "page") : t.removeAttribute("aria-current");
+  });
+  if (v === "home") renderHome();
+  if (v === "meal") renderMealPage();
+  if (v === "kitchen") renderKitchen();
+  if (v === "menu") render();
+  if (setHash) { try { if (location.hash !== "#" + v) location.hash = v; } catch (e) {} }
+  window.scrollTo(0, scrollPos[v] || 0);
+}
+window.addEventListener("hashchange", () => { const v = location.hash.slice(1); if (VIEWS.includes(v) && v !== view) go(v, false); });
+
+/* ---------- Kitchen view ---------- */
+function updateKitchenSum() {
+  const can = RECIPES.filter(canMake);
+  const full = pantryOn() ? can.filter(r => !lacking(r).length).length : 0;
+  $("kSum").innerHTML = `ตอนนี้ทำได้ <b>${can.length}</b> จาก ${RECIPES.length} สูตร` + (pantryOn() ? ` และมีวัตถุดิบครบ <b>${full}</b> สูตร` : "");
+  const n = [...pantry].filter(id => !(noPork && id === "pork")).length;
+  $("pantrySum").textContent = n ? `เลือกไว้ ${n} อย่าง` : "ยังไม่ได้เลือก";
+  // Which single missing tool would unlock the most recipes?
+  const gain = EQUIP.filter(e => !have.has(e.id)).map(e => ({
+    e, n: RECIPES.filter(r => { const m = missing(r); return m.length === 1 && m[0] === e.id; }).length
+  })).filter(x => x.n > 0).sort((a, b) => b.n - a.n).slice(0, 2);
+  $("insight").hidden = gain.length === 0;
+  $("insight").innerHTML = `<h4>ถ้ามีเพิ่มอีกอย่าง</h4>` + gain.map(g => `<p>มี<b> ${esc(g.e.name)} </b>จะทำได้อีก ${g.n} สูตร</p>`).join("");
+}
+function renderKitchen() {
+  $("pills").innerHTML = EQUIP.map(e =>
+    `<button type="button" class="pill" data-eq="${e.id}" aria-pressed="${have.has(e.id)}">${ICON.check}${esc(e.name)}</button>`).join("");
+  $("pantryGroups").innerHTML = PANTRY.map(([g, list]) => `<h4 class="pgroup">${g}</h4><div class="pills" role="group" aria-label="${g}">` +
+    list.filter(p => !(noPork && p[0] === "pork")).map(p =>
+      `<button type="button" class="pill" data-pid="${p[0]}" aria-pressed="${pantry.has(p[0])}">${ICON.check}${esc(PNAME(p[0]))}</button>`).join("") + `</div>`).join("");
+  $("noPork").checked = noPork;
+  updateKitchenSum();
+}
+function saveEquip() { store("krua-equip-v1", [...have]); updateKitchenSum(); }
+function savePantry() { store("krua-pantry-v1", [...pantry]); if (!pantryOn()) state.stocked = false; updateKitchenSum(); }
+$("noPork").addEventListener("change", ev => {
+  noPork = ev.target.checked; store("krua-nopork-v1", [noPork]);
+  if (noPork && state.protein === "หมู") state.protein = "";
+  applyDiet(); renderKitchen(); renderShortcuts(); renderMealBadge();
+  toast(noPork ? "เปลี่ยนเมนูหมูเป็นไก่และเนื้อวัวแล้ว" : "แสดงสูตรเดิมที่มีหมูแล้ว");
+});
+
+/* ---------- Find view: shortcuts, filters, results ---------- */
+const presetList = () => PRESETS.filter(p => !(noPork && p.id === "pork"));
+const activePreset = () => presetList().find(p => Object.keys(DEFAULTS).every(k => state[k] === ({ ...DEFAULTS, ...p.set })[k]));
+const filterCount = () => Object.keys(DEFAULTS).filter(k => state[k] !== DEFAULTS[k]).length;
+function renderShortcuts() {
+  const a = activePreset();
+  $("shortcuts").innerHTML = presetList().map(p =>
+    `<button type="button" class="sc" data-preset="${p.id}" aria-pressed="${a === p}">${p.icon ? `<span aria-hidden="true">${p.icon}</span>` : ""}${p.label}</button>`).join("");
+  const n = filterCount(); $("fBadge").hidden = !n; $("fBadge").textContent = n;
+}
+function resetFilters() {
+  $("q").value = ""; Object.assign(state, DEFAULTS);
+  renderShortcuts(); render(); if (fdlg.open) renderFilters();
+}
+function filtered() {
+  // Ignore Thai tone marks and similar signs so "สปาเก็ตตี้" still finds "สปาเกตตี"
+  const norm = s => s.toLowerCase().replace(/[็-์]/g, "");
+  const q = norm($("q").value.trim());
+  return RECIPES.filter(r =>
+    (state.kind === "ทั้งหมด" || r.kind === state.kind) &&
+    (!state.protein || r.protein === state.protein) &&
+    (state.cat === "ทั้งหมด" || r.cat === state.cat) &&
+    originOk(r) &&
+    tagOk(r) &&
+    (!state.fav || favs.has(r.key)) &&
+    (!state.fast || r.time <= 15) &&
+    (!state.easy || r.level === "ง่าย") &&
+    (!state.stocked || !lacking(r).length) &&
+    (!q || norm(r.name).includes(q) || norm(originLabel(r)).includes(q) || r.ing.some(x => norm(x).includes(q))));
+}
+// One row per recipe, used in every list. The button on the right changes with where the row is shown.
+function rowCard(r, action = "fav") {
+  const miss = missing(r), key = esc(r.key), name = esc(r.name);
+  const btn = action === "fav"
+    ? `<button type="button" class="fav" data-fav="${key}" aria-pressed="${favs.has(r.key)}" aria-label="${favs.has(r.key) ? "เอาออกจากเมนูโปรด" : "เพิ่มเป็นเมนูโปรด"}: ${name}">${ICON.heart}</button>`
+    : action === "del"
+    ? `<button type="button" class="fav" data-del="${key}" aria-label="เอา${name}ออกจากมื้อนี้">${ICON.close}</button>`
+    : `<button type="button" class="fav add" data-add="${key}" aria-pressed="${inMeal(r)}" aria-label="${inMeal(r) ? "เอาออกจากมื้อนี้" : "เพิ่มในมื้อนี้"}: ${name}">${inMeal(r) ? ICON.check : ICON.plus}</button>`;
+  return `<article class="rcard${miss.length ? " locked" : ""}">
+    <span class="thumb ${TINT[r.cat] || "t3"}" aria-hidden="true">${emoji(r)}</span>
+    <div class="rtext">
+      <h3><button type="button" class="open" data-open="${key}">${name}</button></h3>
+      <div class="meta">${r.kind !== "เมนูหลัก" ? esc(r.kind) + " · " : ""}${timeText(r.time)} · ${esc(r.level)} · ${esc(originLabel(r))}</div>
+      ${miss.length ? `<div class="need">ต้องมี ${miss.map(e => esc(EQ[e])).join(", ")}</div>` : ""}${stockLine(r)}
+    </div>${btn}</article>`;
+}
+function render() {
+  const list = filtered();
+  const ok = list.filter(canMake).sort(sortList);
+  const no = list.filter(r => !canMake(r)).sort((a, b) => missing(a).length - missing(b).length || sortList(a, b));
+  const narrowed = filterCount() > 0 || $("q").value.trim();
+  const clear = narrowed ? `<p class="active">กำลังกรองอยู่ พบ ${list.length} สูตร <button type="button" class="link" data-act="reset">ล้างตัวกรอง</button></p>` : "";
+  if (!list.length) {
+    const why = state.fav && !favs.size ? "ยังไม่มีเมนูโปรด แตะรูปหัวใจที่เมนูไหนก็ได้เพื่อเก็บไว้" : "ไม่พบสูตรที่ตรงกับคำค้นหรือตัวกรองที่เลือก";
+    $("results").innerHTML = `<div class="empty"><p>${why}</p><button type="button" class="btn" data-act="reset">ล้างตัวกรอง</button></div>`;
+    return;
+  }
+  let html = `<div class="reshead"><h2>ทำได้เลย <small>${ok.length} สูตร${pantryOn() ? " · เรียงตามของในตู้เย็น" : ""}</small></h2>
+    <button type="button" class="btn small" data-act="shuffle">${ICON.dice}สุ่มจัดมื้อ</button></div>${clear}`;
+  html += ok.length ? `<div class="grid">${ok.map(r => rowCard(r)).join("")}</div>`
+    : `<div class="empty"><p>ยังไม่มีสูตรที่ทำได้ด้วยเครื่องครัวที่เลือกไว้</p><button type="button" class="btn" data-act="go-kitchen">เพิ่มเครื่องครัว</button></div>`;
+  if (no.length) html += `<details class="more"${ok.length ? "" : " open"}><summary>ต้องมีเครื่องครัวเพิ่ม (${no.length})</summary><div class="grid">${no.map(r => rowCard(r)).join("")}</div></details>`;
+  $("results").innerHTML = html;
+}
+let onboarded = !!savedEquip || load("krua-onboard-v1", [false])[0] === true;
+function renderNotice() {
+  $("notice").innerHTML = onboarded ? "" : `<div class="card hello">
+    <h3>เริ่มจากบอกว่าบ้านคุณมีอะไร</h3>
+    <p>เลือกเครื่องครัวและของในตู้เย็น แล้วเว็บจะคัดเมนูที่ทำได้จริงมาให้</p>
+    <div class="rowbtns"><button type="button" class="btn primary" data-act="go-kitchen">ตั้งค่าครัว</button><button type="button" class="btn" data-act="dismiss">ไว้ทีหลัง</button></div>
+  </div>`;
+}
+function setOnboarded() { onboarded = true; store("krua-onboard-v1", [true]); renderNotice(); }
+$("q").addEventListener("input", render);
+
+function renderFilters() {
+  const chips = (field, values) => `<div class="row">${values.map(([v, label]) =>
+    `<button type="button" class="chip" data-f="${field}" data-v="${esc(v)}" aria-pressed="${state[field] === v}">${esc(label)}</button>`).join("")}</div>`;
+  const same = list => list.map(v => [v, v]);
+  const toggles = [["fav", "เมนูโปรด"], ["fast", "ไม่เกิน 15 นาที"], ["easy", "ระดับง่าย"], ...(pantryOn() ? [["stocked", "มีวัตถุดิบครบ"]] : [])];
+  $("fBody").innerHTML = `
+    <div class="fgroup"><h3>ประเภท</h3>${chips("kind", same(KINDS))}</div>
+    <div class="fgroup"><h3>วัตถุดิบหลัก</h3>${chips("protein", [["", "ทั้งหมด"], ...PROTEINS.filter(p => !(noPork && p[0] === "หมู")).map(p => [p[0], p[0]])])}</div>
+    <div class="fgroup"><h3>วิธีทำ</h3>${chips("cat", same(CATS))}</div>
+    <div class="fgroup"><h3>สัญชาติ</h3>${chips("origin", same(ORIGINS))}</div>
+    <div class="fgroup"><h3>เพิ่มเติม</h3><div class="row">${toggles.map(([k, label]) =>
+      `<button type="button" class="chip" data-t="${k}" aria-pressed="${state[k]}">${label}</button>`).join("")}</div></div>`;
+  $("fApply").textContent = `ดู ${filtered().length} สูตร`;
+}
+
+/* ---------- Meal ---------- */
+const inMeal = r => meal.includes(r.key);
+const mealItems = () => meal.map(byKey).filter(Boolean);
+function renderMealBadge() { const n = mealItems().length; $("mealBadge").hidden = !n; $("mealBadge").textContent = n; }
+function saveMeal() { store("krua-meal-v1", meal); renderMealBadge(); }
+function pairsOf(r) {
+  const set = new Set(PAIRS[r.key] || []);
+  Object.entries(PAIRS).forEach(([k, v]) => { if (v.includes(r.key)) set.add(k); });
+  set.delete(r.key);
+  return [...set].map(byKey).filter(Boolean).sort(sortList);
+}
+let lastMain = null, mealTab = "plan";
+function shuffleMeal() {
+  const cookable = RECIPES.filter(r => r.kind === "เมนูหลัก" && canMake(r));
+  let mains = cookable.filter(r => (!state.protein || r.protein === state.protein) && originOk(r));
+  if (!mains.length) mains = cookable;
+  if (!mains.length) { toast("ยังไม่มีเมนูหลักที่ทำได้ ลองเพิ่มเครื่องครัวในครัวของฉัน"); return; }
+  let best = mains;
+  if (pantryOn()) { // closest matches to the fridge first, widened until there are at least 3 to pick from
+    const counts = [...new Set(mains.map(r => lacking(r).length))].sort((a, b) => a - b);
+    for (const c of counts) { best = mains.filter(r => lacking(r).length <= c); if (best.length >= 3) break; }
+  }
+  let pool = best.filter(r => r.key !== lastMain); if (!pool.length) pool = best;
+  const main = pool[Math.floor(Math.random() * pool.length)]; lastMain = main.key;
+  const picked = [], kinds = new Set(["เมนูหลัก"]);
+  const sides = shuffle(pairsOf(main).filter(canMake));
+  if (pantryOn()) sides.sort((a, b) => lacking(a).length - lacking(b).length);
+  for (const x of sides) {
+    if (picked.length >= 2) break;
+    if (kinds.has(x.kind)) continue;
+    kinds.add(x.kind); picked.push(x);
+  }
+  if (!picked.length) {
+    const side = shuffle(RECIPES.filter(r => (r.kind === "จานเคียง" || r.kind === "น้ำจิ้ม / ซอส") && canMake(r)))[0];
+    if (side) picked.push(side);
+  }
+  meal = [main.key, ...picked.map(r => r.key)]; saveMeal();
+  mealTab = "plan"; scrollPos.meal = 0;
+  if (view === "meal") { renderMealPage(); window.scrollTo(0, 0); } else go("meal");
+  toast(`สุ่มได้ ${main.name}`);
+}
+function shopLines(items) {
+  const buy = [], other = [], got = [];
+  items.forEach(r => r.ing.forEach((text, k) => {
+    if (/^(น้ำ|น้ำเย็น|น้ำแข็ง|น้ำร้อน|น้ำอุ่น) |^น้ำสำหรับแช่/.test(text)) return; // plain water is not a shopping item
+    const ids = lineInfo(text).ids, row = { id: `${r.key}|${k}`, text, from: r.name };
+    if (!ids.length) other.push(row);
+    else { row.lack = ids.filter(i => !pantry.has(i)); (row.lack.length ? buy : got).push(row); }
+  }));
+  return { buy, other, got };
+}
+function planHTML(items) {
+  const p = buildPlan(items);
+  const need = [...new Set(items.flatMap(r => r.equip))], lackEq = need.filter(e => !have.has(e));
+  const seen = new Set(meal), more = [];
+  items.forEach(r => pairsOf(r).forEach(x => { if (!seen.has(x.key)) { seen.add(x.key); more.push(x); } }));
+  more.sort((a, b) => missing(a).length - missing(b).length);
+  return `
+    <div class="grid one">${items.map(r => rowCard(r, "del")).join("")}</div>
+    <button type="button" class="btn primary big" data-act="cook-meal">${items.length > 1 ? `เริ่มทำพร้อมกัน ${items.length} เมนู` : `เริ่มทำ${esc(items[0].name)}`}</button>
+    ${items.length > 1 ? `<div class="card"><h3>ลำดับการทำ <small>เสร็จพร้อมกันในประมาณ ${timeText(p.total)}</small></h3>
+      <ol class="steps">${p.starts.map((x, k) => `<li><span>${k === 0 ? `เริ่มที่ <b>${esc(x.r.name)}</b> ก่อน เพราะใช้เวลานานที่สุด` : `นาทีที่ ${x.at} เริ่มทำ <b>${esc(x.r.name)}</b>`}</span></li>`).join("")}</ol></div>` : ""}
+    <div class="card"><h3>เครื่องครัวที่ต้องใช้</h3>
+      <div class="eq">${need.length ? need.map(e => `<span class="${have.has(e) ? "" : "miss"}">${esc(EQ[e])}</span>`).join("") : "<span>ไม่ต้องใช้เครื่องครัว</span>"}</div>
+      ${lackEq.length ? `<p class="warn">ที่บ้านยังไม่มี ${lackEq.map(e => esc(EQ[e])).join(", ")}</p>` : ""}</div>
+    ${more.length ? `<div class="card"><h3>เพิ่มของที่เข้ากัน <small>แตะ + เพื่อเพิ่ม</small></h3><div class="grid one">${more.slice(0, 4).map(r => rowCard(r, "add")).join("")}</div></div>` : ""}
+    <div class="rowbtns"><button type="button" class="btn" data-act="shuffle">${ICON.dice}สุ่มมื้อใหม่</button><button type="button" class="btn" data-act="clear-meal">ล้างมื้อนี้</button></div>`;
+}
+function shopHTML(items, { buy, other, got }) {
+  let n = 0;
+  const row = x => `<li><label><input type="checkbox" id="shop-${n++}" data-shop="${esc(x.id)}" ${bought.has(x.id) ? "checked" : ""}><span>${esc(x.text)}<small>${esc(x.from)}</small></span></label></li>`;
+  const groups = PANTRY.map(([g, list]) => [g, buy.filter(x => list.some(p => p[0] === x.lack[0]))]).filter(x => x[1].length);
+  return `
+    ${pantryOn() ? "" : `<p class="swapnote">ยังไม่ได้เลือกของในตู้เย็น ถ้าเลือกไว้ในครัวของฉัน รายการนี้จะตัดของที่มีอยู่แล้วออกให้</p>`}
+    <div id="copyBox"></div>
+    ${buy.length ? groups.map(([g, rows]) => `<div class="card"><h3>${g} <small>${rows.length} รายการ</small></h3><ul class="checklist shop">${rows.map(row).join("")}</ul></div>`).join("")
+      : `<div class="empty"><p>ของสดสำหรับมื้อนี้มีครบแล้ว</p></div>`}
+    ${other.length ? `<div class="card"><h3>เครื่องปรุงและของอื่น ๆ <small>เช็กว่าที่บ้านมีหรือยัง</small></h3><ul class="checklist shop">${other.map(row).join("")}</ul></div>` : ""}
+    ${got.length ? `<details class="mi"><summary>มีอยู่แล้วในตู้เย็น <small>${got.length} รายการ</small></summary><ul>${got.map(x => `<li>${esc(x.text)}</li>`).join("")}</ul></details>` : ""}
+    <div class="rowbtns">${buy.length ? `<button type="button" class="btn primary" data-act="shop-add">เพิ่มของที่ติ๊กลงตู้เย็น</button>` : ""}<button type="button" class="btn" data-act="shop-copy">คัดลอกรายการ</button></div>`;
+}
+function renderMealPage() {
+  const items = mealItems();
+  $("mealSeg").hidden = !items.length;
+  if (!items.length) {
+    $("mealBody").innerHTML = `<div class="empty"><span class="big-emoji" aria-hidden="true">🍽️</span>
+      <p>ยังไม่มีเมนูในมื้อนี้ ให้สุ่มจัดมื้อให้ หรือเปิดสูตรแล้วกด "เพิ่มในมื้อนี้"</p>
+      <div class="rowbtns"><button type="button" class="btn primary" data-act="shuffle">${ICON.dice}สุ่มจัดมื้อ</button><button type="button" class="btn" data-act="go-menu">ไปเลือกเมนู</button></div></div>`;
+    return;
+  }
+  const shop = shopLines(items);
+  $("segPlan").setAttribute("aria-pressed", mealTab === "plan");
+  $("segShop").setAttribute("aria-pressed", mealTab === "shop");
+  $("segPlan").textContent = `เมนูในมื้อ (${items.length})`;
+  $("segShop").textContent = shop.buy.length ? `รายการซื้อของ (${shop.buy.length})` : "รายการซื้อของ";
+  $("mealBody").innerHTML = mealTab === "plan" ? planHTML(items) : shopHTML(items, shop);
+}
+function copyShop() {
+  const { buy, other } = shopLines(mealItems());
+  const left = rows => rows.filter(x => !bought.has(x.id)).map(x => "- " + x.text);
+  const a = left(buy), b = left(other);
+  const text = ["รายการซื้อของ", ...a, ...(b.length ? ["", "เครื่องปรุงและของอื่น ๆ", ...b] : [])].join("\n");
+  const fallback = () => {
+    $("copyBox").innerHTML = `<textarea class="copybox" id="copyText" readonly rows="6" aria-label="รายการซื้อของแบบข้อความ"></textarea>`;
+    const t = $("copyText"); t.value = text; t.scrollIntoView({ block: "center" }); t.focus(); t.select();
+    toast("เลือกข้อความไว้ให้แล้ว กดคัดลอกได้เลย");
+  };
+  try { navigator.clipboard.writeText(text).then(() => toast("คัดลอกรายการแล้ว"), fallback); } catch (e) { fallback(); }
+}
+function addBought() {
+  const add = shopLines(mealItems()).buy.filter(x => bought.has(x.id));
+  if (!add.length) { toast("ติ๊กของที่ซื้อแล้วก่อน"); return; }
+  const ids = new Set(add.flatMap(x => x.lack));
+  ids.forEach(i => pantry.add(i)); savePantry(); renderMealPage();
+  toast(`เพิ่ม ${ids.size} อย่างลงตู้เย็นแล้ว`);
+}
+
+/* ---------- Recipe screen ---------- */
+let cur = null, step = 0, mode = "", trail = [];
+const checks = {};
+function keepScroll(fn) {
+  const s = dlg.querySelector(".sheet-scroll"), top = s ? s.scrollTop : 0;
+  fn();
+  const s2 = dlg.querySelector(".sheet-scroll"); if (s2) s2.scrollTop = top;
+}
+function openRecipe(r) {
+  if (!r) return;
+  if (dlg.open && mode === "sheet" && cur && cur.key !== r.key) trail.push(cur.key);
+  if (!dlg.open) trail = [];
+  cur = r; stopTimers(); renderSheet();
+  if (!dlg.open) dlg.showModal();
+  dlg.querySelector(".sheet-scroll").scrollTop = 0;
+}
+function stepMinutes(text) {
+  const h = text.match(/(\d+)\s*ชั่วโมง/); if (h) return +h[1] * 60;
+  const m = text.match(/(\d+)(?:\s*[–-]\s*\d+)?\s*นาที(?:\s*(\d+)\s*วินาที)?/); if (m) return +m[1] + (m[2] ? +m[2] / 60 : 0);
+  const s = text.match(/(\d+)(?:\s*[–-]\s*\d+)?\s*วินาที/); return s ? +s[1] / 60 : 0;
+}
+function ingTag(text) {
+  const ids = lineInfo(text).ids; if (!pantryOn() || !ids.length) return "";
+  return ids.every(id => pantry.has(id)) ? `<em class="has">มี</em>` : `<em class="lack">ขาด</em>`;
+}
+function steakBlock(r) {
+  const c = steakCalc(), m = STEAK_METHOD[r.key] || "pan";
+  const main = m === "air" ? `อบ ${dur(c.air1)} กลับด้าน อบอีก ${dur(c.air2)}`
+    : m === "reverse" ? `อบประมาณ ${c.oven} นาที จนถึง ${c.pull5}°C แล้วจี่ด้านละ 1 นาที`
+    : `${m === "grill" ? "ย่าง" : "จี่"}ด้านละ ${dur(c.sear)}`;
+  const sub = m === "reverse" ? "วิธีนี้ไม่ต้องพักเนื้อนาน หั่นเสิร์ฟได้เลย" : `ยกออกเมื่อกลางชิ้นถึง ${c.pull}°C · พัก ${c.rest} นาที`;
+  const warn = m === "reverse" ? (steak.th < 3 ? "วิธีนี้เหมาะกับเนื้อหนา 3 ซม. ขึ้นไป เนื้อบางกว่านี้ใช้สูตรจี่กระทะจะง่ายและแม่นกว่า" : "")
+    : steak.th >= 3 ? "เนื้อหนา 3 ซม. ขึ้นไป ถ้าใช้ไฟแรงอย่างเดียว ข้างนอกจะไหม้ก่อนข้างในสุก ลองสูตรสเต็กหนาแบบรีเวิร์สเซียร์แทน"
+    : steak.th <= 1 ? "เนื้อบาง 1 ซม. สุกเร็วมาก ใช้ไฟแรงสุดและอย่าละสายตา" : "";
+  return `<div class="block calc">
+          <h3>เนื้อของคุณ <small>เวลาในสูตรปรับตามนี้</small></h3>
+          <p class="hint">วัดส่วนที่หนาที่สุดของชิ้น ความหนาต่างกันแค่ครึ่งเซนติเมตร เวลาก็เปลี่ยนไปมาก</p>
+          <div class="clab" id="thLab">ความหนา</div>
+          <div class="row" role="group" aria-labelledby="thLab">${THICK.map(t => `<button type="button" class="chip" data-th="${t}" aria-pressed="${t === steak.th}">${t} ซม.</button>`).join("")}</div>
+          <div class="clab" id="dnLab">ความสุกที่ต้องการ</div>
+          <div class="row" role="group" aria-labelledby="dnLab">${DONENESS.map((d, k) => `<button type="button" class="chip" data-done="${k}" aria-pressed="${k === steak.done}"><span class="swatch d${k}" aria-hidden="true"></span>${d.name}</button>`).join("")}</div>
+          <div class="calcout"><b>${main}</b><span>${sub}</span></div>
+          ${warn ? `<p class="warn">${warn}</p>` : ""}
+          <p class="hint">เวลาเป็นค่าประมาณ เตาและกระทะแต่ละบ้านร้อนไม่เท่ากัน ถ้าไม่แน่ใจให้ยกออกก่อน เนื้อที่สุกน้อยไปจี่ต่อได้ แต่สุกเกินแล้วแก้ไม่ได้</p>
+        </div>`;
+}
+function renderSheet() {
+  mode = "sheet";
+  const r = cur, miss = missing(r), fav = favs.has(r.key), pairs = pairsOf(r), on = inMeal(r), key = esc(r.key);
+  const ticks = checks[r.key] || (checks[r.key] = new Set());
+  const amount = r.yield ? ["ได้", r.yield] : ["สำหรับ", `${r.serves} ที่`];
+  dlg.innerHTML = `
+    <div class="sheet-top">
+      <button type="button" class="fav" data-act="back" aria-label="${trail.length ? "กลับไปสูตรก่อนหน้า" : "ปิดสูตรนี้"}">${trail.length ? ICON.back : ICON.close}</button>
+      <span class="ttl" aria-hidden="true">${esc(r.name)}</span>
+      <button type="button" class="fav" data-fav="${key}" aria-pressed="${fav}" aria-label="${fav ? "เอาออกจากเมนูโปรด" : "เพิ่มเป็นเมนูโปรด"}">${ICON.heart}</button>
+    </div>
+    <div class="sheet-scroll">
+      <div class="sheet-body">
+        <div class="hero"><span class="thumb big ${TINT[r.cat] || "t3"}" aria-hidden="true">${emoji(r)}</span>
+          <div><span class="tag">${esc(r.kind)} · ${esc(originLabel(r))}</span><h2 id="dlg-title">${esc(r.name)}</h2></div></div>
+        ${r.swapped ? `<p class="swapnote">สูตรนี้เดิมใช้หมู เปลี่ยนเป็น${esc(r.swapped)}ให้แล้ว</p>` : ""}
+        <div class="facts">
+          <div><span>เวลา</span><b>${timeText(r.time)}</b></div>
+          <div><span>ความยาก</span><b>${esc(r.level)}</b></div>
+          <div><span>${amount[0]}</span><b>${esc(amount[1])}</b></div>
+        </div>
+        ${r.guide ? steakBlock(r) : ""}
+        <div class="block"><h3>เครื่องครัวที่ใช้</h3>
+          <div class="eq">${r.equip.length ? r.equip.map(e => `<span class="${have.has(e) ? "" : "miss"}">${esc(EQ[e])}</span>`).join("") : "<span>ไม่ต้องใช้เครื่องครัว</span>"}</div>
+          ${miss.length ? `<p class="warn">ที่บ้านยังไม่มี ${miss.map(e => esc(EQ[e])).join(", ")}</p>` : ""}
+        </div>
+        <div class="block"><h3>วัตถุดิบ <small id="ingCount">เตรียมแล้ว ${ticks.size}/${r.ing.length}</small></h3>
+          <ul class="checklist">${r.ing.map((x, k) => `<li><label><input type="checkbox" id="ing-${k}" data-ing="${k}" ${ticks.has(k) ? "checked" : ""}><span>${esc(x)}</span>${ingTag(x)}</label></li>`).join("")}</ul>
+        </div>
+        <div class="block"><h3>วิธีทำ <small>${r.steps.length} ขั้นตอน</small></h3>
+          <ol class="steps">${r.steps.map(x => `<li><span>${esc(x)}</span></li>`).join("")}</ol>
+        </div>
+        ${r.tip ? `<div class="tip"><b>เคล็ดลับ</b>${esc(r.tip)}</div>` : ""}
+        ${pairs.length ? `<div class="block"><h3>กินคู่กับ <small>แตะ + เพื่อเพิ่มในมื้อนี้</small></h3><div class="grid one">${pairs.map(p => rowCard(p, "add")).join("")}</div></div>` : ""}
+        ${r.guide ? `
+        <details class="guide"><summary>ตารางระดับความสุก <small>เนื้อหนา ${steak.th} ซม.</small></summary>
+          <p>เวลาจี่บนกระทะร้อนจัด สำหรับเนื้อที่พักจนหายเย็นแล้ว ถ้าเนื้อยังเย็นจากตู้เย็นจะใช้เวลานานขึ้น ระหว่างพักเนื้อ อุณหภูมิกลางชิ้นจะขึ้นต่ออีก 2–3°C</p>
+          <div class="tbl done"><table>
+            <thead><tr><th>ระดับ</th><th>อุณหภูมิกลางชิ้น</th><th>จี่ด้านละ</th><th>ข้างใน</th><th>กดกลางชิ้นแล้ว</th></tr></thead>
+            <tbody>${DONENESS.map((d, k) => `<tr class="${k === steak.done ? "sel" : ""}"><td><span class="swatch d${k}" aria-hidden="true"></span><b>${d.name}</b></td><td>${d.temp}</td><td>${dur(searSecs(k, steak.th))}</td><td>${d.look}</td><td>${d.feel}</td></tr>`).join("")}</tbody>
+          </table></div>
+        </details>
+        <details class="guide"><summary>เลือกส่วนของเนื้อ <small>ดู</small></summary>
+          <div class="tbl"><table>
+            <tbody>${CUTS.map(c => `<tr><td><b>${c[0]}</b></td><td>${c[1]}</td></tr>`).join("")}</tbody>
+          </table></div>
+        </details>` : ""}
+      </div>
+    </div>
+    <div class="sheet-foot">
+      <button type="button" class="btn" data-add="${key}" aria-pressed="${on}">${on ? `${ICON.check}อยู่ในมื้อนี้` : "เพิ่มในมื้อนี้"}</button>
+      <button type="button" class="btn primary" data-act="start-cook">เริ่มทำทีละขั้น</button>
+    </div>`;
+}
+function saveSteak(sel) {
+  store("krua-steak-v1", [steak.th, steak.done]);
+  keepScroll(renderSheet);
+  const b = dlg.querySelector(sel); if (b) b.focus({ preventScroll: true });
+}
+
+/* ---------- Cooking mode ---------- */
+let timers = [], tick = null, wake = null, audio = null, active = null;
+async function keepAwake(on) {
+  try {
+    if (on && !wake && navigator.wakeLock) wake = await navigator.wakeLock.request("screen");
+    if (!on && wake) { await wake.release(); wake = null; }
+  } catch (e) { wake = null; }
+}
+function stopTimers() { timers = []; clearInterval(tick); tick = null; }
+function fmt(s) { const m = Math.floor(s / 60), r = s % 60; return `${m}:${String(r).padStart(2, "0")}`; }
+function beep() {
+  try {
+    const ctx = audio || (audio = new (window.AudioContext || window.webkitAudioContext)());
+    [0, .35, .7].forEach(t => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.frequency.value = 880; o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(.2, ctx.currentTime + t); g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + t + .3);
+      o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + .3);
+    });
+  } catch (e) {}
+  try { navigator.vibrate && navigator.vibrate([300, 150, 300]); } catch (e) {}
+}
+function startTimer(key, idx, mins, label) {
+  timers = timers.filter(t => !(t.key === key && t.idx === idx));
+  if (!audio) { try { audio = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} }
+  timers.push({ key, idx, label, end: Date.now() + mins * 60000, rang: false });
+  if (!tick) tick = setInterval(onTick, 1000);
+  refreshTimers();
+}
+function cancelTimer(key, idx) {
+  timers = timers.filter(t => !(t.key === key && t.idx === idx));
+  if (!timers.length) { clearInterval(tick); tick = null; }
+  refreshTimers();
+}
+function onTick() {
+  timers.forEach(t => { if (!t.rang && Date.now() >= t.end) { t.rang = true; beep(); toast(`หมดเวลา: ${t.label}`); } });
+  refreshTimers();
+}
+const secsLeft = t => Math.max(0, Math.round((t.end - Date.now()) / 1000));
+function refreshTimers() { renderTimerBox(); renderStrip(); }
+function renderStrip() {
+  const s = $("timerStrip"); if (!s) return;
+  s.hidden = !timers.length;
+  s.innerHTML = timers.map(t => { const left = secsLeft(t);
+    return `<span class="tchip${left ? "" : " done"}" role="timer">${esc(t.label)} <b>${left ? fmt(left) : "หมดเวลา"}</b></span>`; }).join("");
+}
+function renderTimerBox() {
+  const box = $("timerBox"); if (!box || !active) return;
+  const t = timers.find(x => x.key === active.key && x.idx === active.idx);
+  const mins = stepMinutes(active.text);
+  if (t) {
+    const left = secsLeft(t);
+    box.innerHTML = left > 0
+      ? `<span class="clock">${fmt(left)}</span><button type="button" class="btn" id="tStop">ยกเลิกจับเวลา</button>`
+      : `<span class="clock done">หมดเวลาแล้ว</span><button type="button" class="btn" id="tStop">ปิด</button>`;
+    $("tStop").onclick = () => cancelTimer(t.key, t.idx);
+  } else if (mins) {
+    box.innerHTML = `<button type="button" class="btn" id="tStart">${ICON.clock} จับเวลา ${dur(Math.round(mins * 60))}</button>`;
+    $("tStart").onclick = () => startTimer(active.key, active.idx, mins, active.label);
+  } else box.innerHTML = "";
+}
+function renderCook() {
+  mode = "cook";
+  const r = cur, n = r.steps.length, done = step >= n;
+  active = done ? null : { key: r.key, idx: step, text: r.steps[step], label: r.name };
+  dlg.innerHTML = `
+    <div class="cook">
+      <div class="cook-top">
+        <button type="button" class="link" data-act="back">กลับไปที่สูตร</button>
+        <span class="count">${done ? "เสร็จแล้ว" : `ขั้นที่ ${step + 1} จาก ${n}`}</span>
+        <button type="button" class="fav" data-act="close" aria-label="ปิด">${ICON.close}</button>
+      </div>
+      <div class="bar" aria-hidden="true"><i style="width:${Math.min(100, (step / n) * 100)}%"></i></div>
+      <div class="tstrip" id="timerStrip" hidden></div>
+      <div class="cook-main">
+        ${done ? `<div class="done-msg"><span class="big" aria-hidden="true">${emoji(r)}</span><p class="cook-step">${esc(r.name)} เสร็จแล้ว</p><p class="cook-name">ขอให้อร่อยกับมื้อนี้</p></div>`
+          : `<p class="cook-name">${esc(r.name)}</p>
+             <p class="cook-step" id="dlg-title">${esc(r.steps[step])}</p>
+             <div class="timer" id="timerBox"></div>
+             <details class="cook-ing"><summary>ดูวัตถุดิบ</summary><ul>${r.ing.map(x => `<li>${esc(x)}</li>`).join("")}</ul></details>`}
+      </div>
+      <div class="cook-nav">
+        <button type="button" class="btn" id="prev" ${step === 0 ? "disabled" : ""}>ย้อนกลับ</button>
+        ${done ? `<button type="button" class="btn primary" id="finish">ปิด</button>`
+          : `<button type="button" class="btn primary" id="next">${step === n - 1 ? "ทำเสร็จแล้ว" : "ขั้นต่อไป"}</button>`}
+      </div>
+    </div>`;
+  $("prev").onclick = () => { step = Math.max(0, step - 1); renderCook(); };
+  if ($("next")) $("next").onclick = () => { step++; renderCook(); };
+  if ($("finish")) $("finish").onclick = () => dlg.close();
+  refreshTimers();
+  const focusBtn = $("next") || $("finish"); focusBtn && focusBtn.focus();
+}
+
+/* ---------- Cooking several dishes at once ---------- */
+let plan = null, mstep = 0;
+// Line every dish up so they all finish together; steps without a time count as 2 minutes
+function buildPlan(items) {
+  const rows = items.map(r => { const durs = r.steps.map(s => stepMinutes(s) || 2); return { r, durs, total: durs.reduce((a, b) => a + b, 0) }; })
+    .sort((a, b) => b.total - a.total);
+  const total = rows[0].total, steps = [];
+  rows.forEach((x, ri) => {
+    let t = total - x.total;
+    x.r.steps.forEach((s, k) => { steps.push({ r: x.r, key: x.r.key, idx: k, text: s, at: Math.round(t), ri, n: x.r.steps.length }); t += x.durs[k]; });
+  });
+  steps.sort((a, b) => a.at - b.at || a.ri - b.ri || a.idx - b.idx);
+  return { steps, total: Math.round(total), starts: rows.map(x => ({ r: x.r, at: Math.round(total - x.total) })) };
+}
+function renderMulti() {
+  mode = "multi";
+  const { steps, total } = plan, n = steps.length, done = mstep >= n;
+  const s = steps[mstep], next = steps[mstep + 1];
+  const dishes = [...new Set(steps.map(x => x.r))];
+  active = done ? null : { key: s.key, idx: s.idx, text: s.text, label: s.r.name };
+  dlg.innerHTML = `
+    <div class="cook">
+      <div class="cook-top">
+        <button type="button" class="link" data-act="close">กลับไปที่มื้อนี้</button>
+        <span class="count">${done ? "เสร็จแล้ว" : `ขั้นที่ ${mstep + 1} จาก ${n}`}</span>
+        <button type="button" class="fav" data-act="close" aria-label="ปิด">${ICON.close}</button>
+      </div>
+      <div class="bar" aria-hidden="true"><i style="width:${Math.min(100, (mstep / n) * 100)}%"></i></div>
+      <div class="tstrip" id="timerStrip" hidden></div>
+      <div class="cook-main multi">
+        ${done ? `<div class="done-msg"><span class="big" aria-hidden="true">${dishes.map(emoji).join("")}</span><p class="cook-step">ครบ ${dishes.length} เมนูแล้ว</p><p class="cook-name">ขอให้อร่อยกับมื้อนี้</p></div>`
+          : `<div class="dishtag ${TINT[s.r.cat] || "t3"}"><span aria-hidden="true">${emoji(s.r)}</span>${esc(s.r.name)} · ขั้นที่ ${s.idx + 1}/${s.n}</div>
+             <p class="cook-name">ประมาณนาทีที่ ${s.at} จาก ${total}</p>
+             <p class="cook-step" id="dlg-title">${esc(s.text)}</p>
+             <div class="timer" id="timerBox"></div>
+             ${next ? `<div class="nextup"><span>ขั้นถัดไป · นาทีที่ ${next.at}</span><b>${emoji(next.r)} ${esc(next.r.name)}</b><p>${esc(next.text)}</p></div>` : ""}
+             <details class="cook-ing"><summary>ดูไทม์ไลน์ทั้งหมด</summary>
+               <ol class="tl">${steps.map((x, k) => `<li class="${k < mstep ? "past" : k === mstep ? "now" : ""}"><button type="button" data-jump="${k}"><span class="tl-at">${x.at}′</span><span aria-hidden="true">${emoji(x.r)}</span><span>${esc(x.text)}</span></button></li>`).join("")}</ol>
+             </details>
+             <details class="cook-ing"><summary>ดูวัตถุดิบ</summary>
+               ${dishes.map(r => `<p class="ing-dish">${esc(r.name)}</p><ul>${r.ing.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`).join("")}
+             </details>`}
+      </div>
+      <div class="cook-nav">
+        <button type="button" class="btn" id="prev" ${mstep === 0 ? "disabled" : ""}>ย้อนกลับ</button>
+        ${done ? `<button type="button" class="btn primary" id="finish">ปิด</button>`
+          : `<button type="button" class="btn primary" id="next">${mstep === n - 1 ? "ทำเสร็จแล้ว" : "ขั้นต่อไป"}</button>`}
+      </div>
+    </div>`;
+  $("prev").onclick = () => { mstep = Math.max(0, mstep - 1); renderMulti(); };
+  if ($("next")) $("next").onclick = () => { mstep++; renderMulti(); };
+  if ($("finish")) $("finish").onclick = () => dlg.close();
+  refreshTimers();
+  const focusBtn = $("next") || $("finish"); focusBtn && focusBtn.focus();
+}
+
+/* ---------- One place for every tap ---------- */
+function refresh() {
+  renderMealBadge();
+  if (view === "menu") render();
+  if (view === "meal") renderMealPage();
+  if (dlg.open && mode === "sheet") keepScroll(renderSheet);
+}
+function refocus(sel) {
+  const root = fdlg.open ? fdlg : dlg.open ? dlg : $("view-" + view);
+  const b = root.querySelector(sel); if (b) b.focus({ preventScroll: true });
+}
+const ACTIONS = {
+  "open-filters": () => { renderFilters(); fdlg.showModal(); },
+  "close-filters": () => fdlg.close(),
+  "reset": () => resetFilters(),
+  "shuffle": () => shuffleMeal(),
+  "go-kitchen": () => { setOnboarded(); go("kitchen"); },
+  "go-menu": () => go("menu"),
+  "go-meal": () => go("meal"),
+  "install": () => { if (!installEvt) return; installEvt.prompt(); installEvt = null; renderHome(); },
+  "hide-install": () => { installHidden = true; store("life-install-hide-v1", [true]); renderHome(); },
+  "dismiss": () => setOnboarded(),
+  "meal-plan": () => { mealTab = "plan"; renderMealPage(); },
+  "meal-shop": () => { mealTab = "shop"; renderMealPage(); },
+  "clear-meal": () => { meal = []; bought.clear(); store("krua-shop-v1", []); mealTab = "plan"; saveMeal(); renderMealPage(); toast("ล้างมื้อนี้แล้ว"); },
+  "cook-meal": () => {
+    const items = mealItems(); if (!items.length) return;
+    keepAwake(true); stopTimers(); trail = [];
+    if (items.length > 1) { plan = buildPlan(items); mstep = 0; renderMulti(); }
+    else { cur = items[0]; step = 0; renderCook(); }
+    if (!dlg.open) dlg.showModal();
+  },
+  "shop-copy": () => copyShop(),
+  "shop-add": () => addBought(),
+  "equip-all": () => { have = new Set(EQUIP.map(e => e.id)); saveEquip(); renderKitchen(); },
+  "equip-none": () => { have = new Set(); saveEquip(); renderKitchen(); },
+  "pantry-clear": () => { pantry.clear(); savePantry(); renderKitchen(); },
+  "start-cook": () => { step = 0; renderCook(); keepAwake(true); },
+  "close": () => dlg.close(),
+  "back": () => {
+    if (mode === "cook") { keepAwake(false); renderSheet(); return; }
+    if (mode === "sheet" && trail.length) { cur = byKey(trail.pop()) || cur; renderSheet(); dlg.querySelector(".sheet-scroll").scrollTop = 0; return; }
+    dlg.close();
+  }
+};
+document.addEventListener("click", ev => {
+  const t = ev.target; let el;
+  if (t === dlg) { dlg.close(); return; }
+  if (t === fdlg) { fdlg.close(); return; }
+  if ((el = t.closest(".tab"))) { go(el.dataset.view); return; }
+  if ((el = t.closest("[data-view-go]"))) { go(el.dataset.viewGo); return; }
+  if ((el = t.closest("[data-preset]"))) {
+    const p = PRESETS.find(x => x.id === el.dataset.preset), was = activePreset();
+    Object.assign(state, DEFAULTS, was === p ? {} : p.set);
+    renderShortcuts(); render(); refocus(`[data-preset="${was === p ? "all" : p.id}"]`); return;
+  }
+  if ((el = t.closest("[data-f]"))) { state[el.dataset.f] = el.dataset.v; renderFilters(); renderShortcuts(); render(); refocus(`[data-f="${el.dataset.f}"][aria-pressed="true"]`); return; }
+  if ((el = t.closest("[data-t]"))) { state[el.dataset.t] = !state[el.dataset.t]; renderFilters(); renderShortcuts(); render(); refocus(`[data-t="${el.dataset.t}"]`); return; }
+  if ((el = t.closest("[data-eq]"))) {
+    const id = el.dataset.eq; have.has(id) ? have.delete(id) : have.add(id);
+    el.setAttribute("aria-pressed", have.has(id)); saveEquip(); return;
+  }
+  if ((el = t.closest("[data-pid]"))) {
+    const id = el.dataset.pid; pantry.has(id) ? pantry.delete(id) : pantry.add(id);
+    el.setAttribute("aria-pressed", pantry.has(id)); savePantry(); return;
+  }
+  if ((el = t.closest("[data-th]")) && mode === "sheet") { steak.th = +el.dataset.th; saveSteak(`[data-th="${steak.th}"]`); return; }
+  if ((el = t.closest("[data-done]")) && mode === "sheet") { steak.done = +el.dataset.done; saveSteak(`[data-done="${steak.done}"]`); return; }
+  if ((el = t.closest("[data-jump]")) && mode === "multi") { mstep = +el.dataset.jump; renderMulti(); return; }
+  if ((el = t.closest("[data-fav]"))) {
+    const k = el.dataset.fav, on = !favs.has(k);
+    on ? favs.add(k) : favs.delete(k); store("krua-fav-v1", [...favs]);
+    refresh(); refocus(`[data-fav="${k}"]`); toast(on ? "เพิ่มในเมนูโปรดแล้ว" : "เอาออกจากเมนูโปรดแล้ว"); return;
+  }
+  if ((el = t.closest("[data-add]"))) {
+    const k = el.dataset.add, r = byKey(k); if (!r) return;
+    const on = !meal.includes(k);
+    meal = on ? [...meal, k] : meal.filter(x => x !== k); saveMeal();
+    refresh(); refocus(`[data-add="${k}"]`); toast(on ? `เพิ่ม${r.name}ในมื้อนี้แล้ว` : "เอาออกจากมื้อนี้แล้ว"); return;
+  }
+  if ((el = t.closest("[data-del]"))) { meal = meal.filter(x => x !== el.dataset.del); saveMeal(); refresh(); return; }
+  if ((el = t.closest("[data-open]"))) { openRecipe(byKey(el.dataset.open)); return; }
+  if ((el = t.closest("[data-act]")) && ACTIONS[el.dataset.act]) ACTIONS[el.dataset.act]();
+});
+document.addEventListener("change", ev => {
+  const d = ev.target.dataset || {};
+  if (d.shop) { ev.target.checked ? bought.add(d.shop) : bought.delete(d.shop); store("krua-shop-v1", [...bought]); }
+  if (d.ing !== undefined && cur) {
+    const ticks = checks[cur.key] || (checks[cur.key] = new Set()), k = +d.ing;
+    ev.target.checked ? ticks.add(k) : ticks.delete(k);
+    if ($("ingCount")) $("ingCount").textContent = `เตรียมแล้ว ${ticks.size}/${cur.ing.length}`;
+  }
+});
+dlg.addEventListener("keydown", ev => {
+  if (mode !== "cook" && mode !== "multi") return;
+  if (ev.key === "ArrowRight" && $("next")) $("next").click();
+  if (ev.key === "ArrowLeft" && $("prev") && !$("prev").disabled) $("prev").click();
+});
+dlg.addEventListener("close", () => { stopTimers(); keepAwake(false); mode = ""; trail = []; refresh(); });
+
+renderShortcuts(); renderNotice(); renderMealBadge(); renderKitchen(); render();
+// Open where the link points, else where the person last was, else the home screen
+const startView = location.hash.slice(1), lastView = load("life-last-view", [""])[0];
+go(VIEWS.includes(startView) ? startView : VIEWS.includes(lastView) ? lastView : "home", false);
+</script>
