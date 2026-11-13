@@ -483,6 +483,50 @@ dialog::backdrop { background: rgba(6, 10, 22, .55); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 1ms !important; animation-duration: 1ms !important; scroll-behavior: auto !important; }
 }
+
+/* ---------- Cooking screen, readable from arm's length ---------- */
+.cook-top { display: grid; grid-template-columns: 46px minmax(0, 1fr) 46px; align-items: center; gap: 4px; padding: calc(6px + env(safe-area-inset-top, 0px)) 8px 6px; border-bottom: 1px solid var(--line); }
+.cook-top .ttl { text-align: center; font-size: 16px; }
+.segs { display: flex; gap: 4px; padding: 10px 16px 0; }
+.segs i { flex: 1; height: 6px; border-radius: 999px; background: var(--line); }
+.segs i.done { background: var(--basil); }
+.segs i.now { background: var(--basil-mid); }
+.cook-main { justify-content: flex-start; gap: 18px; padding: 18px 20px 24px; }
+.cook-main > * { animation: cookIn .22s var(--ease) both; }
+@keyframes cookIn { from { opacity: 0; } to { opacity: 1; } }
+.stepno { display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 600; color: var(--muted); }
+.stepno b { width: 44px; height: 44px; border-radius: 50%; background: var(--basil); color: var(--on-basil); display: grid; place-items: center; font-size: 20px; font-weight: 700; flex: none; }
+.stepno b .mark, .stepno b svg { width: 22px; height: 22px; display: block; }
+.cook-step { font-size: clamp(22px, 6.2vw, 30px); font-weight: 500; line-height: 1.55; }
+.cook-step mark { background: var(--turmeric-soft); color: var(--ink); font-weight: 700; padding: 0 5px; border-radius: 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.cook-step mark.heat { background: var(--chili-soft); color: var(--chili); }
+.cook-lead { margin: 0; color: var(--muted); font-size: 15px; }
+.sublab { margin: 0 0 8px; font-size: 13.5px; font-weight: 600; color: var(--muted); display: flex; justify-content: space-between; }
+.useing { display: flex; flex-wrap: wrap; gap: 6px; }
+.useing span { font-size: 15px; padding: 6px 12px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); }
+.tstart { width: 100%; min-height: 58px; font-size: 17px; border: 2px solid var(--basil); color: var(--basil-strong); background: var(--basil-soft); }
+.tstart svg { width: 22px; height: 22px; }
+.tcard { border-radius: var(--r-card); padding: 14px 16px; background: var(--basil-soft); display: flex; flex-direction: column; gap: 10px; }
+.tcard.over { background: var(--chili-soft); }
+.tlab { font-size: 13.5px; font-weight: 600; color: var(--basil-strong); text-align: center; }
+.tbig { font-size: clamp(48px, 16vw, 64px); font-weight: 700; line-height: 1; text-align: center; font-variant-numeric: tabular-nums; color: var(--basil-strong); }
+.tcard.over .tbig { font-size: 30px; color: var(--chili); }
+.tnote { margin: 0; text-align: center; color: var(--ink); font-size: 15px; }
+.tbar { height: 8px; border-radius: 999px; background: var(--surface); overflow: hidden; }
+.tbar i { display: block; height: 100%; background: var(--basil); transition: width 1s linear; }
+.trow { display: flex; gap: 8px; }
+.trow .btn { flex: 1; min-height: 48px; }
+.nextup { border-style: solid; background: var(--surface-2); }
+.nextup span { font-weight: 600; }
+.cook-nav { grid-template-columns: 1fr 1.8fr; }
+.cook-nav .btn { min-height: 60px; font-size: 17px; gap: 6px; white-space: nowrap; padding: 0 12px; }
+.cook-step mark { white-space: nowrap; }
+.cook-nav .flip svg { transform: rotate(180deg); display: block; }
+.cook-nav .btn:disabled { opacity: .45; }
+.donebtns { display: flex; flex-direction: column; gap: 8px; width: 100%; margin-top: 8px; }
+.donebtns .btn[aria-pressed="true"] svg path { fill: currentColor; }
+.done-msg .cook-step { font-weight: 700; }
+@media (prefers-reduced-motion: reduce) { .cook-main > * { animation: none; } .tbar i { transition: none; } }
 </style>
 
 <meta name="description" content="ผู้ช่วยเรื่องประจำวัน เริ่มจากครัว: หาเมนูจากของที่มี จัดมื้อ และทำตามทีละขั้น">
@@ -656,7 +700,7 @@ const EQ = Object.fromEntries(EQUIP.map(e => [e.id, e.name]));
 const KINDS = ["ทั้งหมด", "เมนูหลัก", "น้ำจิ้ม / ซอส", "น้ำสต็อก", "จานเคียง", "ของหวาน / เครื่องดื่ม"];
 const PROTEINS = [["เนื้อวัว", "🐄"], ["ไก่", "🐔"], ["หมู", "🐖"], ["ปลา", "🐟"], ["กุ้ง / ทะเล", "🦐"], ["ไข่", "🥚"], ["ผัก", "🥬"]];
 const CATS = ["ทั้งหมด", "สเต็ก", "ผัด", "ต้ม / แกง", "ทอด", "ยำ / ตำ", "นึ่ง", "ปิ้ง / อบ", "จานเดียว", "ไม่ใช้ไฟ"];
-const ORIGINS = ["ทุกสัญชาติ", "ไทย", "ไทยภาคใต้", "ไทยภาคอีสาน", "ไทยภาคเหนือ", "จีน", "ญี่ปุ่น", "เกาหลี", "อินเดีย", "ตะวันออกกลาง", "ตะวันตก", "อิตาเลียน", "เม็กซิกัน"];
+const ORIGINS = ["ทุกสัญชาติ", "ไทย", "ไทยภาคใต้", "ไทยภาคอีสาน", "ไทยภาคเหนือ", "จีน", "ญี่ปุ่น", "เกาหลี", "เวียดนาม", "อินเดีย", "ตะวันออกกลาง", "ตะวันตก", "อิตาเลียน", "สเปน", "เม็กซิกัน"];
 const REGIONS = { "ใต้": "ไทยภาคใต้", "อีสาน": "ไทยภาคอีสาน", "เหนือ": "ไทยภาคเหนือ" };
 // Older recipes that belong to a region or to breakfast
 const REGION_OF = { "ส้มตำไทย": "อีสาน", "เสือร้องไห้": "อีสาน", "น้ำจิ้มแจ่ว": "อีสาน", "คอหมูย่าง น้ำจิ้มแจ่ว": "อีสาน" };
@@ -763,7 +807,31 @@ const PAIRS = {
   "แซลมอนอบซอสมิโซะ": ["ข้าวสวย", "สลัดผักน้ำใส"],
   "ผักอบรวมหม้อทอด": ["สเต็กหม้อทอดไร้น้ำมัน", "แซลมอนอบซอสมิโซะ", "ริบอายสเต็ก ซอสพริกไทยดำ"],
   "แกงไก่เนยอินเดีย": ["ข้าวสวย"],
-  "เคบับเนื้อ": ["สลัดผักน้ำใส", "ซัลซ่ามะเขือเทศ"]
+  "เคบับเนื้อ": ["สลัดผักน้ำใส", "ซัลซ่ามะเขือเทศ", "ฮัมมัส"],
+  "เพนเน่อาราเบียตา": ["ขนมปังกระเทียม", "สลัดผักน้ำใส"],
+  "พาสต้าเพสโต้โหระพา": ["ขนมปังกระเทียม", "สลัดซีซาร์ไก่"],
+  "ลาซานญ่าเนื้อ": ["สลัดผักน้ำใส", "ขนมปังกระเทียม"],
+  "ริซอตโต้เห็ด": ["น้ำสต็อกไก่", "สลัดผักน้ำใส"],
+  "ไก่พาร์มีซาน": ["สปาเกตตีซอสมะเขือเทศ", "สลัดผักน้ำใส"],
+  "ซุปมิเนสโตรเน่": ["ขนมปังกระเทียม", "น้ำสต็อกผัก"],
+  "สปาเกตตีซอสมะเขือเทศ": ["ขนมปังกระเทียม", "ไก่พาร์มีซาน"],
+  "มักกะโรนีชีส": ["สลัดผักน้ำใส"],
+  "ออมเล็ตฝรั่งเศส": ["ขนมปังกระเทียม"],
+  "น่องไก่อบสมุนไพร": ["สลัดผักน้ำใส", "ซุปมิเนสโตรเน่"],
+  "กุ้งกระเทียมสเปน": ["ขนมปังกระเทียม", "สลัดผักน้ำใส"],
+  "ชักชูก้า ไข่ในซอสมะเขือเทศ": ["ขนมปังกระเทียม", "ฮัมมัส"],
+  "ไก่ชาวาร์มา": ["ฮัมมัส", "สลัดผักน้ำใส"],
+  "โอยาโกะด้ง": ["ซุปมิโซะ"],
+  "ไก่คาราอาเกะ": ["ข้าวสวย", "ซุปมิโซะ"],
+  "ข้าวผัดกิมจิ": ["ซุปเนื้อหัวไชเท้า"],
+  "ต็อกบกกี": ["ข้าวผัดกิมจิ"],
+  "จับแชเนื้อ": ["ข้าวสวย", "คาลบีย่าง"],
+  "ไก่ผัดกังเปา": ["ข้าวสวย"],
+  "หมาโผวเต้าหู้เนื้อ": ["ข้าวสวย"],
+  "เฝอเนื้อ": ["น้ำสต็อกเนื้อ"],
+  "เคซาดิยาไก่ชีส": ["ซัลซ่ามะเขือเทศ"],
+  "ชิลีคอนคาร์เน": ["ข้าวสวย", "ขนมปังกระเทียม"],
+  "แกงถั่วดาล": ["ข้าวสวย", "แกงไก่เนยอินเดีย"]
 };
 // No-pork versions: swap pork for chicken or beef in the name, ingredients and steps
 const NO_PORK = {
@@ -805,7 +873,12 @@ const DISH = {
   "ข้าวซอยไก่": "🍜", "แกงฮังเลเนื้อ": "🍛", "น้ำพริกหนุ่ม": "🌶️",
   "กุ้งอบวุ้นเส้น": "🦐", "ปลาหมึกผัดไข่เค็ม": "🦑", "หอยลายผัดพริกเผา": "🐚", "กุ้งผัดพริกเกลือ": "🦐", "ปลากะพงนึ่งซีอิ๊ว": "🐟",
   "ไข่กระทะ": "🍳", "แซนด์วิชไข่ญี่ปุ่น": "🥪", "เฟรนช์โทสต์": "🍞", "บราวนี่": "🍫", "พุดดิ้งนมสด": "🍮", "บัวลอยไข่หวาน": "🥣",
-  "ปีกไก่ทอดน้ำปลาหม้อทอด": "🍗", "แซลมอนอบซอสมิโซะ": "🍣", "ผักอบรวมหม้อทอด": "🥕", "แกงไก่เนยอินเดีย": "🍛", "เคบับเนื้อ": "🍢"
+  "ปีกไก่ทอดน้ำปลาหม้อทอด": "🍗", "แซลมอนอบซอสมิโซะ": "🍣", "ผักอบรวมหม้อทอด": "🥕", "แกงไก่เนยอินเดีย": "🍛", "เคบับเนื้อ": "🍢",
+  "เพนเน่อาราเบียตา": "🌶️", "พาสต้าเพสโต้โหระพา": "🌿", "ลาซานญ่าเนื้อ": "🍝", "ริซอตโต้เห็ด": "🍄", "ไก่พาร์มีซาน": "🧀",
+  "ซุปมิเนสโตรเน่": "🥣", "มักกะโรนีชีส": "🧀", "ออมเล็ตฝรั่งเศส": "🍳", "น่องไก่อบสมุนไพร": "🍗", "สลัดซีซาร์ไก่": "🥗",
+  "ขนมปังกระเทียม": "🥖", "กุ้งกระเทียมสเปน": "🦐", "ชักชูก้า ไข่ในซอสมะเขือเทศ": "🍳", "ฮัมมัส": "🫘", "ไก่ชาวาร์มา": "🌯",
+  "โอยาโกะด้ง": "🍚", "ไก่คาราอาเกะ": "🍗", "ซุปมิโซะ": "🥣", "ข้าวผัดกิมจิ": "🍳", "ต็อกบกกี": "🌶️", "จับแชเนื้อ": "🍜",
+  "ไก่ผัดกังเปา": "🥜", "หมาโผวเต้าหู้เนื้อ": "🌶️", "เฝอเนื้อ": "🍜", "เคซาดิยาไก่ชีส": "🌮", "ชิลีคอนคาร์เน": "🫕", "แกงถั่วดาล": "🍛"
 };
 const ICON = {
   heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg>',
@@ -1290,7 +1363,109 @@ RECIPES.push(
   { name: "เคบับเนื้อ", beef: true, cat: "ปิ้ง / อบ", origin: "ตะวันออกกลาง", time: 30, level: "ง่าย", serves: 3, equip: ["grill"],
     ing: ["เนื้อวัวบด 400 กรัม", "หอมใหญ่สับละเอียด ½ หัว", "กระเทียมสับ 2 กลีบ", "พาร์สลีย์สับ 2 ช้อนโต๊ะ", "ผงยี่หร่า 1 ช้อนชา", "ผงปาปริกา 1 ช้อนชา", "เกลือ 1 ช้อนชา", "พริกไทย ½ ช้อนชา", "ไม้เสียบ 6 ไม้", "ซอสโยเกิร์ต: โยเกิร์ตรสธรรมชาติ ½ ถ้วย และน้ำมะนาว 1 ช้อนชา"],
     steps: ["บีบน้ำออกจากหอมใหญ่สับ ผสมกับเนื้อบด กระเทียม พาร์สลีย์ เครื่องเทศ เกลือ และพริกไทย นวดจนเหนียว", "แบ่งเป็น 6 ส่วน ปั้นหุ้มไม้เสียบเป็นแท่งยาว แช่เย็น 10 นาที", "ย่างไฟกลางค่อนแรง 8 นาที พลิกทุก 2 นาทีจนสุกทั่ว", "ผสมโยเกิร์ตกับน้ำมะนาวเป็นซอส"],
-    tip: "นวดเนื้อให้เหนียวและแช่เย็นก่อนย่าง เนื้อจะไม่หลุดจากไม้" }
+    tip: "นวดเนื้อให้เหนียวและแช่เย็นก่อนย่าง เนื้อจะไม่หลุดจากไม้" },
+
+/* ---------- อาหารต่างชาติชุดใหม่ ---------- */
+  { name: "เพนเน่อาราเบียตา", protein: "ผัก", cat: "จานเดียว", origin: "อิตาเลียน", time: 25, level: "ง่าย", serves: 2, equip: ["stove", "pot", "wok"],
+    ing: ["เส้นเพนเน่ 200 กรัม", "มะเขือเทศกระป๋อง 400 กรัม", "กระเทียมสับ 4 กลีบ", "พริกป่นหยาบ 1 ช้อนชา", "น้ำมันมะกอก 3 ช้อนโต๊ะ", "พาร์สลีย์สับ", "เกลือ", "พาร์มีซานขูด (ไม่ใส่ก็ได้)"],
+    steps: ["ต้มเส้นในน้ำเดือดใส่เกลือ ตามเวลาข้างซอง (ประมาณ 10 นาที) ตักน้ำต้มเส้นเก็บไว้ครึ่งถ้วย", "ระหว่างนั้น ผัดกระเทียมกับพริกป่นในน้ำมันมะกอกไฟอ่อน 2 นาทีจนหอม", "ใส่มะเขือเทศกระป๋อง บี้ให้แตก เคี่ยวไฟกลาง 10 นาทีจนข้น ปรุงเกลือ", "ใส่เส้นและน้ำต้มเส้นเล็กน้อย คลุก 1 นาที โรยพาร์สลีย์"],
+    tip: "อาราเบียตาแปลว่าโกรธ ความเผ็ดมาจากพริกป่น ปรับเพิ่มลดได้ตามชอบ" },
+  { name: "พาสต้าเพสโต้โหระพา", protein: "ผัก", cat: "จานเดียว", origin: "อิตาเลียน", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "pot", "blender"],
+    ing: ["เส้นสปาเกตตีหรือเพนเน่ 200 กรัม", "ใบโหระพา 2 ถ้วย (แน่น ๆ)", "เม็ดมะม่วงหิมพานต์ 3 ช้อนโต๊ะ", "กระเทียม 1 กลีบ", "พาร์มีซานขูด 4 ช้อนโต๊ะ", "น้ำมันมะกอก ½ ถ้วย", "น้ำมะนาว 1 ช้อนชา", "เกลือ"],
+    steps: ["ต้มเส้นในน้ำเดือดใส่เกลือ ตามเวลาข้างซอง (ประมาณ 9 นาที) ตักน้ำต้มเส้นเก็บไว้ครึ่งถ้วย", "ปั่นใบโหระพา เม็ดมะม่วงหิมพานต์ กระเทียม พาร์มีซาน และน้ำมะนาว ค่อย ๆ เติมน้ำมันมะกอกจนเนียน ประมาณ 1 นาที", "คลุกเส้นกับซอสเพสโต้นอกเตา เติมน้ำต้มเส้นทีละน้อยจนซอสเคลือบเส้น ปรุงเกลือ"],
+    tip: "ห้ามใส่เพสโต้ลงในกระทะร้อน ใบโหระพาจะดำและเสียกลิ่น" },
+  { name: "ลาซานญ่าเนื้อ", beef: true, cat: "ปิ้ง / อบ", origin: "อิตาเลียน", time: 90, level: "ปานกลาง", serves: 4, equip: ["stove", "pot", "wok", "oven"],
+    ing: ["แผ่นลาซานญ่าแบบไม่ต้องต้ม 9 แผ่น", "เนื้อวัวบด 400 กรัม", "หอมใหญ่สับ 1 หัว", "กระเทียมสับ 3 กลีบ", "มะเขือเทศกระป๋อง 400 กรัม", "เนย 40 กรัม", "แป้งสาลี 3 ช้อนโต๊ะ", "นมสด 2 ถ้วย", "ชีสมอซซาเรลลาขูด 1½ ถ้วย", "พาร์มีซานขูด 4 ช้อนโต๊ะ", "เกลือ พริกไทย ออริกาโน"],
+    steps: ["ผัดหอมใหญ่และกระเทียมในกระทะ ใส่เนื้อบดผัดจนสุก ใส่มะเขือเทศกระป๋องและออริกาโน เคี่ยวไฟอ่อน 20 นาที ปรุงรส", "ทำซอสขาว: ละลายเนยในหม้อ ใส่แป้ง ผัด 1 นาที ค่อย ๆ เทนมพร้อมคนจนข้น ประมาณ 5 นาที ปรุงเกลือ", "อุ่นเตาอบที่ 190°C", "เรียงในถาด: ซอสเนื้อ แผ่นลาซานญ่า ซอสขาว ชีส ทำซ้ำ 3 ชั้น ปิดหน้าด้วยซอสขาวและชีสทั้งสองแบบ", "ปิดฟอยล์ อบ 25 นาที เปิดฟอยล์อบต่อ 15 นาทีจนหน้าเหลือง", "พักไว้ 10 นาทีก่อนตัด"],
+    tip: "พักลาซานญ่าก่อนตัด ชั้นจะเซตตัว ไม่ไหลเละ" },
+  { name: "ริซอตโต้เห็ด", protein: "ผัก", cat: "จานเดียว", origin: "อิตาเลียน", time: 40, level: "ปานกลาง", serves: 2, equip: ["stove", "pot", "wok"],
+    ing: ["ข้าวอาร์โบริโอ 1 ถ้วย (ใช้ข้าวญี่ปุ่นแทนได้)", "เห็ดแชมปิญองหั่น 200 กรัม", "หอมใหญ่สับ ½ หัว", "กระเทียมสับ 2 กลีบ", "น้ำสต็อกไก่ร้อน 4 ถ้วย", "เนย 30 กรัม", "พาร์มีซานขูด 4 ช้อนโต๊ะ", "เกลือ พริกไทย"],
+    steps: ["ต้มน้ำสต็อกในหม้อ เปิดไฟอ่อนให้ร้อนไว้ตลอด", "ผัดเห็ดกับเนยครึ่งหนึ่งไฟแรง 4 นาทีจนเป็นสีน้ำตาล ตักขึ้น", "ผัดหอมใหญ่และกระเทียมจนนิ่ม ใส่ข้าว ผัด 2 นาทีให้เม็ดข้าวใส", "เติมน้ำสต็อกครั้งละ 1 ทัพพี คนเรื่อย ๆ รอให้ข้าวดูดน้ำจึงเติมครั้งใหม่ ทำต่อไปประมาณ 18 นาทีจนข้าวนุ่มแต่ยังมีไตตรงกลาง", "ปิดไฟ ใส่เห็ด เนยที่เหลือ และพาร์มีซาน คนให้ข้น ปรุงรส"],
+    tip: "การคนบ่อย ๆ ทำให้แป้งในข้าวออกมาเป็นซอสครีมเอง ไม่ต้องใส่ครีม" },
+  { name: "ไก่พาร์มีซาน", protein: "ไก่", cat: "ปิ้ง / อบ", origin: "อิตาเลียน", time: 45, level: "ปานกลาง", serves: 2, equip: ["stove", "wok", "oven"],
+    ing: ["อกไก่ 2 ชิ้น ทุบให้หนาเท่ากันประมาณ 1.5 ซม.", "แป้งสาลี ½ ถ้วย", "ไข่ไก่ 1 ฟอง", "เกล็ดขนมปัง 1 ถ้วย", "พาร์มีซานขูด 3 ช้อนโต๊ะ", "ซอสมะเขือเทศสำหรับพาสต้า 1 ถ้วย", "ชีสมอซซาเรลลาขูด 1 ถ้วย", "น้ำมันสำหรับทอด", "เกลือ พริกไทย"],
+    steps: ["อุ่นเตาอบที่ 200°C โรยเกลือพริกไทยบนอกไก่", "ชุบไก่ในแป้ง ไข่ แล้วเกล็ดขนมปังผสมพาร์มีซาน", "ทอดในน้ำมันไฟกลางด้านละ 3 นาทีจนเหลือง", "วางไก่ในถาด ราดซอสมะเขือเทศ โรยมอซซาเรลลา", "อบ 12 นาทีจนชีสละลายเป็นฟอง เสิร์ฟกับพาสต้าหรือสลัด"],
+    tip: "ทุบอกไก่ให้หนาเท่ากันก่อน ไก่จะสุกพร้อมกันทั้งชิ้น ไม่แห้งตรงขอบ" },
+  { name: "ซุปมิเนสโตรเน่", protein: "ผัก", cat: "ต้ม / แกง", origin: "อิตาเลียน", time: 45, level: "ง่าย", serves: 4, equip: ["stove", "pot"],
+    ing: ["หอมใหญ่ แครอท ขึ้นฉ่ายฝรั่ง หั่นเต๋า อย่างละ 1", "กระเทียมสับ 2 กลีบ", "มันฝรั่งหั่นเต๋า 1 หัว", "มะเขือเทศกระป๋อง 400 กรัม", "ถั่วแดงกระป๋อง 1 กระป๋อง", "น้ำสต็อกผัก 5 ถ้วย", "มักกะโรนี ½ ถ้วย", "น้ำมันมะกอก 2 ช้อนโต๊ะ", "เกลือ พริกไทย ออริกาโน"],
+    steps: ["ผัดหอมใหญ่ แครอท ขึ้นฉ่าย กระเทียม กับน้ำมันมะกอกไฟกลาง 5 นาที", "ใส่มันฝรั่ง มะเขือเทศ น้ำสต็อก และออริกาโน ต้มเดือดแล้วลดไฟ เคี่ยว 20 นาที", "ใส่ถั่วแดงและมักกะโรนี ต้มต่อ 10 นาทีจนเส้นสุก ปรุงรส"],
+    tip: "ซุปนี้ใช้ผักที่เหลือในตู้เย็นได้แทบทุกอย่าง" },
+  { name: "มักกะโรนีชีส", protein: "ผัก", cat: "จานเดียว", origin: "ตะวันตก", time: 25, level: "ง่าย", serves: 2, equip: ["stove", "pot"],
+    ing: ["มักกะโรนี 200 กรัม", "เนย 30 กรัม", "แป้งสาลี 2 ช้อนโต๊ะ", "นมสด 1½ ถ้วย", "ชีสเชดดาร์ขูด 1½ ถ้วย", "มัสตาร์ด ½ ช้อนชา", "เกลือ พริกไทย"],
+    steps: ["ต้มมักกะโรนีในน้ำเดือดใส่เกลือ ตามเวลาข้างซอง (ประมาณ 8 นาที) แล้วเทน้ำออก", "ใช้หม้อเดิม ละลายเนย ใส่แป้ง ผัด 1 นาที", "ค่อย ๆ เทนมพร้อมคน เคี่ยวไฟกลาง 4 นาทีจนข้น", "ปิดไฟ ใส่ชีสและมัสตาร์ด คนจนละลาย ใส่เส้นคลุกให้ทั่ว ปรุงรส"],
+    tip: "ปิดไฟก่อนใส่ชีส ซอสจะเนียน ไม่แยกเป็นเม็ด" },
+  { name: "ออมเล็ตฝรั่งเศส", protein: "ไข่", meal: "เช้า", cat: "ทอด", origin: "ตะวันตก", time: 10, level: "ปานกลาง", serves: 1, equip: ["stove", "wok"],
+    ing: ["ไข่ไก่ 3 ฟอง", "เนย 15 กรัม", "นมสด 1 ช้อนโต๊ะ", "เกลือ พริกไทย", "ชีสขูดหรือต้นหอมซอย (ไม่ใส่ก็ได้)"],
+    steps: ["ตีไข่กับนม เกลือ พริกไทย จนเนื้อเดียวกัน", "ละลายเนยในกระทะไฟกลางค่อนอ่อน พอเนยหยุดเป็นฟองเทไข่ลงไป", "ใช้ตะหลิวคนเร็ว ๆ พร้อมเขย่ากระทะ 30 วินาที จนไข่เริ่มเซตแต่ผิวยังเยิ้ม", "โรยชีส พับไข่เป็นสามทบ แล้วเลื่อนลงจาน"],
+    tip: "ออมเล็ตแบบฝรั่งเศสต้องไม่มีสีน้ำตาลเลย ใช้ไฟอ่อนและเร็ว" },
+  { name: "น่องไก่อบสมุนไพร", protein: "ไก่", cat: "ปิ้ง / อบ", origin: "ตะวันตก", time: 55, level: "ง่าย", serves: 3, equip: ["oven"],
+    ing: ["น่องและสะโพกไก่ติดหนัง 6 ชิ้น", "น้ำมันมะกอก 2 ช้อนโต๊ะ", "กระเทียมสับ 4 กลีบ", "โรสแมรีหรือไทม์สับ 1 ช้อนโต๊ะ", "ปาปริกา 1 ช้อนชา", "น้ำมะนาว 1 ช้อนโต๊ะ", "มันฝรั่งหั่นชิ้น 2 หัว", "เกลือ พริกไทย"],
+    steps: ["อุ่นเตาอบที่ 200°C", "คลุกไก่และมันฝรั่งกับน้ำมันมะกอก กระเทียม สมุนไพร ปาปริกา มะนาว เกลือ พริกไทย", "เรียงลงถาดชั้นเดียว หันหนังไก่ขึ้น", "อบ 40 นาทีจนหนังกรอบ และน้ำที่ไหลจากไก่ใส"],
+    tip: "อย่าเรียงซ้อนกัน ไก่จะนึ่งตัวเองแทนที่จะกรอบ" },
+  { name: "สลัดซีซาร์ไก่", protein: "ไก่", cat: "ยำ / ตำ", origin: "ตะวันตก", time: 25, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["อกไก่ 1 ชิ้น", "ผักกาดคอส 1 หัว", "ขนมปังหั่นเต๋า 1 ถ้วย", "พาร์มีซานขูด 3 ช้อนโต๊ะ", "มายองเนส 3 ช้อนโต๊ะ", "น้ำมะนาว 1 ช้อนโต๊ะ", "มัสตาร์ด ½ ช้อนชา", "กระเทียมขูด ½ กลีบ", "น้ำมันมะกอก 2 ช้อนโต๊ะ", "เกลือ พริกไทย"],
+    steps: ["โรยเกลือพริกไทยบนอกไก่ จี่ไฟกลางด้านละ 5 นาทีจนสุก พักแล้วหั่น", "ใช้กระทะเดิม ผัดขนมปังกับน้ำมันมะกอก 3 นาทีจนกรอบ", "ผสมมายองเนส มะนาว มัสตาร์ด กระเทียม พาร์มีซานครึ่งหนึ่ง เป็นน้ำสลัด", "คลุกผักกับน้ำสลัด วางไก่ ขนมปังกรอบ และพาร์มีซานที่เหลือ"], tip: "" },
+  { name: "ขนมปังกระเทียม", kind: "จานเคียง", protein: "ผัก", cat: "ปิ้ง / อบ", origin: "ตะวันตก", time: 12, level: "ง่าย", serves: 2, equip: ["airfryer"],
+    ing: ["ขนมปังบาแก็ตหรือขนมปังแผ่นหนา 6 ชิ้น", "เนยนิ่ม 40 กรัม", "กระเทียมสับ 3 กลีบ", "พาร์สลีย์สับ 1 ช้อนโต๊ะ", "เกลือเล็กน้อย"],
+    steps: ["ผสมเนย กระเทียม พาร์สลีย์ และเกลือ", "ทาเนยกระเทียมบนขนมปัง", "อบในหม้อทอดไร้น้ำมัน 180°C 5 นาทีจนขอบกรอบ"], tip: "" },
+  { name: "กุ้งกระเทียมสเปน", protein: "กุ้ง / ทะเล", cat: "ผัด", origin: "สเปน", time: 15, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["กุ้งแกะเปลือก 12 ตัว", "กระเทียมสไลซ์ 6 กลีบ", "น้ำมันมะกอก ½ ถ้วย", "พริกแห้ง 2 เม็ด", "ปาปริกา ½ ช้อนชา", "น้ำมะนาว 1 ช้อนโต๊ะ", "พาร์สลีย์สับ", "เกลือ", "ขนมปังสำหรับจิ้ม"],
+    steps: ["ใส่น้ำมันมะกอก กระเทียม และพริกแห้งในกระทะที่ยังเย็น เปิดไฟอ่อน 3 นาทีจนกระเทียมเหลืองอ่อน", "เร่งเป็นไฟกลาง ใส่กุ้งและเกลือ ผัด 2 นาทีจนกุ้งเปลี่ยนสี", "ปิดไฟ โรยปาปริกา บีบมะนาว โรยพาร์สลีย์ เสิร์ฟกับขนมปังจิ้มน้ำมัน"],
+    tip: "น้ำมันกระเทียมที่เหลือคือของอร่อย ใช้ขนมปังจิ้มให้หมด" },
+  { name: "ชักชูก้า ไข่ในซอสมะเขือเทศ", protein: "ไข่", meal: "เช้า", cat: "ต้ม / แกง", origin: "ตะวันออกกลาง", time: 25, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["ไข่ไก่ 4 ฟอง", "มะเขือเทศกระป๋อง 400 กรัม", "หอมใหญ่สับ 1 หัว", "พริกหวานแดงหั่นเต๋า 1 ลูก", "กระเทียมสับ 2 กลีบ", "ผงยี่หร่า 1 ช้อนชา", "ปาปริกา 1 ช้อนชา", "น้ำมันมะกอก 2 ช้อนโต๊ะ", "ผักชีสับ", "เกลือ พริกไทย", "ขนมปัง"],
+    steps: ["ผัดหอมใหญ่และพริกหวานกับน้ำมันมะกอกไฟกลาง 5 นาทีจนนิ่ม ใส่กระเทียม ยี่หร่า ปาปริกา ผัดพอหอม", "ใส่มะเขือเทศกระป๋อง เคี่ยว 8 นาทีจนข้น ปรุงเกลือพริกไทย", "ใช้ช้อนทำหลุม 4 หลุม ตอกไข่ลงไป ปิดฝา ไฟอ่อน 6 นาทีจนไข่ขาวสุก ไข่แดงยังเยิ้ม", "โรยผักชี กินกับขนมปัง"], tip: "" },
+  { name: "ฮัมมัส", kind: "น้ำจิ้ม / ซอส", protein: "ผัก", cat: "ไม่ใช้ไฟ", origin: "ตะวันออกกลาง", time: 10, level: "ง่าย", yield: "ประมาณ 1½ ถ้วย", equip: ["blender"],
+    ing: ["ถั่วลูกไก่กระป๋อง 1 กระป๋อง (สะเด็ดน้ำ)", "งาบด (ทาฮินี) 3 ช้อนโต๊ะ", "น้ำมะนาว 2 ช้อนโต๊ะ", "กระเทียม 1 กลีบ", "น้ำเย็นจัด 3 ช้อนโต๊ะ", "น้ำมันมะกอก 2 ช้อนโต๊ะ", "เกลือ ปาปริกา"],
+    steps: ["ปั่นถั่ว งาบด มะนาว กระเทียม และเกลือ 1 นาที", "ค่อย ๆ เติมน้ำเย็นจัดขณะปั่น ปั่นต่อ 2 นาทีจนเนียนนุ่ม", "ตักใส่จาน ราดน้ำมันมะกอก โรยปาปริกา กินกับผักสดหรือขนมปัง"],
+    tip: "น้ำเย็นจัดทำให้ฮัมมัสเนื้อเบาและนุ่มขึ้น" },
+  { name: "ไก่ชาวาร์มา", protein: "ไก่", cat: "ผัด", origin: "ตะวันออกกลาง", time: 40, level: "ง่าย", serves: 3, equip: ["stove", "wok"],
+    ing: ["สะโพกไก่หั่นเส้น 500 กรัม", "โยเกิร์ตรสธรรมชาติ 3 ช้อนโต๊ะ", "ผงยี่หร่า 1 ช้อนชา", "ปาปริกา 1 ช้อนชา", "ขมิ้นผง ½ ช้อนชา", "กระเทียมสับ 2 กลีบ", "น้ำมะนาว 1 ช้อนโต๊ะ", "แป้งตอร์ตียาหรือพิต้า 4 แผ่น", "ผักกาดหอม มะเขือเทศ หอมใหญ่", "เกลือ"],
+    steps: ["หมักไก่กับโยเกิร์ต เครื่องเทศ กระเทียม มะนาว และเกลือ 20 นาที", "จี่ไก่ในกระทะไฟกลางค่อนแรง 8 นาที พลิกจนสุกและขอบเกรียม", "อุ่นแป้งในกระทะแห้งด้านละ 30 วินาที", "ใส่ไก่และผักลงในแป้ง ราดฮัมมัสหรือซอสโยเกิร์ต แล้วม้วน"], tip: "" },
+  { name: "โอยาโกะด้ง", protein: "ไก่", cat: "จานเดียว", origin: "ญี่ปุ่น", time: 20, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["สะโพกไก่หั่นชิ้นพอดีคำ 250 กรัม", "หอมใหญ่ซอย ½ หัว", "ไข่ไก่ 3 ฟอง", "น้ำซุปดาชิ ¾ ถ้วย", "ซีอิ๊วญี่ปุ่น 2 ช้อนโต๊ะ", "มิริน 2 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนชา", "ข้าวญี่ปุ่นสุก 2 ถ้วย", "ต้นหอมซอย"],
+    steps: ["ต้มดาชิ ซีอิ๊ว มิริน และน้ำตาลในกระทะใบเล็ก ใส่หอมใหญ่ เคี่ยว 3 นาที", "ใส่ไก่ ต้มไฟกลาง 5 นาทีจนสุก", "ตีไข่หยาบ ๆ เทวนรอบไก่ ปิดฝา 1 นาทีให้ไข่สุกแค่ครึ่ง ๆ", "ราดบนข้าว โรยต้นหอม"],
+    tip: "อย่าตีไข่จนเนียน ไข่ขาวกับไข่แดงที่แยกกันนิด ๆ คือเอกลักษณ์ของเมนูนี้" },
+  { name: "ไก่คาราอาเกะ", protein: "ไก่", cat: "ทอด", origin: "ญี่ปุ่น", time: 40, level: "ง่าย", serves: 3, equip: ["stove", "wok"],
+    ing: ["สะโพกไก่หั่นชิ้นพอดีคำ 500 กรัม", "ซีอิ๊วญี่ปุ่น 2 ช้อนโต๊ะ", "สาเกหรือน้ำ 1 ช้อนโต๊ะ", "ขิงขูด 1 ช้อนชา", "กระเทียมขูด 1 ช้อนชา", "แป้งมัน ½ ถ้วย", "น้ำมันสำหรับทอด", "มะนาว และมายองเนสญี่ปุ่น"],
+    steps: ["หมักไก่กับซีอิ๊ว สาเก ขิง กระเทียม 20 นาที", "คลุกแป้งมันให้ทั่ว เคาะแป้งส่วนเกินออก", "ทอดในน้ำมัน 170°C 4 นาที ตักขึ้นพัก 3 นาที", "ทอดรอบสองในน้ำมันร้อนจัด 1 นาทีจนกรอบ เสิร์ฟกับมะนาวและมายองเนส"],
+    tip: "การทอดสองรอบทำให้ข้างนอกกรอบนาน ข้างในยังฉ่ำ" },
+  { name: "ซุปมิโซะ", kind: "จานเคียง", protein: "ผัก", cat: "ต้ม / แกง", origin: "ญี่ปุ่น", time: 10, level: "ง่าย", serves: 2, equip: ["stove", "pot"],
+    ing: ["น้ำซุปดาชิ 2 ถ้วย", "มิโซะ 2 ช้อนโต๊ะ", "เต้าหู้อ่อนหั่นเต๋า ½ ก้อน", "สาหร่ายวากาเมะแห้ง 1 ช้อนโต๊ะ", "ต้นหอมซอย"],
+    steps: ["ต้มดาชิให้เกือบเดือด ใส่เต้าหู้และวากาเมะ 2 นาที", "ปิดไฟ ละลายมิโซะในกระบวยกับน้ำซุปเล็กน้อย แล้วเทกลับลงหม้อ", "โรยต้นหอม"],
+    tip: "อย่าต้มมิโซะจนเดือด กลิ่นหอมจะหาย" },
+  { name: "ข้าวผัดกิมจิ", protein: "ไข่", cat: "จานเดียว", origin: "เกาหลี", time: 15, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["ข้าวสวยค้างคืน 2 ถ้วย", "กิมจิหั่นละเอียด 1 ถ้วย", "น้ำกิมจิ 2 ช้อนโต๊ะ", "โคชูจัง 1 ช้อนโต๊ะ", "ซีอิ๊วขาว 1 ช้อนชา", "น้ำมันงา 1 ช้อนชา", "ไข่ไก่ 2 ฟอง", "ต้นหอมซอย", "งาขาว"],
+    steps: ["ผัดกิมจิในน้ำมันไฟกลาง 3 นาทีจนหอม", "ใส่ข้าว น้ำกิมจิ โคชูจัง ซีอิ๊ว ผัดให้เข้ากัน 3 นาที ปิดไฟ ใส่น้ำมันงา", "ทอดไข่ดาวให้ไข่แดงยังเยิ้ม วางบนข้าว โรยต้นหอมและงา"],
+    tip: "ใช้กิมจิที่เปรี้ยวจัดหน่อย รสจะดีกว่ากิมจิใหม่" },
+  { name: "ต็อกบกกี", protein: "ผัก", cat: "ผัด", origin: "เกาหลี", time: 25, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["ต็อกแท่ง 300 กรัม", "แผ่นปลาเกาหลี (โอเด้ง) 2 แผ่น (ไม่ใส่ก็ได้)", "น้ำ 1½ ถ้วย", "โคชูจัง 2 ช้อนโต๊ะ", "พริกป่นเกาหลี 1 ช้อนโต๊ะ", "ซีอิ๊วขาว 1 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนโต๊ะ", "ต้นหอม 2 ต้น", "ไข่ต้ม 2 ฟอง"],
+    steps: ["แช่ต็อกในน้ำอุ่น 10 นาทีให้นิ่ม", "ต้มน้ำในกระทะ ละลายโคชูจัง พริกป่น ซีอิ๊ว และน้ำตาล", "ใส่ต็อกและแผ่นปลา เคี่ยวไฟกลาง 8 นาที คนบ่อย ๆ จนซอสข้นเคลือบต็อก", "ใส่ต้นหอมและไข่ต้ม คลุกแล้วปิดไฟ"], tip: "" },
+  { name: "จับแชเนื้อ", beef: true, cat: "ผัด", origin: "เกาหลี", time: 35, level: "ปานกลาง", serves: 3, equip: ["stove", "pot", "wok"],
+    ing: ["วุ้นเส้นเกาหลี 150 กรัม", "เนื้อวัวหั่นเส้น 150 กรัม", "ผักโขม 1 กำ", "แครอทหั่นเส้น ½ หัว", "หอมใหญ่ซอย ½ หัว", "เห็ดหอมสดซอย 4 ดอก", "ซีอิ๊วญี่ปุ่น 4 ช้อนโต๊ะ", "น้ำตาล 1½ ช้อนโต๊ะ", "น้ำมันงา 2 ช้อนโต๊ะ", "กระเทียมสับ 1 ช้อนโต๊ะ", "งาขาว"],
+    steps: ["ต้มวุ้นเส้นในน้ำเดือด 6 นาที สะเด็ดน้ำ ตัดให้สั้นลง คลุกน้ำมันงาเล็กน้อย", "ลวกผักโขม 30 วินาที บีบน้ำออก", "ผัดเนื้อกับกระเทียมจนสุก ตักขึ้น ผัดแครอท หอมใหญ่ เห็ด ทีละอย่าง 2 นาที", "รวมทุกอย่างกับวุ้นเส้นในกระทะ ใส่ซีอิ๊ว น้ำตาล น้ำมันงา คลุกไฟอ่อน 2 นาที โรยงา"], tip: "" },
+  { name: "ไก่ผัดกังเปา", protein: "ไก่", cat: "ผัด", origin: "จีน", time: 25, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["อกไก่หั่นเต๋า 300 กรัม", "แป้งมัน 2 ช้อนชา", "พริกแห้ง 8 เม็ด", "ถั่วลิสงคั่ว ⅓ ถ้วย", "ต้นหอมหั่นท่อน 3 ต้น", "กระเทียมสับ 1 ช้อนโต๊ะ", "ขิงสับ 1 ช้อนชา", "ซีอิ๊วขาว 2 ช้อนโต๊ะ", "ซีอิ๊วดำ 1 ช้อนชา", "น้ำส้มสายชูดำหรือน้ำส้มสายชู 1 ช้อนโต๊ะ", "น้ำตาล 1 ช้อนโต๊ะ"],
+    steps: ["หมักไก่กับแป้งมัน 1 ช้อนชาและซีอิ๊วขาว 1 ช้อนโต๊ะ 10 นาที", "ผสมซีอิ๊วที่เหลือ ซีอิ๊วดำ น้ำส้มสายชู น้ำตาล และแป้งมันที่เหลือ เป็นซอส", "ผัดพริกแห้งไฟกลาง 30 วินาทีจนหอม ใส่ไก่ ผัดไฟแรง 4 นาทีจนสุก", "ใส่กระเทียม ขิง ต้นหอม และซอส ผัดจนซอสข้น ใส่ถั่วลิสงแล้วปิดไฟ"],
+    tip: "ผัดพริกแห้งแค่พอหอม ถ้าดำจะขม" },
+  { name: "หมาโผวเต้าหู้เนื้อ", beef: true, cat: "ผัด", origin: "จีน", time: 25, level: "ปานกลาง", serves: 3, equip: ["stove", "wok"],
+    ing: ["เต้าหู้อ่อนหั่นเต๋า 1 ก้อน", "เนื้อวัวบด 150 กรัม", "ซอสเต้าเจี้ยวพริก (โต้วป้านเจี้ยง) 1½ ช้อนโต๊ะ", "กระเทียมสับ 1 ช้อนโต๊ะ", "ขิงสับ 1 ช้อนชา", "พริกไทยเสฉวนป่น ½ ช้อนชา (ไม่ใส่ก็ได้)", "น้ำ ¾ ถ้วย", "ซีอิ๊วขาว 1 ช้อนชา", "แป้งมัน 1 ช้อนชา ละลายน้ำ 2 ช้อนโต๊ะ", "ต้นหอมซอย"],
+    steps: ["ลวกเต้าหู้ในน้ำเดือดใส่เกลือ 1 นาที ตักขึ้น", "ผัดเนื้อบดไฟกลางจนกรอบนิด ๆ ใส่ซอสเต้าเจี้ยวพริก กระเทียม ขิง ผัด 1 นาทีจนน้ำมันแดง", "เติมน้ำและซีอิ๊ว ใส่เต้าหู้ ไถตะหลิวเบา ๆ ต้ม 3 นาที", "ใส่น้ำแป้งมัน รอจนข้น โรยพริกไทยเสฉวนและต้นหอม"],
+    tip: "ลวกเต้าหู้ในน้ำเกลือก่อน เต้าหู้จะไม่แตกตอนผัด" },
+  { name: "เฝอเนื้อ", beef: true, cat: "ต้ม / แกง", origin: "เวียดนาม", time: 60, level: "ปานกลาง", serves: 2, equip: ["stove", "pot", "wok"],
+    ing: ["น้ำสต็อกเนื้อ 6 ถ้วย", "เนื้อสันในสไลซ์บางมาก 200 กรัม", "เส้นเฝอหรือเส้นเล็ก 200 กรัม", "หอมใหญ่ ½ หัว และขิง 1 แง่ง", "โป๊ยกั๊ก 2 ดอก อบเชย 1 แท่ง กานพลู 3 ดอก", "น้ำปลา 2 ช้อนโต๊ะ", "น้ำตาลกรวด 1 ช้อนชา", "ถั่วงอก ใบโหระพา ผักชีฝรั่ง มะนาว พริก"],
+    steps: ["เผาหอมใหญ่และขิงบนกระทะแห้งไฟแรง 5 นาทีจนผิวไหม้", "คั่วโป๊ยกั๊ก อบเชย กานพลู ในกระทะแห้ง 1 นาที", "ใส่ทุกอย่างลงน้ำสต็อก ต้มไฟอ่อน 30 นาที กรองเครื่องเทศออก ปรุงด้วยน้ำปลาและน้ำตาลกรวด", "ลวกเส้นใส่ชาม วางเนื้อดิบบนเส้น ราดน้ำซุปที่เดือดจัดให้เนื้อสุก", "กินกับถั่วงอก ใบโหระพา ผักชีฝรั่ง มะนาว และพริก"],
+    tip: "น้ำซุปต้องเดือดจัดตอนราด เนื้อบางจะสุกพอดีเป็นสีชมพู" },
+  { name: "เคซาดิยาไก่ชีส", protein: "ไก่", cat: "ทอด", origin: "เม็กซิกัน", time: 15, level: "ง่าย", serves: 2, equip: ["stove", "wok"],
+    ing: ["แป้งตอร์ตียา 4 แผ่น", "ไก่สุกฉีกฝอย 1 ถ้วย", "ชีสเชดดาร์หรือมอซซาเรลลาขูด 1½ ถ้วย", "หอมใหญ่สับ ¼ หัว", "พริกจาลาปิโนหรือพริกชี้ฟ้าสับ 1 เม็ด", "ผงยี่หร่า ½ ช้อนชา", "ซัลซ่ามะเขือเทศสำหรับจิ้ม"],
+    steps: ["คลุกไก่กับยี่หร่า หอมใหญ่ และพริก", "วางแป้ง 1 แผ่นในกระทะแห้งไฟกลาง โรยชีสครึ่งหนึ่ง ไก่ แล้วชีสอีกชั้น ปิดด้วยแป้งอีกแผ่น", "จี่ด้านละ 2 นาทีจนกรอบและชีสละลาย", "ตัดเป็นสามเหลี่ยม กินกับซัลซ่า"], tip: "" },
+  { name: "ชิลีคอนคาร์เน", beef: true, cat: "ต้ม / แกง", origin: "เม็กซิกัน", time: 60, level: "ง่าย", serves: 4, equip: ["stove", "pot"],
+    ing: ["เนื้อวัวบด 500 กรัม", "หอมใหญ่สับ 1 หัว", "กระเทียมสับ 3 กลีบ", "พริกหวานหั่นเต๋า 1 ลูก", "มะเขือเทศกระป๋อง 400 กรัม", "ถั่วแดงกระป๋อง 1 กระป๋อง", "ซอสมะเขือเทศเข้มข้น 2 ช้อนโต๊ะ", "ผงยี่หร่า 2 ช้อนชา", "ปาปริกา 2 ช้อนชา", "พริกป่น 1 ช้อนชา", "น้ำ 1 ถ้วย", "เกลือ"],
+    steps: ["ผัดหอมใหญ่ กระเทียม และพริกหวานในหม้อ 5 นาที", "ใส่เนื้อบดผัดจนสุก ใส่เครื่องเทศทั้งหมด ผัดต่อ 1 นาที", "ใส่มะเขือเทศ ซอสมะเขือเทศเข้มข้น และน้ำ เคี่ยวไฟอ่อน 30 นาที", "ใส่ถั่วแดง เคี่ยวต่อ 10 นาที ปรุงเกลือ กินกับข้าวสวยหรือขนมปัง"], tip: "" },
+  { name: "แกงถั่วดาล", protein: "ผัก", cat: "ต้ม / แกง", origin: "อินเดีย", time: 35, level: "ง่าย", serves: 3, equip: ["stove", "pot"],
+    ing: ["ถั่วเลนทิลแดง 1 ถ้วย", "น้ำ 3 ถ้วย", "หอมใหญ่สับ 1 หัว", "มะเขือเทศสับ 1 ลูก", "กระเทียมสับ 3 กลีบ", "ขิงสับ 1 ช้อนชา", "ผงขมิ้น ½ ช้อนชา", "ผงยี่หร่า 1 ช้อนชา", "ผงการัมมาซาลาหรือผงกะหรี่ 1 ช้อนชา", "เนย 2 ช้อนโต๊ะ", "เกลือ ผักชี"],
+    steps: ["ล้างถั่ว ต้มกับน้ำและขมิ้น 20 นาทีจนถั่วเละ", "ระหว่างนั้น ละลายเนยในกระทะ ผัดยี่หร่า หอมใหญ่ กระเทียม ขิง 5 นาที ใส่มะเขือเทศและผงเครื่องเทศ ผัดต่อ 3 นาที", "เทลงในหม้อถั่ว คนให้เข้ากัน ปรุงเกลือ โรยผักชี กินกับข้าวสวย"],
+    tip: "ถั่วเลนทิลแดงไม่ต้องแช่น้ำก่อน สุกเร็ว" }
 );
 
 const $ = id => document.getElementById(id);
@@ -1320,7 +1495,7 @@ const PRESETS = [
   { id: "shrimp", label: "กุ้ง ทะเล", icon: "", set: { protein: "กุ้ง / ทะเล" } },
   { id: "egg", label: "ไข่", icon: "", set: { protein: "ไข่" } },
   { id: "veg", label: "ผัก", icon: "", set: { protein: "ผัก" } },
-  { id: "pasta", label: "สปาเกตตี", icon: "", set: { tag: "pasta" } },
+  { id: "pasta", label: "พาสต้า", icon: "", set: { tag: "pasta" } },
   { id: "south", label: "อาหารใต้", icon: "", set: { origin: "ไทยภาคใต้" } },
   { id: "isan", label: "อาหารอีสาน", icon: "", set: { origin: "ไทยภาคอีสาน" } },
   { id: "north", label: "อาหารเหนือ", icon: "", set: { origin: "ไทยภาคเหนือ" } },
@@ -1383,7 +1558,7 @@ const timeText = m => m < 60 ? `${m} นาที` : `${Math.floor(m / 60)} ช�
 // Southern dishes are Thai too: "ไทย" shows them all, "ไทยภาคใต้" narrows to the region
 const originLabel = r => REGIONS[r.region] || r.origin;
 const originOk = r => state.origin === "ทุกสัญชาติ" || (Object.values(REGIONS).includes(state.origin) ? REGIONS[r.region] === state.origin : r.origin === state.origin);
-const tagOk = r => !state.tag || (state.tag === "pasta" ? r.name.includes("สปาเกตตี") : state.tag === "air" ? r.equip.includes("airfryer") : state.tag === "breakfast" ? r.meal === "เช้า" : true);
+const tagOk = r => !state.tag || (state.tag === "pasta" ? /สปาเกตตี|พาสต้า|เพนเน่|ลาซานญ่า|มักกะโรนี/.test(r.name) : state.tag === "air" ? r.equip.includes("airfryer") : state.tag === "breakfast" ? r.meal === "เช้า" : true);
 const KORDER = Object.fromEntries(KINDS.map((k, i) => [k, i]));
 function shuffle(a) { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
@@ -1405,7 +1580,7 @@ const PANTRY = [
     ["ginger", "ขิง", /ขิง/], ["herb", "โรสแมรี ไทม์ พาร์สลีย์", /โรสแมรี|ไทม์|พาร์สลีย์/]]],
   ["ข้าว เส้น แป้ง", [
     ["rice", "ข้าวสาร ข้าวสวย", /ข้าวสาร|ข้าวสวย|ข้าวหอมมะลิ|ข้าวญี่ปุ่น/], ["sticky", "ข้าวเหนียว", /ข้าวเหนียว/],
-    ["pasta", "เส้นสปาเกตตี", /สปาเกตตี/], ["flat", "เส้นใหญ่", /เส้นใหญ่/], ["glass", "วุ้นเส้น", /วุ้นเส้น/],
+    ["pasta", "เส้นพาสต้า", /สปาเกตตี|เพนเน่|มักกะโรนี|ลาซานญ่า|เส้นพาสต้า/], ["flat", "เส้นใหญ่", /เส้นใหญ่/], ["glass", "วุ้นเส้น", /วุ้นเส้น/],
     ["instant", "บะหมี่กึ่งสำเร็จรูป", /บะหมี่/], ["bread", "ขนมปัง", /ขนมปัง/], ["flour", "แป้งสาลี", /แป้งสาลี|แป้งเค้ก/]]],
   ["นม เนย กะทิ", [
     ["butter", "เนย", /เนย/], ["milk", "นมสด", /นมสด/], ["cream", "วิปปิ้งครีม", /ครีม/],
@@ -1472,7 +1647,7 @@ const SFX = {
 // Actions whose sound differs from a plain tap. null = the action plays its own sound once it knows the outcome.
 const ACT_SFX = { shuffle: null, "shop-add": null, "m-save": null, "m-save-more": null, "m-wipe": null, "m-delete": "off", "m-close": "back",
   "m-add": "open", "rec-add": "open", "shop-pay": "open", "toast-act": "on", back: "back", close: "back", "close-filters": "back", reset: "off", "clear-meal": "off",
-  "equip-none": "off", "pantry-clear": "off", "equip-all": "on", "open-filters": "open", "start-cook": "next", "cook-meal": "next", install: "on" };
+  "equip-none": "off", "pantry-clear": "off", "equip-all": "on", "open-filters": "open", "start-cook": "next", "cook-meal": "next", "cook-pay": "open", install: "on" };
 function sfx(name) {
   if (!sfxOn) return;
   try {
@@ -1506,8 +1681,8 @@ function clickSound(t) {
   if ((el = t.closest("[data-act]"))) { const s = ACT_SFX[el.dataset.act]; if (s !== null) sfx(s || "tap"); return; }
   if ((el = t.closest("#next"))) return sfx(el.textContent.includes("เสร็จ") ? "done" : "next");
   if (t.closest("#prev, #finish")) return sfx("back");
-  if (t.closest("#tStart")) return sfx("on");
-  if (t.closest("#tStop")) return sfx("off");
+  if (t.closest("#tStart, [data-tstart], [data-tplus]")) return sfx("on");
+  if (t.closest("#tStop, [data-tstop]")) return sfx("off");
 }
 $("sfxSwitch").checked = sfxOn;
 $("sfxSwitch").addEventListener("change", ev => { sfxOn = ev.target.checked; store("life-sfx-v1", [sfxOn]); sfx("on"); });
@@ -1953,7 +2128,7 @@ function beep() {
 function startTimer(key, idx, mins, label) {
   timers = timers.filter(t => !(t.key === key && t.idx === idx));
   if (!audio) { try { audio = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} }
-  timers.push({ key, idx, label, end: Date.now() + mins * 60000, rang: false });
+  timers.push({ key, idx, label, end: Date.now() + mins * 60000, total: Math.round(mins * 60), rang: false });
   if (!tick) tick = setInterval(onTick, 1000);
   refreshTimers();
 }
@@ -1979,47 +2154,104 @@ function renderTimerBox() {
   const t = timers.find(x => x.key === active.key && x.idx === active.idx);
   const mins = stepMinutes(active.text);
   if (t) {
-    const left = secsLeft(t);
+    const left = secsLeft(t), pct = Math.max(0, Math.min(100, left / t.total * 100));
     box.innerHTML = left > 0
-      ? `<span class="clock">${fmt(left)}</span><button type="button" class="btn" id="tStop">ยกเลิกจับเวลา</button>`
-      : `<span class="clock done">หมดเวลาแล้ว</span><button type="button" class="btn" id="tStop">ปิด</button>`;
-    $("tStop").onclick = () => cancelTimer(t.key, t.idx);
+      ? `<div class="tcard"><span class="tlab">เหลือเวลา</span><div class="tbig" role="timer" aria-live="off">${fmt(left)}</div>
+          <div class="tbar" aria-hidden="true"><i style="width:${pct.toFixed(1)}%"></i></div>
+          <div class="trow"><button type="button" class="btn" data-tplus="1">+1 นาที</button><button type="button" class="btn" data-tstop="1">หยุด</button></div></div>`
+      : `<div class="tcard over" role="alert"><div class="tbig">หมดเวลาแล้ว</div><p class="tnote">ทำขั้นนี้เสร็จแล้ว กด "ขั้นต่อไป" ได้เลย</p>
+          <div class="trow"><button type="button" class="btn" data-tstop="1">รับทราบ</button></div></div>`;
   } else if (mins) {
-    box.innerHTML = `<button type="button" class="btn" id="tStart">${ICON.clock} จับเวลา ${dur(Math.round(mins * 60))}</button>`;
-    $("tStart").onclick = () => startTimer(active.key, active.idx, mins, active.label);
+    box.innerHTML = `<button type="button" class="btn tstart" data-tstart="${mins}">${ICON.clock}<span>เริ่มจับเวลา <b>${dur(Math.round(mins * 60))}</b></span></button>`;
   } else box.innerHTML = "";
 }
-function renderCook() {
-  mode = "cook";
-  const r = cur, n = r.steps.length, done = step >= n;
-  active = done ? null : { key: r.key, idx: step, text: r.steps[step], label: r.name };
-  dlg.innerHTML = `
+// Step text with the numbers that matter (times, heat, amounts) picked out so they can be read from across the kitchen
+const UNIT = "นาที|วินาที|ชั่วโมง|°C|ซม\\.|กรัม|กก\\.|มล\\.|ลิตร|ช้อนโต๊ะ|ช้อนชา|ถ้วย|ฟอง|ลูก|ชิ้น|กลีบ|ครั้ง|ทัพพี";
+function stepHTML(text) {
+  return esc(text)
+    .replace(new RegExp(`(\\d+(?:\\.\\d+)?(?:\\s*[–-]\\s*\\d+(?:\\.\\d+)?)?\\s*(?:${UNIT})(?:\\s*\\d+\\s*วินาที)?)`, "g"), '<mark>$1</mark>')
+    .replace(/(ไฟแรงจัด|ไฟแรง|ไฟกลางค่อนแรง|ไฟกลางค่อนอ่อน|ไฟอ่อนค่อนกลาง|ไฟอ่อนที่สุด|ไฟอ่อน|ไฟกลาง|ร้อนจัด|ปิดไฟ)/g, '<mark class="heat">$1</mark>');
+}
+// Ingredients this step talks about, so nobody has to scroll back to the list mid-step
+function ingName(line) { return line.replace(/\([^)]*\)/g, " ").replace(/^[^:]{1,14}:\s*/, "").split(/[0-9½¼¾⅓]/)[0].trim(); }
+function usedInStep(r, text) {
+  return r.ing.filter(line => {
+    const name = ingName(line); if (!name) return false;
+    const words = [name, ...name.split(/\s+/)].filter(w => w.length >= 3 && !/^(และ|หรือ|สำหรับ|อย่างละ|เช่น)$/.test(w));
+    return words.some(w => text.includes(w));
+  });
+}
+function segs(n, at) { return `<div class="segs" aria-hidden="true">${Array.from({ length: n }, (_, i) => `<i class="${i < at ? "done" : i === at ? "now" : ""}"></i>`).join("")}</div>`; }
+function stepBody(r, text, idx, n) {
+  const uses = usedInStep(r, text);
+  return `<div class="stepno"><b>${idx + 1}</b><span>ขั้นที่ ${idx + 1} จาก ${n}</span></div>
+    <p class="cook-step" id="dlg-title">${stepHTML(text)}</p>
+    ${uses.length ? `<div><p class="sublab">ใช้ในขั้นนี้</p><div class="useing">${uses.map(x => `<span>${esc(x)}</span>`).join("")}</div></div>` : ""}
+    <div id="timerBox"></div>`;
+}
+function swipe(el, onNext, onPrev) {
+  let x0 = null, y0 = 0;
+  el.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  el.addEventListener("touchend", e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+    if (Math.abs(dx) > 70 && Math.abs(dy) < 60) (dx < 0 ? onNext : onPrev)();
+  }, { passive: true });
+}
+function cookFrame({ title, backLabel, n, at, main, prevOff, nextLabel, done }) {
+  return `
     <div class="cook">
       <div class="cook-top">
-        <button type="button" class="link" data-act="back">กลับไปที่สูตร</button>
-        <span class="count">${done ? "เสร็จแล้ว" : `ขั้นที่ ${step + 1} จาก ${n}`}</span>
+        <button type="button" class="fav" data-act="back" aria-label="${backLabel}">${ICON.back}</button>
+        <span class="ttl">${esc(title)}</span>
         <button type="button" class="fav" data-act="close" aria-label="ปิด">${ICON.close}</button>
       </div>
-      <div class="bar" aria-hidden="true"><i style="width:${Math.min(100, (step / n) * 100)}%"></i></div>
+      ${segs(n, at)}
       <div class="tstrip" id="timerStrip" hidden></div>
-      <div class="cook-main">
-        ${done ? `<div class="done-msg"><span class="big" aria-hidden="true">${emoji(r)}</span><p class="cook-step">${esc(r.name)} เสร็จแล้ว</p><p class="cook-name">ขอให้อร่อยกับมื้อนี้</p></div>`
-          : `<p class="cook-name">${esc(r.name)}</p>
-             <p class="cook-step" id="dlg-title">${esc(r.steps[step])}</p>
-             <div class="timer" id="timerBox"></div>
-             <details class="cook-ing"><summary>ดูวัตถุดิบ</summary><ul>${r.ing.map(x => `<li>${esc(x)}</li>`).join("")}</ul></details>`}
-      </div>
+      <div class="cook-main">${main}</div>
       <div class="cook-nav">
-        <button type="button" class="btn" id="prev" ${step === 0 ? "disabled" : ""}>ย้อนกลับ</button>
-        ${done ? `<button type="button" class="btn primary" id="finish">ปิด</button>`
-          : `<button type="button" class="btn primary" id="next">${step === n - 1 ? "ทำเสร็จแล้ว" : "ขั้นต่อไป"}</button>`}
+        <button type="button" class="btn" id="prev" ${prevOff ? "disabled" : ""}>${ICON.back}<span>ย้อนกลับ</span></button>
+        ${done ? `<button type="button" class="btn primary" id="finish">ปิด</button>` : `<button type="button" class="btn primary" id="next"><span>${nextLabel}</span><span class="flip">${ICON.back}</span></button>`}
       </div>
     </div>`;
-  $("prev").onclick = () => { step = Math.max(0, step - 1); renderCook(); };
-  if ($("next")) $("next").onclick = () => { step++; renderCook(); };
+}
+function wireCook(onPrev, onNext) {
+  $("prev").onclick = onPrev;
+  if ($("next")) $("next").onclick = onNext;
   if ($("finish")) $("finish").onclick = () => dlg.close();
+  const m = dlg.querySelector(".cook-main");
+  swipe(m, () => $("next") && $("next").click(), () => !$("prev").disabled && $("prev").click());
   refreshTimers();
-  const focusBtn = $("next") || $("finish"); focusBtn && focusBtn.focus();
+  const f = $("next") || $("finish"); f && f.focus({ preventScroll: true });
+}
+// step -1 is the "get ready" screen: everything out on the counter before the first step
+function renderCook() {
+  mode = "cook";
+  const r = cur, n = r.steps.length, done = step >= n, prep = step < 0;
+  active = done || prep ? null : { key: r.key, idx: step, text: r.steps[step], label: r.name };
+  const ticks = checks[r.key] || (checks[r.key] = new Set());
+  let main;
+  if (prep) {
+    main = `<div class="stepno"><b>${ICON.check}</b><span>เตรียมของก่อนเริ่ม</span></div>
+      <p class="cook-lead">วางของทุกอย่างไว้ใกล้มือ แล้วจะทำทีละขั้นได้ลื่น ๆ</p>
+      <div><p class="sublab">เครื่องครัว</p><div class="useing">${r.equip.length ? r.equip.map(e => `<span>${esc(EQ[e])}</span>`).join("") : "<span>ไม่ต้องใช้เครื่องครัว</span>"}</div></div>
+      <div><p class="sublab">วัตถุดิบ <span id="ingCount">${ticks.size}/${r.ing.length}</span></p>
+        <ul class="checklist">${r.ing.map((x, k) => `<li><label><input type="checkbox" id="cing-${k}" data-ing="${k}" ${ticks.has(k) ? "checked" : ""}><span>${esc(x)}</span></label></li>`).join("")}</ul></div>
+      ${r.tip ? `<div class="tip"><b>เคล็ดลับ</b>${esc(r.tip)}</div>` : ""}`;
+  } else if (done) {
+    const fav = favs.has(r.key);
+    main = `<div class="done-msg"><span class="big" aria-hidden="true">${emoji(r)}</span><p class="cook-step" id="dlg-title">${esc(r.name)} เสร็จแล้ว</p><p class="cook-lead">ขอให้อร่อยกับมื้อนี้</p>
+      <div class="donebtns"><button type="button" class="btn" data-fav="${esc(r.key)}" aria-pressed="${fav}">${ICON.heart}${fav ? "อยู่ในเมนูโปรดแล้ว" : "เก็บเป็นเมนูโปรด"}</button>
+      <button type="button" class="btn" data-act="cook-pay">${ico("receipt")}จดค่าวัตถุดิบ</button></div></div>`;
+  } else {
+    const next = r.steps[step + 1];
+    main = stepBody(r, r.steps[step], step, n) +
+      (next ? `<div class="nextup"><span>ขั้นต่อไป</span><p>${esc(next)}</p></div>` : `<div class="nextup"><span>ขั้นสุดท้ายแล้ว</span><p>ทำขั้นนี้เสร็จก็พร้อมเสิร์ฟ</p></div>`) +
+      `<details class="cook-ing"><summary>ดูทุกขั้นตอน</summary><ol class="tl">${r.steps.map((x, k) => `<li class="${k < step ? "past" : k === step ? "now" : ""}"><button type="button" data-jump="${k}"><span class="tl-at">${k + 1}</span><span></span><span>${esc(x)}</span></button></li>`).join("")}</ol></details>`;
+  }
+  dlg.innerHTML = cookFrame({ title: r.name, backLabel: "กลับไปที่สูตร", n, at: prep ? -1 : step, main, prevOff: prep,
+    nextLabel: prep ? "พร้อมแล้ว เริ่มเลย" : step === n - 1 ? "ทำเสร็จแล้ว" : "ขั้นต่อไป", done });
+  wireCook(() => { step = Math.max(-1, step - 1); renderCook(); }, () => { step++; renderCook(); });
 }
 
 /* ---------- Cooking several dishes at once ---------- */
@@ -2042,40 +2274,18 @@ function renderMulti() {
   const s = steps[mstep], next = steps[mstep + 1];
   const dishes = [...new Set(steps.map(x => x.r))];
   active = done ? null : { key: s.key, idx: s.idx, text: s.text, label: s.r.name };
-  dlg.innerHTML = `
-    <div class="cook">
-      <div class="cook-top">
-        <button type="button" class="link" data-act="close">กลับไปที่มื้อนี้</button>
-        <span class="count">${done ? "เสร็จแล้ว" : `ขั้นที่ ${mstep + 1} จาก ${n}`}</span>
-        <button type="button" class="fav" data-act="close" aria-label="ปิด">${ICON.close}</button>
-      </div>
-      <div class="bar" aria-hidden="true"><i style="width:${Math.min(100, (mstep / n) * 100)}%"></i></div>
-      <div class="tstrip" id="timerStrip" hidden></div>
-      <div class="cook-main multi">
-        ${done ? `<div class="done-msg"><span class="big" aria-hidden="true">${dishes.map(emoji).join("")}</span><p class="cook-step">ครบ ${dishes.length} เมนูแล้ว</p><p class="cook-name">ขอให้อร่อยกับมื้อนี้</p></div>`
-          : `<div class="dishtag ${TINT[s.r.cat] || "t3"}"><span aria-hidden="true">${emoji(s.r)}</span>${esc(s.r.name)} · ขั้นที่ ${s.idx + 1}/${s.n}</div>
-             <p class="cook-name">ประมาณนาทีที่ ${s.at} จาก ${total}</p>
-             <p class="cook-step" id="dlg-title">${esc(s.text)}</p>
-             <div class="timer" id="timerBox"></div>
-             ${next ? `<div class="nextup"><span>ขั้นถัดไป · นาทีที่ ${next.at}</span><b>${emoji(next.r)} ${esc(next.r.name)}</b><p>${esc(next.text)}</p></div>` : ""}
-             <details class="cook-ing"><summary>ดูไทม์ไลน์ทั้งหมด</summary>
-               <ol class="tl">${steps.map((x, k) => `<li class="${k < mstep ? "past" : k === mstep ? "now" : ""}"><button type="button" data-jump="${k}"><span class="tl-at">${x.at}′</span><span aria-hidden="true">${emoji(x.r)}</span><span>${esc(x.text)}</span></button></li>`).join("")}</ol>
-             </details>
-             <details class="cook-ing"><summary>ดูวัตถุดิบ</summary>
-               ${dishes.map(r => `<p class="ing-dish">${esc(r.name)}</p><ul>${r.ing.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`).join("")}
-             </details>`}
-      </div>
-      <div class="cook-nav">
-        <button type="button" class="btn" id="prev" ${mstep === 0 ? "disabled" : ""}>ย้อนกลับ</button>
-        ${done ? `<button type="button" class="btn primary" id="finish">ปิด</button>`
-          : `<button type="button" class="btn primary" id="next">${mstep === n - 1 ? "ทำเสร็จแล้ว" : "ขั้นต่อไป"}</button>`}
-      </div>
-    </div>`;
-  $("prev").onclick = () => { mstep = Math.max(0, mstep - 1); renderMulti(); };
-  if ($("next")) $("next").onclick = () => { mstep++; renderMulti(); };
-  if ($("finish")) $("finish").onclick = () => dlg.close();
-  refreshTimers();
-  const focusBtn = $("next") || $("finish"); focusBtn && focusBtn.focus();
+  const main = done
+    ? `<div class="done-msg"><span class="big" aria-hidden="true">${dishes.map(emoji).join("")}</span><p class="cook-step" id="dlg-title">ครบ ${dishes.length} เมนูแล้ว</p><p class="cook-lead">ขอให้อร่อยกับมื้อนี้</p></div>`
+    : `<div class="dishtag ${TINT[s.r.cat] || "t3"}"><span aria-hidden="true">${emoji(s.r)}</span>${esc(s.r.name)}</div>
+       <p class="cook-lead">ประมาณนาทีที่ ${s.at} จาก ${total} ของทั้งมื้อ</p>
+       ${stepBody(s.r, s.text, s.idx, s.n)}
+       ${next ? `<div class="nextup"><span>ขั้นต่อไป · นาทีที่ ${next.at} · ${esc(next.r.name)}</span><p>${esc(next.text)}</p></div>` : ""}
+       <details class="cook-ing"><summary>ดูไทม์ไลน์ทั้งหมด</summary>
+         <ol class="tl">${steps.map((x, k) => `<li class="${k < mstep ? "past" : k === mstep ? "now" : ""}"><button type="button" data-jump="${k}"><span class="tl-at">${x.at}′</span><span aria-hidden="true">${emoji(x.r)}</span><span>${esc(x.text)}</span></button></li>`).join("")}</ol>
+       </details>`;
+  dlg.innerHTML = cookFrame({ title: `ทำพร้อมกัน ${dishes.length} เมนู`, backLabel: "กลับไปที่มื้อนี้", n, at: mstep, main, prevOff: mstep === 0,
+    nextLabel: mstep === n - 1 ? "ทำเสร็จแล้ว" : "ขั้นต่อไป", done });
+  wireCook(() => { mstep = Math.max(0, mstep - 1); renderMulti(); }, () => { mstep++; renderMulti(); });
 }
 
 /* ---------- Money: expenses, income and budgets ---------- */
@@ -2476,6 +2686,7 @@ function refresh() {
   if (view === "menu") render();
   if (view === "meal") renderMealPage();
   if (dlg.open && mode === "sheet") keepScroll(renderSheet);
+  if (dlg.open && mode === "cook" && step >= cur.steps.length) renderCook();
 }
 function refocus(sel) {
   const root = mdlg.open ? mdlg : fdlg.open ? fdlg : dlg.open ? dlg : $("view-" + view);
@@ -2509,11 +2720,12 @@ const ACTIONS = {
   "meal-plan": () => { mealTab = "plan"; renderMealPage(); },
   "meal-shop": () => { mealTab = "shop"; renderMealPage(); },
   "clear-meal": () => { meal = []; bought.clear(); store("krua-shop-v1", []); mealTab = "plan"; saveMeal(); renderMealPage(); toast("ล้างมื้อนี้แล้ว"); },
+  "cook-pay": () => openMoneyForm({ c: "grocery", n: ("วัตถุดิบ: " + cur.name).slice(0, 60) }),
   "cook-meal": () => {
     const items = mealItems(); if (!items.length) return;
     keepAwake(true); stopTimers(); trail = [];
     if (items.length > 1) { plan = buildPlan(items); mstep = 0; renderMulti(); }
-    else { cur = items[0]; step = 0; renderCook(); }
+    else { cur = items[0]; step = -1; renderCook(); }
     if (!dlg.open) dlg.showModal();
   },
   "shop-copy": () => copyShop(),
@@ -2521,10 +2733,11 @@ const ACTIONS = {
   "equip-all": () => { have = new Set(EQUIP.map(e => e.id)); saveEquip(); renderKitchen(); },
   "equip-none": () => { have = new Set(); saveEquip(); renderKitchen(); },
   "pantry-clear": () => { pantry.clear(); savePantry(); renderKitchen(); },
-  "start-cook": () => { step = 0; renderCook(); keepAwake(true); },
+  "start-cook": () => { step = -1; renderCook(); keepAwake(true); },
   "close": () => dlg.close(),
   "back": () => {
     if (mode === "cook") { keepAwake(false); renderSheet(); return; }
+    if (mode === "multi") { dlg.close(); return; }
     if (mode === "sheet" && trail.length) { cur = byKey(trail.pop()) || cur; renderSheet(); dlg.querySelector(".sheet-scroll").scrollTop = 0; return; }
     dlg.close();
   }
@@ -2571,7 +2784,10 @@ document.addEventListener("click", ev => {
   }
   if ((el = t.closest("[data-th]")) && mode === "sheet") { steak.th = +el.dataset.th; saveSteak(`[data-th="${steak.th}"]`); return; }
   if ((el = t.closest("[data-done]")) && mode === "sheet") { steak.done = +el.dataset.done; saveSteak(`[data-done="${steak.done}"]`); return; }
-  if ((el = t.closest("[data-jump]")) && mode === "multi") { mstep = +el.dataset.jump; renderMulti(); return; }
+  if ((el = t.closest("[data-jump]")) && (mode === "multi" || mode === "cook")) { if (mode === "multi") { mstep = +el.dataset.jump; renderMulti(); } else { step = +el.dataset.jump; renderCook(); } return; }
+  if ((el = t.closest("[data-tstart]")) && active) { startTimer(active.key, active.idx, +el.dataset.tstart, active.label); return; }
+  if ((el = t.closest("[data-tplus]")) && active) { const tm = timers.find(x => x.key === active.key && x.idx === active.idx); if (tm) { tm.end = Math.max(tm.end, Date.now()) + 60000; tm.total += 60; tm.rang = false; refreshTimers(); } return; }
+  if ((el = t.closest("[data-tstop]")) && active) { cancelTimer(active.key, active.idx); return; }
   if ((el = t.closest("[data-fav]"))) {
     const k = el.dataset.fav, on = !favs.has(k);
     on ? favs.add(k) : favs.delete(k); store("krua-fav-v1", [...favs]);
