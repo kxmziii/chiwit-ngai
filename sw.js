@@ -1,6 +1,6 @@
 // Service worker: keeps a copy of the app on the phone so it opens without a connection.
 // The app itself is fetched from the network first, so a new version shows up as soon as the phone is online.
-const CACHE = "chiwit-ngai-v3";
+const CACHE = "chiwit-ngai-v4";
 const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png"];
 
 self.addEventListener("install", event => {
@@ -34,8 +34,10 @@ self.addEventListener("fetch", event => {
         .then(response => keep(request, response))
         .catch(() => caches.match(request, { ignoreSearch: true }).then(hit => hit || caches.match("./index.html")))
     );
-  } else if (/(^|\.)fonts\.(googleapis|gstatic)\.com$/.test(url.hostname)) {
-    // Fonts never change: saved copy first
+  } else if (/(^|\.)fonts\.(googleapis|gstatic)\.com$/.test(url.hostname) ||
+             (url.hostname === "cdn.jsdelivr.net" && url.pathname.startsWith("/npm/@mediapipe/tasks-vision@")) ||
+             (url.hostname === "storage.googleapis.com" && url.pathname.startsWith("/mediapipe-models/"))) {
+    // Fonts and the pinned pose AI files never change: saved copy first, so the camera counter works offline after the first load
     event.respondWith(caches.match(request).then(hit => hit || fetch(request).then(response => keep(request, response))));
   }
 });

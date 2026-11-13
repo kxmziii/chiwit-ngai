@@ -527,6 +527,60 @@ dialog::backdrop { background: rgba(6, 10, 22, .55); }
 .donebtns .btn[aria-pressed="true"] svg path { fill: currentColor; }
 .done-msg .cook-step { font-weight: 700; }
 @media (prefers-reduced-motion: reduce) { .cook-main > * { animation: none; } .tbar i { transition: none; } }
+
+/* ---------- Exercise ---------- */
+#wdlg { width: 100vw; max-width: 100vw; height: 100vh; height: 100dvh; max-height: none; margin: 0; border-radius: 0; }
+@media (min-width: 700px) { #wdlg { width: min(680px, calc(100vw - 32px)); height: min(900px, calc(100vh - 32px)); margin: auto; border-radius: 20px; } }
+.lvcard { gap: 10px; }
+.lvrow { display: flex; align-items: center; gap: 14px; }
+.lvnum { width: 64px; height: 64px; border-radius: 18px; background: var(--basil); color: var(--on-basil); display: grid; place-items: center; font-size: 30px; font-weight: 700; flex: none; }
+.lvrow b { display: block; font-size: 20px; font-weight: 700; }
+.lvrow span { color: var(--muted); }
+.lvrow .lvnum { color: var(--on-basil); }
+.lvdots { display: flex; gap: 6px; }
+.lvdots i { flex: 1; height: 10px; border-radius: 999px; background: var(--line); }
+.lvdots i.on { background: var(--good); }
+.decay { margin: 0; font-size: 14.5px; padding: 8px 12px; border-radius: var(--r-ctl); background: var(--surface-2); color: var(--muted); display: flex; gap: 8px; align-items: center; }
+.decay.ok { background: var(--good-soft); color: var(--good); }
+.decay.warn { background: var(--turmeric-soft); color: var(--turmeric); }
+.decay.over { background: var(--chili-soft); color: var(--chili); }
+.decay .ico, .warn .ico { width: 18px; height: 18px; }
+.lvcard > .warn { display: flex; gap: 6px; align-items: center; margin: 0; }
+.rules { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 15px; }
+.wolist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.wolist li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.wolist li:last-child { border-bottom: none; }
+.wolist span { color: var(--muted); }
+.btn.big .ico { width: 22px; height: 22px; }
+.woex { display: flex; flex-direction: column; gap: 12px; }
+.woname b { display: block; font-size: 24px; font-weight: 700; }
+.woname span { color: var(--muted); font-size: 14.5px; }
+.stage { position: relative; width: 100%; height: min(52vh, 460px); border-radius: var(--r-card); overflow: hidden; background: #0b1020; }
+.stage video, .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.stage.mirror video, .stage.mirror canvas { transform: scaleX(-1); }
+.woover { position: absolute; left: 12px; bottom: 10px; display: flex; align-items: baseline; gap: 6px; color: #fff; text-shadow: 0 2px 8px rgba(0, 0, 0, .6); }
+.woover span { font-size: 64px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.woover small { font-size: 18px; }
+.wohint { margin: 0; min-height: 48px; padding: 10px 14px; border-radius: var(--r-ctl); background: var(--basil-soft); color: var(--basil-strong); font-size: 18px; font-weight: 600; text-align: center; }
+.wohint.warn { background: var(--turmeric-soft); color: var(--turmeric); }
+.tapzone { width: 100%; min-height: min(46vh, 380px); border: 2px dashed var(--basil); border-radius: var(--r-card); background: var(--basil-soft); color: var(--basil-strong); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.tapzone:active { filter: brightness(.95); }
+.tapzone span { font-size: clamp(72px, 24vw, 110px); font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.tapzone small { font-size: 18px; }
+.tapzone em { font-style: normal; font-size: 15px; color: var(--muted); }
+.rest { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding-top: 6vh; }
+.rest .tbig { font-size: clamp(72px, 26vw, 120px); }
+.lvup { font-size: clamp(44px, 14vw, 64px); font-weight: 700; color: var(--good); line-height: 1.1; }
+.ico.huge { width: 64px; height: 64px; color: var(--turmeric); }
+.done-msg .wolist { width: 100%; text-align: left; }
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.cal span { aspect-ratio: 1; max-width: 100%; display: grid; place-items: center; border-radius: 10px; background: var(--surface-2); color: var(--muted); font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.cal span.full { background: var(--good); color: var(--surface); font-weight: 600; }
+.cal span.part { background: var(--good-soft); color: var(--good); }
+.cal span.today { outline: 2px solid var(--basil); outline-offset: -2px; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin: 0 4px 0 8px; vertical-align: -1px; }
+.dot.full { background: var(--good); } .dot.part { background: var(--good-soft); border: 1px solid var(--good); }
+.brow > b { font-size: 18px; font-variant-numeric: tabular-nums; }
 </style>
 
 <meta name="description" content="ผู้ช่วยเรื่องประจำวัน เริ่มจากครัว: หาเมนูจากของที่มี จัดมื้อ และทำตามทีละขั้น">
@@ -564,6 +618,14 @@ dialog::backdrop { background: rgba(6, 10, 22, .55); }
     <button type="button" class="tab" data-view="budget">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><path d="M12 12h.01"/></svg>
       <span>งบ</span>
+    </button>
+    <button type="button" class="tab" data-view="fit">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>
+      <span>วันนี้</span>
+    </button>
+    <button type="button" class="tab" data-view="fitlog">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 20V11M12 20V4M19 20v-6"/></svg>
+      <span>สถิติ</span>
     </button>
     <button type="button" class="tab" data-view="menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -656,6 +718,16 @@ dialog::backdrop { background: rgba(6, 10, 22, .55); }
 
   <section id="view-stats" aria-label="สรุปรายจ่าย" hidden><div id="statsBody" class="stack"></div></section>
 
+  <section id="view-fit" aria-label="ออกกำลังกายวันนี้" hidden>
+    <div class="pagehead"><h2>วันนี้</h2><p>ฝึกทุกวัน level ขึ้น หายไปนาน level ลด กล้องช่วยนับให้</p></div>
+    <div id="fitBody" class="stack"></div>
+  </section>
+
+  <section id="view-fitlog" aria-label="สถิติการออกกำลังกาย" hidden>
+    <div class="pagehead"><h2>สถิติ</h2><p>ความต่อเนื่องและสถิติดีที่สุดของแต่ละท่า</p></div>
+    <div id="fitLogBody" class="stack"></div>
+  </section>
+
   <section id="view-budget" aria-label="งบและการตั้งค่ารายจ่าย" hidden>
     <div class="pagehead"><h2>งบและการตั้งค่า</h2><p>ตั้งงบ รายการประจำ หมวดของคุณเอง และสำรองข้อมูล</p></div>
     <div id="budgetBody" class="stack"></div>
@@ -676,6 +748,7 @@ dialog::backdrop { background: rgba(6, 10, 22, .55); }
   </div>
 </dialog>
 <dialog id="mdlg" aria-labelledby="m-title"></dialog>
+<dialog id="wdlg" aria-labelledby="w-title"></dialog>
 <button type="button" class="fab" id="fab" data-act="m-add" hidden>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>จดรายจ่าย
 </button>
@@ -1621,7 +1694,7 @@ const sortList = (a, b) => KORDER[a.kind] - KORDER[b.kind]
 function toast(msg, act) { // act = { label, fn } adds one button, used for undo
   let t = $("toast");
   if (!t) { t = document.createElement("div"); t.id = "toast"; t.className = "toast"; t.setAttribute("role", "status"); }
-  const host = mdlg.open ? mdlg : fdlg.open ? fdlg : dlg.open ? dlg : document.body;
+  const host = wdlg.open ? wdlg : mdlg.open ? mdlg : fdlg.open ? fdlg : dlg.open ? dlg : document.body;
   if (t.parentNode !== host) host.appendChild(t);
   t.textContent = msg; t.hidden = false;
   toast.fn = act ? act.fn : null;
@@ -1645,7 +1718,7 @@ const SFX = {
   warn: [{ f: 220, d: .14, g: .05, type: "square" }]
 };
 // Actions whose sound differs from a plain tap. null = the action plays its own sound once it knows the outcome.
-const ACT_SFX = { shuffle: null, "shop-add": null, "m-save": null, "m-save-more": null, "m-wipe": null, "m-delete": "off", "m-close": "back",
+const ACT_SFX = { "wo-start": "open", "wo-cam": "open", "wo-tap": "open", "wo-close": "back", "wo-next": "next", "wo-skip": "off", "wo-go": "next", "wo-minus": "off", "wo-plus": "tap", "wo-plus1": "tap", "wo-meal": "open", shuffle: null, "shop-add": null, "m-save": null, "m-save-more": null, "m-wipe": null, "m-delete": "off", "m-close": "back",
   "m-add": "open", "rec-add": "open", "shop-pay": "open", "toast-act": "on", back: "back", close: "back", "close-filters": "back", reset: "off", "clear-meal": "off",
   "equip-none": "off", "pantry-clear": "off", "equip-all": "on", "open-filters": "open", "start-cook": "next", "cook-meal": "next", "cook-pay": "open", install: "on" };
 function sfx(name) {
@@ -1699,7 +1772,11 @@ const TOPICS = [
     desc: "จดรายจ่ายในไม่กี่แตะ ดูสรุป และคุมงบรายเดือน",
     stat: () => { const spent = sum(txIn(monthKey(today())));
       return `เดือนนี้ใช้ไป ${baht(spent)}` + (money.budget ? (money.budget >= spent ? ` · เหลือ ${baht(money.budget - spent)}` : ` · เกินงบ ${baht(spent - money.budget)}`) : ""); },
-    quick: [["m-add", "จดรายจ่าย"], ["go-ledger", "รายการ"], ["go-stats", "สรุป"]] }
+    quick: [["m-add", "จดรายจ่าย"], ["go-ledger", "รายการ"], ["go-stats", "สรุป"]] },
+  { id: "fit", name: "ออกกำลังกาย", icon: "dumbbell", tint: "t2", start: "fit", views: ["fit", "fitlog"],
+    desc: "กล้องนับครั้งให้ ฝึกทุกวัน level ขึ้น หายไปนาน level ลด",
+    stat: () => `Level ${fit.level} · ${rankOf(fit.level)}` + (fit.log.some(x => x.d === today() && x.full) ? " · วันนี้ทำครบแล้ว" : ""),
+    quick: [["wo-start", "เริ่มฝึก"], ["go-fit", "วันนี้"], ["go-fitlog", "สถิติ"]] }
 ];
 const topicOf = v => TOPICS.find(t => t.views.includes(v));
 const VIEWS = ["home", ...TOPICS.flatMap(t => t.views)];
@@ -1748,6 +1825,8 @@ function go(v, setHash = true) {
   $("fab").hidden = !inMoney; document.body.classList.toggle("has-fab", inMoney);
   if (inMoney) renderMoney();
   if (v === "home") renderHome();
+  if (v === "fit") renderFit();
+  if (v === "fitlog") renderFitLog();
   if (v === "meal") renderMealPage();
   if (v === "kitchen") renderKitchen();
   if (v === "menu") render();
@@ -2680,6 +2759,346 @@ document.addEventListener("input", ev => {
 document.addEventListener("mouseover", ev => { const el = ev.target.closest && ev.target.closest("[data-day]"); if (el) pickDay(+el.dataset.day); });
 postRecurring();
 
+/* ---------- Exercise: camera rep counting, levels that rise with training and drop with long breaks ---------- */
+Object.assign(LI, {
+  activity: '<path d="M3 12h4l3-8 4 16 3-8h4"/>',
+  camera: '<path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/>',
+  tap: '<path d="M9 11V5a2 2 0 0 1 4 0v6M13 10a2 2 0 0 1 4 0v2M17 11a2 2 0 0 1 4 0v4a7 7 0 0 1-7 7h-1a7 7 0 0 1-6-3.5L4.5 15a2 2 0 0 1 3.4-2L9 14"/>',
+  flame: '<path d="M12 22a7 7 0 0 0 7-7c0-4-3-6-4-10-2 2-2.5 4-2.5 5.5C11 9 9.5 7.5 9.5 5 6.5 8 5 11 5 15a7 7 0 0 0 7 7z"/>',
+  trophy: '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/>',
+  arrowdown: '<path d="M12 5v14M6 13l6 6 6-6"/>'
+});
+const FIT_KEY = "life-fit-v1";
+const fit = Object.assign({ level: 1, prog: 0, last: "", progDay: "", dropped: 0, drop: null, log: [], best: {} }, loadObj(FIT_KEY, {}));
+function saveFit() { try { localStorage.setItem(FIT_KEY, JSON.stringify(fit)); } catch (e) { toast("บันทึกไม่สำเร็จ พื้นที่เก็บข้อมูลอาจเต็ม"); } }
+const NEED = 2, MAX_LV = 30, GRACE = 2; // finish 2 days at a level to move up; 2 rest days in a row are free
+const RANKS = [[1, "มือใหม่"], [5, "เริ่มฟิต"], [10, "นักกีฬาโรงเรียน"], [15, "ตัวจริงของทีม"], [20, "ทีมชาติ"], [25, "ปีศาจ"], [30, "GOAT"]];
+const rankOf = lv => RANKS.filter(r => lv >= r[0]).pop()[1];
+// Targets grow with level. side: film from the side; hold: counts seconds instead of reps
+const EX = {
+  squat: { name: "สควอท", from: 1, reps: L => Math.min(60, 8 + 2 * L), tip: "ยืนเท้ากว้างเท่าไหล่ ย่อจนต้นขาขนานพื้น หลังตรง", cam: "หันหน้าเข้ากล้อง" },
+  pushup: { name: "วิดพื้น", from: 1, side: true, reps: L => Math.min(40, 4 + L), tip: "ลำตัวตรงตั้งแต่หัวถึงส้นเท้า ลงจนข้อศอกงอเป็นมุมฉาก", cam: "หันข้างให้กล้อง" },
+  jack: { name: "แจ็กกิ้งแจ็ก", from: 1, reps: L => Math.min(100, 15 + 3 * L), tip: "กระโดดกางขาพร้อมยกแขนเหนือหัว แล้วกลับท่าเดิม", cam: "หันหน้าเข้ากล้อง" },
+  plank: { name: "แพลงก์", from: 1, side: true, hold: true, reps: L => Math.min(180, 15 + 4 * L), tip: "วางศอกใต้ไหล่ ลำตัวตรง ไม่ยกหรือหย่อนสะโพก", cam: "หันข้างให้กล้อง" },
+  lunge: { name: "ลันจ์", from: 5, reps: L => Math.min(40, 6 + L), tip: "ก้าวยาวไปข้างหน้า ย่อจนเข่าหลังเกือบแตะพื้น แล้วสลับขา นับทุกข้าง", cam: "หันข้างให้กล้อง" },
+  knees: { name: "ยกเข่าสูง", from: 5, reps: L => Math.min(120, 20 + 3 * L), tip: "วิ่งอยู่กับที่ ยกเข่าให้สูงถึงระดับสะโพก นับทุกข้าง", cam: "หันหน้าเข้ากล้อง" },
+  sprawl: { name: "สปรอล", from: 10, side: true, reps: L => Math.min(30, 3 + Math.floor(L / 2)), tip: "จากท่ายืน ทิ้งตัวลง เตะขาไปข้างหลังให้สะโพกแนบพื้น แล้วลุกกลับเร็ว ๆ ท่าป้องกันพื้นฐานของมวยปล้ำ", cam: "หันข้างให้กล้อง" }
+};
+const dayNo = d => Math.round(parseYmd(d).getTime() / 86400000);
+const roundsFor = L => L < 8 ? 1 : L < 20 ? 2 : 3;
+const restFor = L => Math.max(15, 40 - L);
+// Today's session: the exercises rotate by date so each day is a little different
+function workoutFor(L = fit.level, d = today()) {
+  const pool = Object.keys(EX).filter(k => EX[k].from <= L), n = Math.min(pool.length, L < 10 ? 4 : 5);
+  const start = dayNo(d) % pool.length, pick = Array.from({ length: n }, (_, i) => pool[(start + i) % pool.length]);
+  const list = [];
+  for (let r = 0; r < roundsFor(L); r++) pick.forEach(k => list.push({ k, target: EX[k].reps(L), round: r + 1 }));
+  return list;
+}
+const estMin = list => Math.round(list.reduce((n, x) => n + (EX[x.k].hold ? x.target : x.target * 2.5) + restFor(fit.level), 0) / 60);
+// Long breaks cost levels: after 2 free rest days, lose 1 level, then 1 more for every 2 further days away
+function missedDays() { return fit.last ? dayNo(today()) - dayNo(fit.last) - 1 : -1; }
+function applyDecay() {
+  const missed = missedDays(); if (missed <= GRACE) return null;
+  const owed = 1 + Math.floor((missed - GRACE - 1) / 2), now = owed - (fit.dropped || 0);
+  if (now <= 0) return null;
+  const from = fit.level; fit.level = Math.max(1, fit.level - now); fit.prog = 0; fit.dropped = owed;
+  fit.drop = { from, to: fit.level, missed, d: today() }; saveFit();
+  return fit.drop;
+}
+function decayNote() {
+  const missed = missedDays();
+  if (missed < 0) return { cls: "", text: "เริ่มครั้งแรกวันนี้ได้เลย" };
+  if (fit.last === today()) return { cls: "ok", text: "วันนี้ออกกำลังกายแล้ว พักได้ถึงวันที่ " + parseYmd(ymd(addDays(new Date(), GRACE + 1))).toLocaleDateString("th-TH", { weekday: "short", day: "numeric", month: "short" }) + " โดย level ไม่ลด" };
+  const left = GRACE - missed;
+  if (left > 0) return { cls: "ok", text: `พักได้อีก ${left} วัน ก่อน level จะลด` };
+  if (left === 0) return { cls: "warn", text: "วันนี้เป็นวันสุดท้ายที่พักได้ ถ้าพรุ่งนี้ยังไม่ออกกำลังกาย level จะลด 1" };
+  return { cls: "over", text: `หายไป ${missed} วันแล้ว level ลดไปแล้ว ออกกำลังกายวันนี้เพื่อหยุดการลด` };
+}
+function streak() {
+  const days = new Set(fit.log.filter(x => x.full).map(x => x.d)); let n = 0, d = new Date();
+  if (!days.has(ymd(d))) d = addDays(d, -1);
+  while (days.has(ymd(d))) { n++; d = addDays(d, -1); }
+  return n;
+}
+function bestStreak() {
+  const days = [...new Set(fit.log.filter(x => x.full).map(x => x.d))].map(dayNo).sort((a, b) => a - b); let best = 0, run = 0;
+  days.forEach((d, i) => { run = i && d === days[i - 1] + 1 ? run + 1 : 1; best = Math.max(best, run); });
+  return best;
+}
+
+/* Pose AI: MediaPipe Pose Landmarker running in the browser. Video never leaves the phone. */
+const MP_VER = "0.10.14";
+let poser = null, poserLoading = null;
+async function loadPoser() {
+  if (poser) return poser;
+  if (!poserLoading) poserLoading = (async () => {
+    const vision = await import(`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VER}/vision_bundle.mjs`);
+    const files = await vision.FilesetResolver.forVisionTasks(`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VER}/wasm`);
+    const opts = d => ({ baseOptions: { modelAssetPath: "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task", delegate: d }, runningMode: "VIDEO", numPoses: 1 });
+    try { poser = await vision.PoseLandmarker.createFromOptions(files, opts("GPU")); }
+    catch (e) { poser = await vision.PoseLandmarker.createFromOptions(files, opts("CPU")); }
+    return poser;
+  })();
+  try { return await poserLoading; } catch (e) { poserLoading = null; throw e; }
+}
+const BONES = [[11, 12], [11, 13], [13, 15], [12, 14], [14, 16], [11, 23], [12, 24], [23, 24], [23, 25], [25, 27], [24, 26], [26, 28]];
+function angle(a, b, c) { const d = Math.abs(Math.atan2(a.y - b.y, a.x - b.x) - Math.atan2(c.y - b.y, c.x - b.x)) * 180 / Math.PI; return d > 180 ? 360 - d : d; }
+// Rep counter: one small state machine per exercise, fed one pose per video frame
+function newCounter() { return { phase: "up", count: 0, held: 0, hint: "", shallow: false, sm: [], lk: "down", rk: "down", t: 0 }; }
+function smooth(c, v) { c.sm.push(v); if (c.sm.length > 4) c.sm.shift(); return c.sm.reduce((a, b) => a + b, 0) / c.sm.length; }
+function analyse(k, lm, W, H, c, now) {
+  const P = i => ({ x: lm[i].x * W, y: lm[i].y * H, v: lm[i].visibility == null ? 1 : lm[i].visibility });
+  const seen = (...ids) => ids.every(i => P(i).v > .5);
+  const L = { sh: P(11), el: P(13), wr: P(15), hip: P(23), kn: P(25), an: P(27) }, R = { sh: P(12), el: P(14), wr: P(16), hip: P(24), kn: P(26), an: P(28) };
+  const vis = s => [s.sh, s.el, s.hip, s.kn, s.an].reduce((n, p) => n + p.v, 0);
+  const S = vis(L) >= vis(R) ? L : R; // the side facing the camera
+  const dt = c.t ? Math.min(.25, (now - c.t) / 1000) : 0; c.t = now;
+  const rep = () => { c.count++; c.hint = ""; sfx("tap"); };
+  switch (k) {
+    case "squat": {
+      if (!seen(23, 25, 27) && !seen(24, 26, 28)) return "ถอยออกให้เห็นตั้งแต่สะโพกถึงเท้า";
+      const a = smooth(c, seen(23, 25, 27, 24, 26, 28) ? (angle(L.hip, L.kn, L.an) + angle(R.hip, R.kn, R.an)) / 2 : angle(S.hip, S.kn, S.an));
+      if (c.phase === "up") { if (a < 100) { c.phase = "down"; c.hint = "ดีมาก ลุกขึ้น"; } else if (a < 135) { c.shallow = true; c.hint = "ย่อลงอีกนิด"; } }
+      else if (a > 160) { c.phase = "up"; rep(); }
+      if (c.phase === "up" && a > 165 && c.shallow) { c.shallow = false; c.hint = "ครั้งนั้นไม่นับ ย่อให้ต้นขาขนานพื้น"; }
+      return "";
+    }
+    case "pushup": case "plank": {
+      if (!seen(11, 23, 27) && !seen(12, 24, 28)) return "หันข้างให้กล้อง ให้เห็นทั้งตัว";
+      const line = angle(S.sh, S.hip, S.an), flat = Math.abs(S.sh.y - S.an.y) < Math.abs(S.sh.x - S.an.x) * .6;
+      if (!flat) { c.hint = k === "plank" ? "ลงท่าแพลงก์ ลำตัวขนานพื้น" : "ลงท่าวิดพื้น ลำตัวขนานพื้น"; return ""; }
+      const sag = line < 160 ? ((S.hip.y > (S.sh.y + S.an.y) / 2) ? "ยกสะโพกขึ้นนิด ลำตัวให้ตรง" : "ลดสะโพกลงนิด ลำตัวให้ตรง") : "";
+      if (k === "plank") { if (!sag) { c.held += dt; c.hint = "ตรงดีมาก ค้างไว้"; } else c.hint = sag + " (เวลาหยุดเดิน)"; return ""; }
+      const a = smooth(c, angle(S.sh, S.el, S.wr));
+      if (c.phase === "up") { if (a < 95) { c.phase = "down"; c.hint = sag || "ดันขึ้น"; } }
+      else if (a > 155) { c.phase = "up"; rep(); if (sag) c.hint = sag; }
+      return "";
+    }
+    case "jack": {
+      if (!seen(11, 12, 15, 16, 27, 28)) return "ถอยออกให้เห็นทั้งตัว ตั้งแต่มือถึงเท้า";
+      const shW = Math.abs(L.sh.x - R.sh.x), feet = Math.abs(L.an.x - R.an.x), up = L.wr.y < L.sh.y && R.wr.y < R.sh.y;
+      if (c.phase === "up") { if (up && feet > shW * 1.4) c.phase = "open"; }
+      else if (!up && L.wr.y > L.sh.y && feet < shW * 1.15) { c.phase = "up"; rep(); }
+      return "";
+    }
+    case "lunge": {
+      if (!seen(23, 25, 27) || !seen(24, 26, 28)) return "หันข้างให้กล้อง ให้เห็นทั้งสองขา";
+      const a = smooth(c, Math.min(angle(L.hip, L.kn, L.an), angle(R.hip, R.kn, R.an)));
+      if (c.phase === "up") { if (a < 105) { c.phase = "down"; c.hint = "ดันกลับขึ้น"; } }
+      else if (a > 155) { c.phase = "up"; rep(); }
+      return "";
+    }
+    case "knees": {
+      if (!seen(23, 24, 25, 26)) return "ถอยออกให้เห็นตั้งแต่สะโพกถึงเข่า";
+      const leg = Math.max(30, Math.abs(S.hip.y - S.an.y) || 120);
+      [["lk", L], ["rk", R]].forEach(([key, s]) => {
+        const lifted = s.kn.y < s.hip.y + leg * .25, down = s.kn.y > s.hip.y + leg * .4;
+        if (c[key] === "down" && lifted) c[key] = "up";
+        else if (c[key] === "up" && down) { c[key] = "down"; rep(); }
+      });
+      return "";
+    }
+    case "sprawl": {
+      if (!seen(11, 23) && !seen(12, 24)) return "หันข้างให้กล้อง ให้เห็นทั้งตัว";
+      const dx = Math.abs(S.sh.x - S.hip.x), dy = Math.abs(S.sh.y - S.hip.y);
+      if (c.phase === "up") { if (dy < dx * .5) { c.phase = "down"; c.hint = "ลุกกลับเร็ว ๆ"; } }
+      else if (dy > dx * 1.5) { c.phase = "up"; rep(); }
+      return "";
+    }
+  }
+  return "";
+}
+
+/* Workout runner */
+const wdlg = $("wdlg");
+let wo = null, camStream = null, camRaf = 0, facing = "user";
+const woItem = () => wo.list[wo.i];
+const woDone = it => (wo.counts[wo.i] || 0) >= it.target;
+function startWorkout() {
+  if (!wo || wo.phase === "done") wo = { list: workoutFor(), i: 0, counts: {}, phase: "intro", mode: "", c: null, restEnd: 0, msg: "" };
+  renderWo(); if (!wdlg.open) wdlg.showModal(); keepAwake(true);
+}
+function stopCamera() {
+  cancelAnimationFrame(camRaf); camRaf = 0;
+  if (camStream) camStream.getTracks().forEach(t => t.stop());
+  camStream = null;
+}
+async function useCamera() {
+  wo.msg = ""; wo.phase = "loading"; renderWo();
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error("nocam");
+    camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facing, width: { ideal: 640 }, height: { ideal: 480 } }, audio: false });
+    $("woLoad").textContent = "กำลังโหลดตัว AI จับท่าทาง ครั้งแรกอาจใช้เวลาสักครู่";
+    await loadPoser();
+    wo.mode = "cam"; beginExercise();
+  } catch (e) {
+    stopCamera(); wo.phase = "intro";
+    wo.msg = (e && e.name === "NotAllowedError") ? "ไม่ได้รับอนุญาตให้ใช้กล้อง ถ้าจะใช้กล้อง ให้อนุญาตในการตั้งค่าเบราว์เซอร์ หรือเลือกนับเองได้เลย"
+      : onSite() ? "เปิดกล้องหรือโหลดตัว AI ไม่สำเร็จ ลองใหม่อีกครั้ง หรือเลือกนับเองได้เลย"
+      : "หน้านี้เปิดกล้องไม่ได้ ใช้กล้องได้บนเว็บ kxmziii.github.io/chiwit-ngai หรือเลือกนับเองได้เลย";
+    renderWo();
+  }
+}
+function beginExercise() { wo.phase = "ex"; wo.c = newCounter(); wo.c.count = wo.counts[wo.i] || 0; renderWo(); if (wo.mode === "cam") runCam(); }
+function runCam() {
+  cancelAnimationFrame(camRaf);
+  const video = $("woVideo"), canvas = $("woCanvas"); if (!video || !camStream) return;
+  video.srcObject = camStream; video.play().catch(() => {});
+  const ctx = canvas.getContext("2d"); let lastT = -1;
+  const loop = () => {
+    camRaf = requestAnimationFrame(loop);
+    if (!wo || wo.phase !== "ex" || video.readyState < 2) return;
+    const W = video.videoWidth, H = video.videoHeight; if (canvas.width !== W) { canvas.width = W; canvas.height = H; }
+    const now = performance.now(); if (now === lastT) return; lastT = now;
+    let res; try { res = poser.detectForVideo(video, now); } catch (e) { return; }
+    ctx.clearRect(0, 0, W, H);
+    const lm = res && res.landmarks && res.landmarks[0];
+    const it = woItem(), c = wo.c;
+    if (!lm) { setHint("ไม่เห็นตัว ถอยออกให้เห็นทั้งตัวในกรอบ", true); return; }
+    ctx.lineWidth = Math.max(3, W / 160); ctx.strokeStyle = "rgba(255,255,255,.9)"; ctx.fillStyle = "#3b82f6";
+    BONES.forEach(([a, b]) => { if ((lm[a].visibility || 0) > .5 && (lm[b].visibility || 0) > .5) { ctx.beginPath(); ctx.moveTo(lm[a].x * W, lm[a].y * H); ctx.lineTo(lm[b].x * W, lm[b].y * H); ctx.stroke(); } });
+    [11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28].forEach(i => { if ((lm[i].visibility || 0) > .5) { ctx.beginPath(); ctx.arc(lm[i].x * W, lm[i].y * H, Math.max(4, W / 110), 0, 7); ctx.fill(); } });
+    const before = c.count, beforeHeld = Math.floor(c.held);
+    const block = analyse(it.k, lm, W, H, c, now);
+    setHint(block || c.hint, !!block);
+    if (EX[it.k].hold) { if (Math.floor(c.held) !== beforeHeld) setCount(Math.floor(c.held)); }
+    else if (c.count !== before) setCount(c.count);
+  };
+  loop();
+}
+function setHint(text, warn) { const h = $("woHint"); if (h && h.textContent !== text) { h.textContent = text; h.classList.toggle("warn", !!warn); } }
+function setCount(n) {
+  const it = woItem(); wo.counts[wo.i] = Math.max(0, n); if (wo.c) { if (EX[it.k].hold) wo.c.held = wo.counts[wo.i]; else wo.c.count = wo.counts[wo.i]; }
+  const el = $("woNum"); if (el) el.textContent = wo.counts[wo.i];
+  const bar = $("woBar"); if (bar) bar.style.width = Math.min(100, wo.counts[wo.i] / it.target * 100) + "%";
+  if (woDone(it) && !wo.finishing) { wo.finishing = true; sfx("done"); setTimeout(() => { wo.finishing = false; nextExercise(); }, 700); }
+}
+let holdTick = 0;
+function toggleHold() {
+  if (holdTick) { clearInterval(holdTick); holdTick = 0; renderWo(); return; }
+  holdTick = setInterval(() => setCount((wo.counts[wo.i] || 0) + 1), 1000); renderWo();
+}
+function nextExercise() {
+  if (!wo || wo.phase !== "ex") return;
+  clearInterval(holdTick); holdTick = 0;
+  if (wo.i >= wo.list.length - 1) return finishWorkout();
+  wo.i++; wo.phase = "rest"; wo.restEnd = Date.now() + restFor(fit.level) * 1000; renderWo();
+}
+let restTimer = 0;
+function renderRestTick() {
+  clearInterval(restTimer);
+  restTimer = setInterval(() => {
+    if (!wo || wo.phase !== "rest") { clearInterval(restTimer); return; }
+    const left = Math.max(0, Math.ceil((wo.restEnd - Date.now()) / 1000)), el = $("woRest");
+    if (el) el.textContent = left;
+    if (!left) { clearInterval(restTimer); beep(); beginExercise(); }
+  }, 250);
+}
+function finishWorkout() {
+  stopCamera(); clearInterval(holdTick); holdTick = 0;
+  const res = {}; wo.list.forEach((it, i) => { res[it.k] = (res[it.k] || 0) + (wo.counts[i] || 0); fit.best[it.k] = Math.max(fit.best[it.k] || 0, wo.counts[i] || 0); });
+  const full = wo.list.every((it, i) => (wo.counts[i] || 0) >= it.target), t = today();
+  let up = false;
+  if (full && fit.progDay !== t) { // a level counts at most one finished day toward the next level
+    fit.prog++; fit.progDay = t;
+    if (fit.prog >= NEED && fit.level < MAX_LV) { fit.level++; fit.prog = 0; up = true; }
+  }
+  if (full) { fit.last = t; fit.dropped = 0; fit.drop = null; }
+  fit.log.push({ d: t, ts: Date.now(), lv: fit.level, ex: res, full });
+  if (fit.log.length > 400) fit.log = fit.log.slice(-400);
+  saveFit();
+  wo.phase = "done"; wo.result = { full, up }; renderWo();
+  if (up) sfx("shuffle"); else if (full) sfx("done");
+  if (view === "fit" || view === "fitlog" || view === "home") renderFitViews();
+}
+function closeWorkout() { stopCamera(); clearInterval(holdTick); holdTick = 0; clearInterval(restTimer); keepAwake(false); if (wdlg.open) wdlg.close(); renderFitViews(); }
+function renderWo() {
+  const it = wo.list[wo.i], ex = it && EX[it.k], n = wo.list.length;
+  const top = `<div class="cook-top"><span></span><span class="ttl">${wo.phase === "done" ? "จบการฝึก" : `ท่าที่ ${Math.min(wo.i + 1, n)} จาก ${n}`}</span>
+    <button type="button" class="fav" data-act="wo-close" aria-label="ปิด">${ICON.close}</button></div>${segs(n, wo.phase === "done" ? n : wo.i)}`;
+  let body = "", nav = "";
+  if (wo.phase === "intro" || wo.phase === "loading") {
+    body = `<div class="stepno"><b>${fit.level}</b><span>Level ${fit.level} · ${rankOf(fit.level)}</span></div>
+      <p class="cook-step" id="w-title">วันนี้ ${n} ท่า ประมาณ ${estMin(wo.list)} นาที</p>
+      <ol class="wolist">${wo.list.map(x => `<li><b>${EX[x.k].name}</b><span>${x.target} ${EX[x.k].hold ? "วินาที" : "ครั้ง"}${roundsFor(fit.level) > 1 ? ` · รอบ ${x.round}` : ""}</span></li>`).join("")}</ol>
+      <div class="tip"><b>ตั้งกล้อง</b>วางมือถือพิงไว้ห่าง 2–3 เมตร ให้เห็นตั้งแต่หัวจรดเท้า แสงพอ และมีคนเดียวในภาพ ภาพจากกล้องประมวลผลในเครื่องเท่านั้น ไม่มีการบันทึกหรือส่งไปไหน</div>
+      ${wo.msg ? `<p class="warn" role="alert">${esc(wo.msg)}</p>` : ""}
+      ${wo.phase === "loading" ? `<p class="cook-lead" id="woLoad" aria-live="polite">กำลังขออนุญาตใช้กล้อง</p>` : ""}`;
+    nav = `<div class="cook-nav"><button type="button" class="btn" data-act="wo-tap">${ico("tap")}<span>นับเอง</span></button>
+      <button type="button" class="btn primary" data-act="wo-cam" ${wo.phase === "loading" ? "disabled" : ""}>${ico("camera")}<span>${wo.phase === "loading" ? "กำลังเปิด..." : "ใช้กล้องนับให้"}</span></button></div>`;
+  } else if (wo.phase === "ex") {
+    const cnt = wo.counts[wo.i] || 0, unit = ex.hold ? "วินาที" : "ครั้ง";
+    body = `<div class="woex"><div class="woname"><b id="w-title">${ex.name}</b><span>${ex.cam && wo.mode === "cam" ? ex.cam + " · " : ""}${ex.tip}</span></div>
+      ${wo.mode === "cam" ? `<div class="stage${facing === "user" ? " mirror" : ""}"><video id="woVideo" playsinline muted></video><canvas id="woCanvas"></canvas>
+        <div class="woover"><span id="woNum">${cnt}</span><small>/ ${it.target} ${unit}</small></div></div>
+        <p class="wohint" id="woHint" aria-live="polite">เริ่มได้เลย</p>`
+      : `<button type="button" class="tapzone" ${ex.hold ? `data-act="wo-hold"` : `data-act="wo-plus"`}><span id="woNum">${cnt}</span><small>/ ${it.target} ${unit}</small>
+          <em>${ex.hold ? (holdTick ? "แตะเพื่อหยุดเวลา" : "แตะเพื่อเริ่มจับเวลา") : "แตะทุกครั้งที่ทำครบ 1 ครั้ง"}</em></button>`}
+      <div class="tbar" aria-hidden="true"><i id="woBar" style="width:${Math.min(100, cnt / it.target * 100)}%"></i></div>
+      <div class="trow"><button type="button" class="btn" data-act="wo-minus">−1</button><button type="button" class="btn" data-act="wo-plus1">+1</button>
+        ${wo.mode === "cam" ? `<button type="button" class="btn" data-act="wo-flip">สลับกล้อง</button>` : ""}</div></div>`;
+    nav = `<div class="cook-nav"><button type="button" class="btn" data-act="wo-skip"><span>ข้ามท่านี้</span></button>
+      <button type="button" class="btn primary" data-act="wo-next"><span>${cnt >= it.target ? "ท่าต่อไป" : "จบท่านี้"}</span></button></div>`;
+  } else if (wo.phase === "rest") {
+    body = `<div class="rest"><p class="cook-lead">พักหายใจ</p><div class="tbig" id="woRest" role="timer">${restFor(fit.level)}</div>
+      <p class="cook-step">ต่อไป: ${ex.name} ${it.target} ${ex.hold ? "วินาที" : "ครั้ง"}</p><p class="cook-lead">${ex.tip}</p></div>`;
+    nav = `<div class="cook-nav"><button type="button" class="btn" data-act="wo-rest10"><span>+10 วินาที</span></button>
+      <button type="button" class="btn primary" data-act="wo-go"><span>เริ่มเลย</span></button></div>`;
+  } else {
+    const r = wo.result || {};
+    body = `<div class="done-msg">${r.up ? `<span class="lvup">Level ${fit.level}</span><p class="cook-step">เลื่อนขั้นแล้ว! ${rankOf(fit.level)}</p>`
+        : `<span class="big" aria-hidden="true">${ico(r.full ? "trophy" : "activity", "huge")}</span><p class="cook-step">${r.full ? "ทำครบทุกท่าแล้ว" : "บันทึกการฝึกแล้ว"}</p>`}
+      <p class="cook-lead">${r.full ? (fit.level >= MAX_LV ? "ถึงระดับสูงสุดแล้ว รักษาฟอร์มไว้" : `อีก ${NEED - fit.prog} วันที่ทำครบ จะขึ้น Level ${fit.level + 1}`) : "ยังทำไม่ครบทุกท่า ครั้งนี้เลยยังไม่นับเพื่อเลื่อนขั้น แต่ลองใหม่ได้ทุกเมื่อ"}</p>
+      <ul class="wolist">${wo.list.map((x, i) => `<li><b>${EX[x.k].name}</b><span>${wo.counts[i] || 0} / ${x.target}</span></li>`).join("")}</ul>
+      <div class="donebtns"><button type="button" class="btn" data-act="wo-meal">${ico("utensils")}หาเมนูหลังซ้อม</button></div></div>`;
+    nav = `<div class="cook-nav"><span></span><button type="button" class="btn primary" data-act="wo-close"><span>เสร็จ</span></button></div>`;
+  }
+  wdlg.innerHTML = `<div class="cook">${top}<div class="cook-main">${body}</div>${nav}</div>`;
+  if (wo.phase === "ex" && wo.mode === "cam") runCam();
+  if (wo.phase === "rest") renderRestTick();
+}
+
+/* Today and stats views */
+function levelCard() {
+  const note = decayNote(), drop = fit.drop && fit.drop.d === today() ? fit.drop : null;
+  return `<div class="card lvcard">
+      ${drop ? `<p class="warn" role="alert">${ico("arrowdown")} หายไป ${drop.missed} วัน level ลดจาก ${drop.from} เป็น ${drop.to}</p>` : ""}
+      <div class="lvrow"><span class="lvnum">${fit.level}</span><div><b>Level ${fit.level}</b><span>${rankOf(fit.level)}</span></div></div>
+      <div class="lvdots" aria-label="ทำครบ ${fit.prog} จาก ${NEED} วัน">${Array.from({ length: NEED }, (_, i) => `<i class="${i < fit.prog ? "on" : ""}"></i>`).join("")}</div>
+      <p class="hint">${fit.level >= MAX_LV ? "ระดับสูงสุดแล้ว" : `ทำครบอีก ${NEED - fit.prog} วัน จะขึ้น Level ${fit.level + 1}`}</p>
+      <p class="decay ${note.cls}">${note.text}</p></div>`;
+}
+function renderFitViews() { if (view === "fit") renderFit(); if (view === "fitlog") renderFitLog(); if (view === "home") renderHome(); }
+function renderFit() {
+  const list = workoutFor(), doneToday = fit.log.some(x => x.d === today() && x.full);
+  $("fitBody").innerHTML = levelCard() + `
+    <div class="card"><h3>ฝึกวันนี้ <small>${list.length} ท่า · ประมาณ ${estMin(list)} นาที</small></h3>
+      <ol class="wolist">${list.map(x => `<li><b>${EX[x.k].name}</b><span>${x.target} ${EX[x.k].hold ? "วินาที" : "ครั้ง"}${roundsFor(fit.level) > 1 ? ` · รอบ ${x.round}` : ""}</span></li>`).join("")}</ol>
+      ${doneToday ? `<p class="decay ok">${ico("check")} วันนี้ทำครบแล้ว ฝึกซ้ำได้ แต่จะไม่นับเพื่อเลื่อนขั้นเพิ่ม</p>` : ""}
+      <button type="button" class="btn primary big" data-act="wo-start">${ico("activity")}${doneToday ? "ฝึกอีกรอบ" : "เริ่มฝึก"}</button></div>
+    <div class="card"><h3>กติกา</h3><ul class="rules">
+      <li>ทำครบทุกท่าในวันนั้น = นับ 1 วัน ทำครบ ${NEED} วัน (คนละวัน) ขึ้น 1 level</li>
+      <li>ยิ่ง level สูง จำนวนครั้งยิ่งมาก มีท่าใหม่เพิ่มที่ Level 5 และ 10 และเพิ่มรอบที่ Level 8 และ 20</li>
+      <li>พักติดกันได้ ${GRACE} วัน ถ้าหายไปวันที่ ${GRACE + 1} level ลด 1 และลดอีก 1 ทุก 2 วันที่หายไปต่อ</li></ul></div>`;
+}
+function renderFitLog() {
+  const done = new Set(fit.log.filter(x => x.full).map(x => x.d)), any = new Set(fit.log.map(x => x.d));
+  const days = Array.from({ length: 28 }, (_, i) => ymd(addDays(new Date(), i - 27)));
+  const tot = {}; fit.log.forEach(x => Object.entries(x.ex).forEach(([k, v]) => { tot[k] = (tot[k] || 0) + v; }));
+  $("fitLogBody").innerHTML = `
+    <div class="tiles"><div class="tile"><span>ทำต่อเนื่อง</span><b>${streak()} วัน</b></div><div class="tile"><span>ต่อเนื่องสูงสุด</span><b>${bestStreak()} วัน</b></div><div class="tile"><span>ฝึกทั้งหมด</span><b>${fit.log.length} ครั้ง</b></div></div>
+    <div class="card"><h3>28 วันล่าสุด <small><span class="dot full"></span>ครบ <span class="dot part"></span>ไม่ครบ</small></h3>
+      <div class="cal">${days.map(d => `<span class="${done.has(d) ? "full" : any.has(d) ? "part" : ""}${d === today() ? " today" : ""}" title="${d}">${parseYmd(d).getDate()}</span>`).join("")}</div></div>
+    <div class="card"><h3>สถิติต่อท่า <small>รวม · ดีที่สุดใน 1 เซต</small></h3>
+      ${Object.keys(EX).filter(k => tot[k] || fit.best[k]).map(k => `<div class="brow"><span class="txt"><b>${EX[k].name}</b><small>รวม ${tot[k] || 0} ${EX[k].hold ? "วินาที" : "ครั้ง"}</small></span><b>${fit.best[k] || 0}</b></div>`).join("") || `<p class="hint">ยังไม่มีข้อมูล เริ่มฝึกครั้งแรกได้ที่แท็บวันนี้</p>`}</div>
+    ${fit.log.length ? `<div class="card"><h3>ล่าสุด</h3>${[...fit.log].reverse().slice(0, 8).map(x => `<div class="brow"><span class="txt"><b>${dayLabel(x.d)} · Level ${x.lv}</b><small>${Object.entries(x.ex).map(([k, v]) => `${EX[k] ? EX[k].name : k} ${v}`).join(" · ")}</small></span>${x.full ? `<span class="decay ok">ครบ</span>` : `<span class="decay">ไม่ครบ</span>`}</div>`).join("")}</div>` : ""}`;
+}
+wdlg.addEventListener("cancel", ev => { ev.preventDefault(); closeWorkout(); });
+const decayed = applyDecay();
+if (decayed) setTimeout(() => toast(`หายไป ${decayed.missed} วัน level ลดจาก ${decayed.from} เป็น ${decayed.to}`), 600);
+
+
 /* ---------- One place for every tap ---------- */
 function refresh() {
   renderMealBadge();
@@ -2689,7 +3108,7 @@ function refresh() {
   if (dlg.open && mode === "cook" && step >= cur.steps.length) renderCook();
 }
 function refocus(sel) {
-  const root = mdlg.open ? mdlg : fdlg.open ? fdlg : dlg.open ? dlg : $("view-" + view);
+  const root = wdlg.open ? wdlg : mdlg.open ? mdlg : fdlg.open ? fdlg : dlg.open ? dlg : $("view-" + view);
   const b = root.querySelector(sel); if (b) b.focus({ preventScroll: true });
 }
 const ACTIONS = {
@@ -2702,6 +3121,21 @@ const ACTIONS = {
   "go-meal": () => go("meal"),
   "go-money": () => go("money"), "go-ledger": () => go("ledger"), "go-stats": () => go("stats"), "go-budget": () => go("budget"),
   "m-add": () => openMoneyForm(),
+  "go-fit": () => go("fit"), "go-fitlog": () => go("fitlog"),
+  "wo-start": () => startWorkout(),
+  "wo-cam": () => useCamera(),
+  "wo-tap": () => { wo.mode = "tap"; wo.msg = ""; beginExercise(); },
+  "wo-close": () => closeWorkout(),
+  "wo-plus": () => setCount((wo.counts[wo.i] || 0) + 1),
+  "wo-plus1": () => setCount((wo.counts[wo.i] || 0) + 1),
+  "wo-minus": () => setCount((wo.counts[wo.i] || 0) - 1),
+  "wo-hold": () => toggleHold(),
+  "wo-next": () => nextExercise(),
+  "wo-skip": () => nextExercise(),
+  "wo-go": () => { clearInterval(restTimer); beginExercise(); },
+  "wo-rest10": () => { wo.restEnd += 10000; },
+  "wo-flip": async () => { facing = facing === "user" ? "environment" : "user"; stopCamera(); await useCamera(); },
+  "wo-meal": () => { closeWorkout(); Object.assign(state, DEFAULTS, { protein: "เนื้อวัว" }); renderShortcuts(); go("menu"); },
   "m-close": () => mdlg.close(),
   "m-save": () => saveMoneyForm(false),
   "m-save-more": () => saveMoneyForm(true),
@@ -2748,6 +3182,7 @@ document.addEventListener("click", ev => {
   if (t === dlg) { dlg.close(); return; }
   if (t === fdlg) { fdlg.close(); return; }
   if (t === mdlg) { mdlg.close(); return; }
+  if (t === wdlg) return;
   if ((el = t.closest("[data-key]"))) { keyAmt(el.dataset.key); return; }
   if ((el = t.closest("[data-mtype]"))) { mform.t = el.dataset.mtype; mform.c = money.lastCat[mform.t] || (mform.t === "e" ? "food" : "salary"); syncMoneyForm(); return; }
   if ((el = t.closest("[data-mcat]"))) { mform.c = el.dataset.mcat; syncMoneyForm(); refocus(`[data-mcat="${mform.c}"]`); return; }
