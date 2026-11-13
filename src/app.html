@@ -586,6 +586,24 @@ dialog::backdrop { background: rgba(6, 10, 22, .55); }
 .pepcard { gap: 8px; }
 .peplab { font-size: 13px; font-weight: 600; color: var(--turmeric); }
 .pepq { margin: 0; font-size: 19px; font-weight: 700; line-height: 1.45; text-wrap: balance; }
+
+/* ---------- Sports and body page ---------- */
+.mgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.mfield { display: flex; flex-direction: column; gap: 4px; font-size: 13.5px; font-weight: 600; color: var(--muted); }
+.wchart svg { display: block; width: 100%; height: auto; }
+.wchart .grid { stroke: var(--line); stroke-width: 1; }
+.wchart .tline { stroke: var(--turmeric); stroke-width: 1; }
+.wchart .wline { fill: none; stroke: var(--basil); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.wchart .wdot { fill: var(--basil); stroke: var(--surface); stroke-width: 2; }
+.wchart .tlab { color: var(--turmeric); }
+.pcomp { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.pcomp figure { margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.pcomp img { width: 100%; aspect-ratio: 3 / 4; max-width: 100%; object-fit: cover; border-radius: var(--r-ctl); background: var(--surface-2); }
+.pcomp figcaption { font-size: 13px; color: var(--muted); text-align: center; }
+.stage .ghost { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: .35; pointer-events: none; }
+.stage.mirror .ghost { transform: none; }
+.phprev { width: 100%; max-height: 60vh; object-fit: contain; border-radius: var(--r-card); background: #0b1020; }
+label.btn { cursor: pointer; }
 </style>
 
 <header class="appbar">
@@ -614,6 +632,10 @@ dialog::backdrop { background: rgba(6, 10, 22, .55); }
     <button type="button" class="tab" data-view="fit">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>
       <span>วันนี้</span>
+    </button>
+    <button type="button" class="tab" data-view="fitbody">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4.5" r="2"/><path d="M5 9h14M12 9v5M9 22l3-8 3 8"/></svg>
+      <span>ร่างกาย</span>
     </button>
     <button type="button" class="tab" data-view="fitlog">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 20V11M12 20V4M19 20v-6"/></svg>
@@ -715,6 +737,11 @@ dialog::backdrop { background: rgba(6, 10, 22, .55); }
   <section id="view-fit" aria-label="ออกกำลังกายวันนี้" hidden>
     <div class="pagehead"><h2>วันนี้</h2><p>ฝึกทุกวัน level ขึ้น หายไปนาน level ลด กล้องช่วยนับให้</p></div>
     <div id="fitBody" class="stack"></div>
+  </section>
+
+  <section id="view-fitbody" aria-label="ร่างกาย" hidden>
+    <div class="pagehead"><h2>ร่างกาย</h2><p>น้ำหนัก สัดส่วน รูปเทียบ และทดสอบร่างกายด้วยกล้อง ทุกอย่างเก็บในเครื่องนี้</p></div>
+    <div id="bodyBody" class="stack"></div>
   </section>
 
   <section id="view-fitlog" aria-label="สถิติการออกกำลังกาย" hidden>
@@ -1712,7 +1739,7 @@ const SFX = {
   warn: [{ f: 220, d: .14, g: .05, type: "square" }]
 };
 // Actions whose sound differs from a plain tap. null = the action plays its own sound once it knows the outcome.
-const ACT_SFX = { "wo-start": "open", "wo-cam": "open", "wo-tap": "open", "wo-close": "back", "wo-next": "next", "wo-skip": "off", "wo-go": "next", "wo-minus": "off", "wo-plus": "tap", "wo-plus1": "tap", "wo-meal": "open", shuffle: null, "shop-add": null, "m-save": null, "m-save-more": null, "m-wipe": null, "m-delete": "off", "m-close": "back",
+const ACT_SFX = { "bt-start": "open", "ph-cam": "open", "bt-skip": "off", "bt-next": "next", "bt-go": "next", "b-weight": null, "b-meas": null, "ph-keep": "on", "wo-start": "open", "wo-cam": "open", "wo-tap": "open", "wo-close": "back", "wo-next": "next", "wo-skip": "off", "wo-go": "next", "wo-minus": "off", "wo-plus": "tap", "wo-plus1": "tap", "wo-meal": "open", shuffle: null, "shop-add": null, "m-save": null, "m-save-more": null, "m-wipe": null, "m-delete": "off", "m-close": "back",
   "m-add": "open", "rec-add": "open", "shop-pay": "open", "toast-act": "on", back: "back", close: "back", "close-filters": "back", reset: "off", "clear-meal": "off",
   "equip-none": "off", "pantry-clear": "off", "equip-all": "on", "open-filters": "open", "start-cook": "next", "cook-meal": "next", "cook-pay": "open", install: "on" };
 function sfx(name) {
@@ -1736,6 +1763,7 @@ function sfx(name) {
 // Picks the sound for a tap before anything changes, so "on" and "off" reflect what the tap is about to do
 function clickSound(t) {
   let el;
+  if (t.closest("[data-sport], [data-team], [data-phpose], [data-pha], [data-phb]")) return sfx("tap");
   if (t.closest(".tab, [data-preset], [data-f], [data-t], [data-th], [data-done], [data-jump], [data-key], [data-mtype], [data-mcat], [data-mdate], [data-mmonth], [data-lt], [data-lcat], [data-emoji], [data-day]")) return sfx("tap");
   if (t.closest("[data-view-go], [data-open], [data-tx], [data-statcat]")) return sfx("open");
   if (t.closest("[data-quick]")) return sfx("on");
@@ -1767,9 +1795,9 @@ const TOPICS = [
     stat: () => { const spent = sum(txIn(monthKey(today())));
       return `เดือนนี้ใช้ไป ${baht(spent)}` + (money.budget ? (money.budget >= spent ? ` · เหลือ ${baht(money.budget - spent)}` : ` · เกินงบ ${baht(spent - money.budget)}`) : ""); },
     quick: [["m-add", "จดรายจ่าย"], ["go-ledger", "รายการ"], ["go-stats", "สรุป"]] },
-  { id: "fit", name: "ออกกำลังกาย", icon: "dumbbell", tint: "t2", start: "fit", views: ["fit", "fitlog"],
+  { id: "fit", name: "ออกกำลังกาย", icon: "dumbbell", tint: "t2", start: "fit", views: ["fit", "fitbody", "fitlog"],
     desc: "กล้องนับครั้งให้ ฝึกทุกวัน level ขึ้น หายไปนาน level ลด",
-    stat: () => `Level ${fit.level} · ${rankOf(fit.level)}` + (fit.log.some(x => x.d === today() && x.full) ? " · วันนี้ทำครบแล้ว" : ""),
+    stat: () => `${SPORTS[fit.sport].name} Level ${fit.level} · ${rankOf(fit.level)}` + (fit.log.some(x => x.d === today() && x.full) ? " · วันนี้ทำครบแล้ว" : ""),
     quick: [["wo-start", "เริ่มฝึก"], ["go-fit", "วันนี้"], ["go-fitlog", "สถิติ"]] }
 ];
 const topicOf = v => TOPICS.find(t => t.views.includes(v));
@@ -1821,6 +1849,7 @@ function go(v, setHash = true) {
   if (v === "home") renderHome();
   if (v === "fit") renderFit();
   if (v === "fitlog") renderFitLog();
+  if (v === "fitbody") renderBody();
   if (v === "meal") renderMealPage();
   if (v === "kitchen") renderKitchen();
   if (v === "menu") render();
@@ -2776,17 +2805,51 @@ const EX = {
   plank: { name: "แพลงก์", from: 1, side: true, hold: true, reps: L => Math.min(180, 15 + 4 * L), tip: "วางศอกใต้ไหล่ ลำตัวตรง ไม่ยกหรือหย่อนสะโพก", cam: "หันข้างให้กล้อง" },
   lunge: { name: "ลันจ์", from: 5, reps: L => Math.min(40, 6 + L), tip: "ก้าวยาวไปข้างหน้า ย่อจนเข่าหลังเกือบแตะพื้น แล้วสลับขา นับทุกข้าง", cam: "หันข้างให้กล้อง" },
   knees: { name: "ยกเข่าสูง", from: 5, reps: L => Math.min(120, 20 + 3 * L), tip: "วิ่งอยู่กับที่ ยกเข่าให้สูงถึงระดับสะโพก นับทุกข้าง", cam: "หันหน้าเข้ากล้อง" },
-  sprawl: { name: "สปรอล", from: 10, side: true, reps: L => Math.min(30, 3 + Math.floor(L / 2)), tip: "จากท่ายืน ทิ้งตัวลง เตะขาไปข้างหลังให้สะโพกแนบพื้น แล้วลุกกลับเร็ว ๆ ท่าป้องกันพื้นฐานของมวยปล้ำ", cam: "หันข้างให้กล้อง" }
+  sprawl: { name: "สปรอล", from: 10, side: true, reps: L => Math.min(30, 3 + Math.floor(L / 2)), tip: "จากท่ายืน ทิ้งตัวลง เตะขาไปข้างหลังให้สะโพกแนบพื้น แล้วลุกกลับเร็ว ๆ ท่าป้องกันพื้นฐานของมวยปล้ำ", cam: "หันข้างให้กล้อง" },
+  shot: { name: "ก้าวเข้าทำ (Shot)", detect: "lunge", reps: L => Math.min(30, 6 + L), tip: "ย่อต่ำในท่าการ์ด ก้าวเท้าหน้ายาว เข่าหลังลงแตะพื้นเบา ๆ แล้วดันกลับ สลับข้าง นับทุกข้าง", cam: "หันข้างให้กล้อง" },
+  burpee: { name: "เบอร์พี", detect: "sprawl", side: true, reps: L => Math.min(30, 4 + Math.floor(L / 2)), tip: "ทิ้งตัวลงวิดพื้น 1 ครั้ง ดึงขากลับ แล้วกระโดดขึ้นยกมือเหนือหัว", cam: "หันข้างให้กล้อง" },
+  squatjump: { name: "สควอทกระโดด", detect: "squat", reps: L => Math.min(40, 6 + L), tip: "ย่อลงสควอท แล้วระเบิดกระโดดสูง ลงพื้นนุ่ม ๆ ย่อเข่ารับ", cam: "หันหน้าเข้ากล้อง" },
+  techup: { name: "ลุกขึ้นแบบเทคนิค", detect: "sprawl", side: true, reps: L => Math.min(20, 3 + Math.floor(L / 2)), tip: "นั่งพื้น มือหนึ่งยันพื้นข้างหลัง ยกสะโพก ดึงขากลับไปข้างหลัง แล้วลุกขึ้นในท่าการ์ด สลับข้าง", cam: "หันข้างให้กล้อง" },
+  bearcrawl: { name: "คลานหมี", time: true, hold: true, reps: L => Math.min(90, 20 + 2 * L), tip: "คลานด้วยมือและเท้า เข่าลอยจากพื้นเล็กน้อย หลังตรง เดินหน้าแล้วถอยหลัง" },
+  mountain: { name: "ปีนเขา (Mountain climber)", time: true, hold: true, reps: L => Math.min(60, 20 + 2 * L), tip: "ท่าวิดพื้นแขนตรง ดึงเข่าเข้าหาอกสลับข้างเร็ว ๆ สะโพกไม่โด่ง" },
+  bridge: { name: "บริดจ์ยกสะโพก", time: true, hold: true, reps: L => Math.min(90, 20 + 3 * L), tip: "นอนหงาย ชันเข่า ยกสะโพกขึ้นค้างไว้ บีบก้น ห้ามใช้คอรับน้ำหนัก" },
+  hipescape: { name: "กุ้งหนี (Hip escape)", time: true, hold: true, reps: L => Math.min(90, 20 + 3 * L), tip: "นอนตะแคง ดันเท้าดันสะโพกถอยออกไปเป็นรูปตัว C แล้วสลับข้าง ไถไปตามพื้น" },
+  hollow: { name: "ฮอลโลว์โฮลด์", time: true, hold: true, reps: L => Math.min(60, 10 + 2 * L), tip: "นอนหงาย กดหลังล่างแนบพื้น ยกไหล่และขาขึ้นเล็กน้อย แขนเหยียดเหนือหัว ค้างไว้" },
+  shadowbox: { name: "ชกลม", time: true, hold: true, reps: L => Math.min(180, 60 + 6 * L), tip: "ยกการ์ด ขยับเท้าตลอด ออกหมัดตรง หมัดฮุก และหลบ หายใจออกทุกครั้งที่ออกหมัด" },
+  rope: { name: "กระโดดเชือก", time: true, hold: true, reps: L => Math.min(180, 45 + 5 * L), tip: "ไม่มีเชือกก็กระโดดเบา ๆ บนปลายเท้าแทนได้ ข้อมือหมุน ลงพื้นเงียบ ๆ" },
+  twist: { name: "บิดลำตัว (Russian twist)", time: true, hold: true, reps: L => Math.min(60, 20 + 2 * L), tip: "นั่งเอนหลังเล็กน้อย ยกเท้าลอย บิดลำตัวแตะพื้นซ้ายขวาสลับกัน" },
+  skater: { name: "สเก็ตเตอร์จัมป์", time: true, hold: true, reps: L => Math.min(60, 20 + 2 * L), tip: "กระโดดออกด้านข้างลงขาเดียว ขาอีกข้างไขว้หลัง แล้วกระโดดกลับอีกฝั่ง" },
+  balance: { name: "ทรงตัวขาเดียว", time: true, hold: true, reps: L => Math.min(60, 20 + 2 * L), tip: "ยืนขาเดียว ย่อเข่านิด ๆ หลับตาได้ถ้าง่ายไป สลับข้างครึ่งเวลา" }
 };
+// Each sport has its own pool: [drill, level it unlocks at]
+const SPORTS = {
+  wrestling: { name: "มวยปล้ำ", pool: [["sprawl", 1], ["shot", 1], ["pushup", 1], ["squat", 1], ["bearcrawl", 1], ["plank", 1], ["burpee", 5], ["mountain", 5], ["bridge", 10]] },
+  bjj: { name: "BJJ", pool: [["hipescape", 1], ["bridge", 1], ["pushup", 1], ["squat", 1], ["hollow", 1], ["techup", 5], ["lunge", 5], ["burpee", 10]] },
+  boxing: { name: "มวย", pool: [["shadowbox", 1], ["rope", 1], ["pushup", 1], ["squat", 1], ["twist", 1], ["knees", 5], ["plank", 5], ["burpee", 10]] },
+  football: { name: "ฟุตบอล", pool: [["knees", 1], ["squatjump", 1], ["lunge", 1], ["skater", 1], ["balance", 1], ["jack", 1], ["plank", 5], ["burpee", 10]] },
+  general: { name: "ทั่วไป", pool: [["squat", 1], ["pushup", 1], ["jack", 1], ["plank", 1], ["lunge", 5], ["knees", 5], ["sprawl", 10]] }
+};
+// Each sport keeps its own level. The active sport's level sits in fit.level; the others wait in fit.sp.
+if (!fit.sport) { fit.sport = "wrestling"; fit.sp = {}; }
+if (!fit.sp) fit.sp = {};
+if (!fit.team) fit.team = [];
+function setSport(k) {
+  if (k === fit.sport || !SPORTS[k]) return;
+  fit.sp[fit.sport] = { level: fit.level, prog: fit.prog, progDay: fit.progDay };
+  Object.assign(fit, { level: 1, prog: 0, progDay: "" }, fit.sp[k] || {}); fit.sport = k; saveFit();
+}
+const WEEKDAYS = ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"];
+const isTeamDay = (d = today()) => fit.team.includes(parseYmd(d).getDay());
 const dayNo = d => Math.round(parseYmd(d).getTime() / 86400000);
 const roundsFor = L => L < 8 ? 1 : L < 20 ? 2 : 3;
 const restFor = L => Math.max(15, 40 - L);
 // Today's session: the exercises rotate by date so each day is a little different
 function workoutFor(L = fit.level, d = today()) {
-  const pool = Object.keys(EX).filter(k => EX[k].from <= L), n = Math.min(pool.length, L < 10 ? 4 : 5);
+  const pool = SPORTS[fit.sport].pool.filter(([, from]) => from <= L).map(([k]) => k);
+  const light = isTeamDay(d), n = Math.min(pool.length, light ? 3 : L < 10 ? 4 : 5);
   const start = dayNo(d) % pool.length, pick = Array.from({ length: n }, (_, i) => pool[(start + i) % pool.length]);
   const list = [];
-  for (let r = 0; r < roundsFor(L); r++) pick.forEach(k => list.push({ k, target: EX[k].reps(L), round: r + 1 }));
+  for (let r = 0; r < (light ? 1 : roundsFor(L)); r++) pick.forEach(k => list.push({ k, target: light ? Math.max(1, Math.round(EX[k].reps(L) * .6)) : EX[k].reps(L), round: r + 1 }));
   return list;
 }
 const estMin = list => Math.round(list.reduce((n, x) => n + (EX[x.k].hold ? x.target : x.target * 2.5) + restFor(fit.level), 0) / 60);
@@ -2797,6 +2860,7 @@ function applyDecay() {
   const owed = 1 + Math.floor((missed - GRACE - 1) / 2), now = owed - (fit.dropped || 0);
   if (now <= 0) return null;
   const from = fit.level; fit.level = Math.max(1, fit.level - now); fit.prog = 0; fit.dropped = owed;
+  Object.values(fit.sp || {}).forEach(x => { x.level = Math.max(1, (x.level || 1) - now); x.prog = 0; });
   fit.drop = { from, to: fit.level, missed, d: today() }; saveFit();
   return fit.drop;
 }
@@ -2994,7 +3058,7 @@ function runCam() {
     BONES.forEach(([a, b]) => { if ((lm[a].visibility || 0) > .5 && (lm[b].visibility || 0) > .5) { ctx.beginPath(); ctx.moveTo(lm[a].x * W, lm[a].y * H); ctx.lineTo(lm[b].x * W, lm[b].y * H); ctx.stroke(); } });
     [11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28].forEach(i => { if ((lm[i].visibility || 0) > .5) { ctx.beginPath(); ctx.arc(lm[i].x * W, lm[i].y * H, Math.max(4, W / 110), 0, 7); ctx.fill(); } });
     const before = c.count, beforeHeld = Math.floor(c.held);
-    const block = analyse(it.k, lm, W, H, c, now);
+    const block = analyse(EX[it.k].detect || it.k, lm, W, H, c, now);
     setHint(block || c.hint, !!block);
     if (EX[it.k].hold) { if (Math.floor(c.held) !== beforeHeld) setCount(Math.floor(c.held)); }
     else if (c.count !== before) setCount(c.count);
@@ -3044,14 +3108,14 @@ function finishWorkout() {
     if (fit.prog >= NEED && fit.level < MAX_LV) { fit.level++; fit.prog = 0; up = true; }
   }
   if (full) { fit.last = t; fit.dropped = 0; fit.drop = null; }
-  fit.log.push({ d: t, ts: Date.now(), lv: fit.level, ex: res, full });
+  fit.log.push({ d: t, ts: Date.now(), lv: fit.level, sp: fit.sport, ex: res, full });
   if (fit.log.length > 400) fit.log = fit.log.slice(-400);
   saveFit();
   wo.phase = "done"; wo.result = { full, up, text: pick(up ? "levelUp" : full ? "finishFull" : "finishPartial") }; renderWo(); speak(wo.result.text);
   if (up) sfx("shuffle"); else if (full) sfx("done");
   if (view === "fit" || view === "fitlog" || view === "home") renderFitViews();
 }
-function closeWorkout() { stopCamera(); clearInterval(holdTick); holdTick = 0; clearInterval(restTimer); keepAwake(false); if (wdlg.open) wdlg.close(); renderFitViews(); }
+function closeWorkout() { if (typeof bt !== "undefined" && bt) clearInterval(bt.timer); bt = null; ph = null; cancelAnimationFrame(camRaf); stopCamera(); clearInterval(holdTick); holdTick = 0; clearInterval(restTimer); keepAwake(false); if (wdlg.open) wdlg.close(); renderFitViews(); }
 function renderWo() {
   const it = wo.list[wo.i], ex = it && EX[it.k], n = wo.list.length;
   const top = `<div class="cook-top"><span></span><span class="ttl">${wo.phase === "done" ? "จบการฝึก" : `ท่าที่ ${Math.min(wo.i + 1, n)} จาก ${n}`}</span>
@@ -3070,11 +3134,11 @@ function renderWo() {
   } else if (wo.phase === "ex") {
     const cnt = wo.counts[wo.i] || 0, unit = ex.hold ? "วินาที" : "ครั้ง";
     body = `<div class="woex"><div class="woname"><b id="w-title">${ex.name}</b><span>${ex.cam && wo.mode === "cam" ? ex.cam + " · " : ""}${ex.tip}</span></div>
-      ${wo.mode === "cam" ? `<div class="stage${facing === "user" ? " mirror" : ""}"><video id="woVideo" playsinline muted></video><canvas id="woCanvas"></canvas>
+      ${wo.mode === "cam" && !ex.time ? `<div class="stage${facing === "user" ? " mirror" : ""}"><video id="woVideo" playsinline muted></video><canvas id="woCanvas"></canvas>
         <div class="woover"><span id="woNum">${cnt}</span><small>/ ${it.target} ${unit}</small></div></div>
         <p class="wohint" id="woHint" aria-live="polite">เริ่มได้เลย</p>`
       : `<button type="button" class="tapzone" ${ex.hold ? `data-act="wo-hold"` : `data-act="wo-plus"`}><span id="woNum">${cnt}</span><small>/ ${it.target} ${unit}</small>
-          <em>${ex.hold ? (holdTick ? "แตะเพื่อหยุดเวลา" : "แตะเพื่อเริ่มจับเวลา") : "แตะทุกครั้งที่ทำครบ 1 ครั้ง"}</em></button>`}
+          <em>${ex.hold ? (holdTick ? "แตะเพื่อหยุดเวลา" : ex.time ? "แตะเพื่อเริ่ม ทำไปจนหมดเวลา" : "แตะเพื่อเริ่มจับเวลา") : "แตะทุกครั้งที่ทำครบ 1 ครั้ง"}</em></button>`}
       <p class="coach" id="woCoach" aria-live="polite">${esc(wo.coachText || "")}</p>
       <div class="tbar" aria-hidden="true"><i id="woBar" style="width:${Math.min(100, cnt / it.target * 100)}%"></i></div>
       <div class="trow"><button type="button" class="btn" data-act="wo-minus">−1</button><button type="button" class="btn" data-act="wo-plus1">+1</button>
@@ -3106,23 +3170,27 @@ function levelCard() {
   const note = decayNote(), drop = fit.drop && fit.drop.d === today() ? fit.drop : null;
   return `<div class="card lvcard">
       ${drop ? `<p class="warn" role="alert">${ico("arrowdown")} หายไป ${drop.missed} วัน level ลดจาก ${drop.from} เป็น ${drop.to}</p>` : ""}
-      <div class="lvrow"><span class="lvnum">${fit.level}</span><div><b>Level ${fit.level}</b><span>${rankOf(fit.level)}</span></div></div>
+      <div class="lvrow"><span class="lvnum">${fit.level}</span><div><b>Level ${fit.level}</b><span>${rankOf(fit.level)} · ${SPORTS[fit.sport].name}</span></div></div>
       <div class="lvdots" aria-label="ทำครบ ${fit.prog} จาก ${NEED} วัน">${Array.from({ length: NEED }, (_, i) => `<i class="${i < fit.prog ? "on" : ""}"></i>`).join("")}</div>
       <p class="hint">${fit.level >= MAX_LV ? "ระดับสูงสุดแล้ว" : `ทำครบอีก ${NEED - fit.prog} วัน จะขึ้น Level ${fit.level + 1}`}</p>
       <p class="decay ${note.cls}">${note.text}</p></div>`;
 }
-function renderFitViews() { if (view === "fit") renderFit(); if (view === "fitlog") renderFitLog(); if (view === "home") renderHome(); }
+function renderFitViews() { if (view === "fit") renderFit(); if (view === "fitlog") renderFitLog(); if (view === "fitbody") renderBody(); if (view === "home") renderHome(); }
 function renderFit() {
   const list = workoutFor(), doneToday = fit.log.some(x => x.d === today() && x.full);
-  $("fitBody").innerHTML = levelCard() + pepCard() + `
-    <div class="card"><h3>ฝึกวันนี้ <small>${list.length} ท่า · ประมาณ ${estMin(list)} นาที</small></h3>
+  $("fitBody").innerHTML = `<div class="scrollrow" role="group" aria-label="กีฬา">${Object.entries(SPORTS).map(([k, x]) => `<button type="button" class="chip" data-sport="${k}" aria-pressed="${k === fit.sport}">${x.name}${fit.sp[k] && k !== fit.sport ? ` · Lv ${fit.sp[k].level}` : ""}</button>`).join("")}</div>` + levelCard() + pepCard() + `
+    <div class="card"><h3>ฝึกวันนี้ <small>${SPORTS[fit.sport].name} · ${list.length} ท่า · ประมาณ ${estMin(list)} นาที</small></h3>
+      ${isTeamDay() ? `<p class="decay warn">วันนี้มีซ้อมกับทีม เลยจัดเป็นวันเบา ทำครบก็นับเหมือนวันปกติ</p>` : ""}
       <ol class="wolist">${list.map(x => `<li><b>${EX[x.k].name}</b><span>${x.target} ${EX[x.k].hold ? "วินาที" : "ครั้ง"}${roundsFor(fit.level) > 1 ? ` · รอบ ${x.round}` : ""}</span></li>`).join("")}</ol>
       ${doneToday ? `<p class="decay ok">${ico("check")} วันนี้ทำครบแล้ว ฝึกซ้ำได้ แต่จะไม่นับเพื่อเลื่อนขั้นเพิ่ม</p>` : ""}
       <button type="button" class="btn primary big" data-act="wo-start">${ico("activity")}${doneToday ? "ฝึกอีกรอบ" : "เริ่มฝึก"}</button></div>
     <div class="card"><h3>กติกา</h3><ul class="rules">
       <li>ทำครบทุกท่าในวันนั้น = นับ 1 วัน ทำครบ ${NEED} วัน (คนละวัน) ขึ้น 1 level</li>
       <li>ยิ่ง level สูง จำนวนครั้งยิ่งมาก มีท่าใหม่เพิ่มที่ Level 5 และ 10 และเพิ่มรอบที่ Level 8 และ 20</li>
-      <li>พักติดกันได้ ${GRACE} วัน ถ้าหายไปวันที่ ${GRACE + 1} level ลด 1 และลดอีก 1 ทุก 2 วันที่หายไปต่อ</li></ul></div>`;
+      <li>พักติดกันได้ ${GRACE} วัน ถ้าหายไปวันที่ ${GRACE + 1} level ลด 1 และลดอีก 1 ทุก 2 วันที่หายไปต่อ ฝึกกีฬาไหนก็นับว่าไม่ได้หายไป</li>
+      <li>แต่ละกีฬามี level ของตัวเอง ท่าที่จับด้วยกล้องไม่ได้จะเป็นท่าจับเวลาแทน</li></ul></div>
+    <div class="card"><h3>วันที่ซ้อมกับทีม <small>วันนั้นแผนจะเบาลง</small></h3>
+      <div class="row" role="group" aria-label="วันที่ซ้อมกับทีม">${WEEKDAYS.map((w, i) => `<button type="button" class="chip" data-team="${i}" aria-pressed="${fit.team.includes(i)}">${w}</button>`).join("")}</div></div>`;
 }
 function renderFitLog() {
   const done = new Set(fit.log.filter(x => x.full).map(x => x.d)), any = new Set(fit.log.map(x => x.d));
@@ -3136,6 +3204,269 @@ function renderFitLog() {
       ${Object.keys(EX).filter(k => tot[k] || fit.best[k]).map(k => `<div class="brow"><span class="txt"><b>${EX[k].name}</b><small>รวม ${tot[k] || 0} ${EX[k].hold ? "วินาที" : "ครั้ง"}</small></span><b>${fit.best[k] || 0}</b></div>`).join("") || `<p class="hint">ยังไม่มีข้อมูล เริ่มฝึกครั้งแรกได้ที่แท็บวันนี้</p>`}</div>
     ${fit.log.length ? `<div class="card"><h3>ล่าสุด</h3>${[...fit.log].reverse().slice(0, 8).map(x => `<div class="brow"><span class="txt"><b>${dayLabel(x.d)} · Level ${x.lv}</b><small>${Object.entries(x.ex).map(([k, v]) => `${EX[k] ? EX[k].name : k} ${v}`).join(" · ")}</small></span>${x.full ? `<span class="decay ok">ครบ</span>` : `<span class="decay">ไม่ครบ</span>`}</div>`).join("")}</div>` : ""}`;
 }
+
+/* ---------- Body page: weight, measurements, progress photos and camera fitness tests ---------- */
+const BODY_KEY = "life-body-v1";
+const body = Object.assign({ height: 0, target: 0, weights: [], meas: [], tests: [], photos: [] }, loadObj(BODY_KEY, {}));
+function saveBody() { try { localStorage.setItem(BODY_KEY, JSON.stringify(body)); } catch (e) { toast("บันทึกไม่สำเร็จ พื้นที่เก็บข้อมูลอาจเต็ม"); } }
+const num1 = v => (Math.round(v * 10) / 10).toLocaleString("en-US", { maximumFractionDigits: 1 });
+const signed = (v, u) => (v > 0 ? "+" : v < 0 ? "−" : "±") + num1(Math.abs(v)) + (u ? " " + u : "");
+const MEAS = [["waist", "รอบเอว"], ["chest", "รอบอก"], ["arm", "ต้นแขน"], ["thigh", "ต้นขา"]];
+
+// Photos live in IndexedDB on this device only (too big for localStorage)
+const photoDb = (() => {
+  let db = null;
+  const open = () => db || (db = new Promise((res, rej) => { const r = indexedDB.open("life-photos", 1); r.onupgradeneeded = () => r.result.createObjectStore("p"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }));
+  const run = (mode, fn) => open().then(d => new Promise((res, rej) => { const t = d.transaction("p", mode), q = fn(t.objectStore("p")); t.oncomplete = () => res(q && q.result); t.onerror = () => rej(t.error); }));
+  return { put: (k, v) => run("readwrite", s => s.put(v, k)), get: k => run("readonly", s => s.get(k)), del: k => run("readwrite", s => s.delete(k)) };
+})();
+const photoUrls = new Map();
+async function photoUrl(id) {
+  if (photoUrls.has(id)) return photoUrls.get(id);
+  const blob = await photoDb.get(id); if (!blob) return "";
+  const u = URL.createObjectURL(blob); photoUrls.set(id, u); return u;
+}
+function fillPhotos(root) { root.querySelectorAll("img[data-photo]").forEach(img => photoUrl(img.dataset.photo).then(u => { if (u) img.src = u; }).catch(() => {})); }
+function shrink(src, mirror) { // any image or video frame -> JPEG blob, longest side 900px
+  const w = src.videoWidth || src.naturalWidth || src.width, h = src.videoHeight || src.naturalHeight || src.height, k = Math.min(1, 900 / Math.max(w, h));
+  const c = document.createElement("canvas"); c.width = Math.round(w * k); c.height = Math.round(h * k);
+  const g = c.getContext("2d"); if (mirror) { g.translate(c.width, 0); g.scale(-1, 1); } g.drawImage(src, 0, 0, c.width, c.height);
+  return new Promise(res => c.toBlob(res, "image/jpeg", .82));
+}
+async function storePhoto(blob, pose) {
+  const id = "ph" + newId();
+  try { await photoDb.put(id, blob); } catch (e) { toast("เก็บรูปไม่สำเร็จ เบราว์เซอร์นี้อาจไม่อนุญาตให้เก็บรูปในเครื่อง"); return; }
+  body.photos.push({ id, d: today(), pose }); saveBody(); toast("เก็บรูปแล้ว รูปอยู่ในเครื่องนี้เท่านั้น");
+}
+const latestPhoto = pose => body.photos.filter(p => p.pose === pose).slice(-1)[0];
+
+let phPose = "front", phA = "", phB = "";
+function weightChart() {
+  const w = body.weights.slice(-12); if (w.length < 2) return "";
+  const vals = w.map(x => x.kg).concat(body.target ? [body.target] : []), lo = Math.min(...vals) - .5, hi = Math.max(...vals) + .5;
+  const W = 300, H = 110, X = i => 8 + i * (W - 16) / (w.length - 1), Y = v => 8 + (hi - v) / (hi - lo) * (H - 16);
+  const pts = w.map((x, i) => `${X(i).toFixed(1)},${Y(x.kg).toFixed(1)}`).join(" ");
+  return `<div class="wchart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="กราฟน้ำหนัก ${w.length} ครั้งล่าสุด จาก ${num1(w[0].kg)} เป็น ${num1(w[w.length - 1].kg)} กก.">
+      <line class="grid" x1="0" x2="${W}" y1="${H - .5}" y2="${H - .5}"/>
+      ${body.target ? `<line class="tline" x1="0" x2="${W}" y1="${Y(body.target).toFixed(1)}" y2="${Y(body.target).toFixed(1)}"/>` : ""}
+      <polyline class="wline" points="${pts}"/>${w.map((x, i) => `<circle class="wdot" cx="${X(i).toFixed(1)}" cy="${Y(x.kg).toFixed(1)}" r="4"/>`).join("")}</svg>
+    <div class="xaxis"><span>${dayLabel(w[0].d)}</span>${body.target ? `<span class="tlab">เส้นบาง = รุ่น ${num1(body.target)} กก.</span>` : ""}<span>${dayLabel(w[w.length - 1].d)}</span></div></div>`;
+}
+function weightNote() {
+  const w = body.weights; if (!w.length) return "";
+  const last = w[w.length - 1], ref = [...w].reverse().find(x => dayNo(last.d) - dayNo(x.d) >= 7);
+  let out = "";
+  if (ref) {
+    const perWeek = (last.kg - ref.kg) / (dayNo(last.d) - dayNo(ref.d)) * 7;
+    out += `<p class="hint">เปลี่ยนไป ${signed(perWeek, "กก.")} ต่อสัปดาห์ (เทียบกับ ${dayLabel(ref.d)})</p>`;
+    if (perWeek < -last.kg * .01) out += `<p class="decay over">${ico("arrowdown")} ลดเร็วกว่าราว 1% ของน้ำหนักตัวต่อสัปดาห์ ซึ่งเร็วเกินไปสำหรับนักกีฬาวัยเรียน ควรคุยกับโค้ชเรื่องแผนลดน้ำหนัก และกินให้พอกับการซ้อม</p>`;
+  }
+  if (body.target) {
+    const gap = last.kg - body.target;
+    out += `<p class="decay ${Math.abs(gap) < .5 ? "ok" : ""}">${Math.abs(gap) < .5 ? "อยู่ในรุ่นที่ตั้งไว้แล้ว" : gap > 0 ? `เกินรุ่น ${num1(gap)} กก. ลดอย่างปลอดภัยใช้เวลาประมาณ ${Math.ceil(gap / (last.kg * .0075))} สัปดาห์` : `ต่ำกว่ารุ่น ${num1(-gap)} กก.`}</p>`;
+  }
+  return out;
+}
+function renderBody() {
+  const w = body.weights, last = w[w.length - 1], m = body.meas, mLast = m[m.length - 1], mPrev = m[m.length - 2];
+  const poses = body.photos.filter(p => p.pose === phPose);
+  if (!poses.find(p => p.id === phA)) phA = poses[0] ? poses[0].id : "";
+  if (!poses.find(p => p.id === phB)) phB = poses.length ? poses[poses.length - 1].id : "";
+  const tl = body.tests.slice(-4);
+  $("bodyBody").innerHTML = `
+    <div class="card"><h3>ข้อมูลพื้นฐาน</h3>
+      <label class="frow" for="bHeight"><span>ส่วนสูง (ซม.)</span><input class="field sm" id="bHeight" type="text" inputmode="decimal" autocomplete="off" placeholder="เช่น 172" value="${body.height || ""}"></label>
+      <label class="frow" for="bTarget"><span>รุ่นน้ำหนักที่ตั้งใจ (กก.)</span><input class="field sm" id="bTarget" type="text" inputmode="decimal" autocomplete="off" placeholder="ไม่ตั้งก็ได้" value="${body.target || ""}"></label>
+      <p class="hint">ส่วนสูงใช้คำนวณความสูงตอนทดสอบกระโดด รุ่นน้ำหนักไว้ดูว่าห่างจากรุ่นเท่าไร</p></div>
+    <div class="card"><h3>น้ำหนัก <small>${w.length} ครั้ง</small></h3>
+      ${last ? `<div class="hero-num"><span>ล่าสุด · ${dayLabel(last.d)}</span><b>${num1(last.kg)} กก.</b></div>` : `<p class="hint">ยังไม่มีข้อมูล ชั่งตอนเช้าหลังเข้าห้องน้ำ ก่อนกินอะไร จะได้ค่าที่เทียบกันได้</p>`}
+      ${weightChart()}${weightNote()}
+      <label class="flabel" for="bWeight">น้ำหนักวันนี้ (กก.)</label>
+      <div class="rowbtns"><input class="field" id="bWeight" type="text" inputmode="decimal" autocomplete="off" placeholder="เช่น 64.5" style="flex:2 1 140px"><button type="button" class="btn primary" data-act="b-weight">บันทึก</button></div></div>
+    <div class="card"><h3>สัดส่วน <small>ซม. · วัดเดือนละครั้ง</small></h3>
+      ${mLast ? `<div class="mgrid">${MEAS.map(([k, n]) => `<div class="tile"><span>${n}</span><b>${mLast[k] ? num1(mLast[k]) : "–"}</b>${mPrev && mLast[k] && mPrev[k] ? `<small>${signed(mLast[k] - mPrev[k])}</small>` : ""}</div>`).join("")}</div><p class="hint">วัดล่าสุด ${dayLabel(mLast.d)}</p>` : ""}
+      <div class="mgrid">${MEAS.map(([k, n]) => `<label class="mfield" for="m-${k}"><span>${n}</span><input class="field" id="m-${k}" type="text" inputmode="decimal" autocomplete="off" placeholder="ซม."></label>`).join("")}</div>
+      <button type="button" class="btn" data-act="b-meas">บันทึกสัดส่วน</button></div>
+    <div class="card"><h3>รูปเทียบก่อนหลัง <small>เก็บในเครื่องนี้เท่านั้น</small></h3>
+      <div class="seg" role="group" aria-label="ท่าถ่ายรูป"><button type="button" data-phpose="front" aria-pressed="${phPose === "front"}">หน้าตรง</button><button type="button" data-phpose="side" aria-pressed="${phPose === "side"}">ด้านข้าง</button></div>
+      ${poses.length ? `<div class="pcomp"><figure><img data-photo="${phA}" alt="รูปก่อน"><figcaption>${dayLabel((poses.find(p => p.id === phA) || {}).d || today())}</figcaption></figure>
+          <figure><img data-photo="${phB}" alt="รูปล่าสุด"><figcaption>${dayLabel((poses.find(p => p.id === phB) || {}).d || today())}</figcaption></figure></div>
+        ${poses.length > 2 ? `<p class="sublab">เลือกรูปซ้าย</p><div class="scrollrow">${poses.map(p => `<button type="button" class="chip" data-pha="${p.id}" aria-pressed="${p.id === phA}">${dayLabel(p.d)}</button>`).join("")}</div>
+          <p class="sublab">เลือกรูปขวา</p><div class="scrollrow">${poses.map(p => `<button type="button" class="chip" data-phb="${p.id}" aria-pressed="${p.id === phB}">${dayLabel(p.d)}</button>`).join("")}</div>` : ""}
+        <button type="button" class="link" data-delphoto="${phB}" style="color:var(--chili)">ลบรูปขวา</button>`
+      : `<p class="hint">ถ่ายท่า${phPose === "front" ? "หน้าตรง" : "ด้านข้าง"}เดือนละครั้ง ใส่ชุดเดิม ยืนจุดเดิม แสงเดิม แล้วเลื่อนเทียบความเปลี่ยนแปลงได้</p>`}
+      <div class="rowbtns"><button type="button" class="btn primary" data-act="ph-cam">${ico("camera")}ถ่ายด้วยกล้อง</button>
+        <label class="btn" for="phFile">เลือกรูปจากเครื่อง</label><input type="file" id="phFile" accept="image/*" hidden></div></div>
+    <div class="card"><h3>ทดสอบร่างกาย <small>ทำเดือนละครั้ง</small></h3>
+      <p class="hint">กล้องวัดท่ายืน ความลึกสควอท ความสูงกระโดด วิดพื้น 60 วินาที และแพลงก์ ค่าที่ได้เป็นค่าประมาณจากกล้อง ใช้ดูพัฒนาการของตัวเอง ไม่ใช่ผลตรวจทางการแพทย์</p>
+      ${tl.length ? `<div class="tbl"><table><thead><tr><th>ผลทดสอบ</th>${tl.map(t => `<th>${parseYmd(t.d).toLocaleDateString("th-TH", { day: "numeric", month: "short" })}</th>`).join("")}</tr></thead><tbody>
+        ${TESTS.flatMap(t => t.fields).map(([k, n, u]) => `<tr><td>${n}</td>${tl.map(x => `<td>${x[k] != null ? num1(x[k]) + " " + u : "–"}</td>`).join("")}</tr>`).join("")}</tbody></table></div>` : ""}
+      <button type="button" class="btn primary big" data-act="bt-start">${ico("activity")}เริ่มทดสอบ</button></div>`;
+  fillPhotos($("bodyBody"));
+}
+
+/* Photo capture with a faint copy of the last photo to line up the same pose */
+let ph = null;
+async function startPhoto() {
+  ph = { phase: "loading" }; renderPh(); if (!wdlg.open) wdlg.showModal();
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error("nocam");
+    camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facing, width: { ideal: 1280 }, height: { ideal: 960 } }, audio: false });
+    ph.phase = "cam"; renderPh();
+  } catch (e) { stopCamera(); ph.phase = "nocam"; renderPh(); }
+}
+function renderPh() {
+  const ghost = latestPhoto(phPose);
+  let main = "", nav = "";
+  if (ph.phase === "cam" || ph.phase === "loading") {
+    main = `<p class="cook-lead" id="w-title">${phPose === "front" ? "ยืนหันหน้าเข้ากล้อง แขนแนบลำตัว" : "ยืนหันข้างให้กล้อง แขนแนบลำตัว"} ให้เห็นทั้งตัว${ghost ? " และให้ตัวทับเงารูปครั้งก่อนพอดี" : ""}</p>
+      <div class="stage${facing === "user" ? " mirror" : ""}"><video id="phVideo" playsinline muted></video>${ghost ? `<img class="ghost" data-photo="${ghost.id}" alt="">` : ""}
+        <div class="woover"><span id="phCount"></span></div></div>`;
+    nav = `<div class="cook-nav"><button type="button" class="btn" data-act="wo-flip-ph">สลับกล้อง</button><button type="button" class="btn primary" data-act="ph-shoot" ${ph.phase === "loading" ? "disabled" : ""}>${ico("camera")}<span>ถ่ายใน 5 วินาที</span></button></div>`;
+  } else if (ph.phase === "preview") {
+    main = `<p class="cook-step" id="w-title">ใช้รูปนี้ไหม</p><img class="phprev" src="${ph.url}" alt="รูปที่เพิ่งถ่าย">`;
+    nav = `<div class="cook-nav"><button type="button" class="btn" data-act="ph-retake">ถ่ายใหม่</button><button type="button" class="btn primary" data-act="ph-keep">เก็บรูปนี้</button></div>`;
+  } else {
+    main = `<p class="warn" id="w-title" role="alert">${onSite() ? "เปิดกล้องไม่สำเร็จ ลองอนุญาตกล้องในการตั้งค่าเบราว์เซอร์" : "หน้านี้เปิดกล้องไม่ได้ ใช้กล้องได้บนเว็บ kxmziii.github.io/chiwit-ngai"} หรือใช้ปุ่ม "เลือกรูปจากเครื่อง" แทน</p>`;
+    nav = `<div class="cook-nav"><span></span><button type="button" class="btn primary" data-act="wo-close">ปิด</button></div>`;
+  }
+  wdlg.innerHTML = `<div class="cook"><div class="cook-top"><span></span><span class="ttl">ถ่ายรูป${phPose === "front" ? "หน้าตรง" : "ด้านข้าง"}</span><button type="button" class="fav" data-act="wo-close" aria-label="ปิด">${ICON.close}</button></div><div class="cook-main">${main}</div>${nav}</div>`;
+  fillPhotos(wdlg);
+  const v = $("phVideo"); if (v && camStream) { v.srcObject = camStream; v.play().catch(() => {}); }
+}
+function shootPhoto() {
+  let n = 5; const el = $("phCount"), b = wdlg.querySelector('[data-act="ph-shoot"]'); if (b) b.disabled = true;
+  const t = setInterval(async () => {
+    if (!ph || ph.phase !== "cam") { clearInterval(t); return; }
+    if (el) el.textContent = n; if (n > 0) sfx("tap");
+    if (n-- <= 0) {
+      clearInterval(t); beep();
+      const v = $("phVideo"); ph.blob = await shrink(v, facing === "user"); ph.url = URL.createObjectURL(ph.blob);
+      stopCamera(); ph.phase = "preview"; renderPh();
+    }
+  }, 1000);
+}
+
+/* Fitness tests: each one is a short camera measurement */
+const TESTS = [
+  { k: "posture", name: "ท่ายืน", fields: [["shoulder", "ไหล่เอียง", "°"], ["hip", "สะโพกเอียง", "°"]], tip: "ยืนตรงหันหน้าเข้ากล้อง แขนแนบลำตัว นิ่งไว้ 3 วินาที", cam: true },
+  { k: "squat", name: "ความลึกสควอท", fields: [["knee", "มุมเข่าตอนย่อลึกสุด", "°"]], tip: "หันข้างให้กล้อง ย่อให้ลึกที่สุดโดยส้นเท้าไม่ยก 3 ครั้ง ยิ่งมุมน้อยยิ่งย่อได้ลึก", cam: true },
+  { k: "jump", name: "กระโดดสูง", fields: [["jump", "กระโดดสูง", "ซม."]], tip: "หันหน้าเข้ากล้อง ยืนนิ่ง 2 วินาที แล้วกระโดดสูงสุด 3 ครั้ง ต้องใส่ส่วนสูงไว้ก่อน", cam: true },
+  { k: "pushup", name: "วิดพื้น 60 วินาที", fields: [["pushup", "วิดพื้นใน 60 วินาที", "ครั้ง"]], tip: "หันข้างให้กล้อง วิดพื้นให้ได้มากที่สุดใน 60 วินาที ลงลึกทุกครั้ง" },
+  { k: "plank", name: "แพลงก์นานสุด", fields: [["plank", "แพลงก์นานสุด", "วินาที"]], tip: "หันข้างให้กล้อง ค้างแพลงก์ให้นานที่สุด ลำตัวตรงตลอด ถ้าตัวหย่อนนานเกิน 2 วินาทีจะหยุดนับ" }
+];
+let bt = null;
+async function startTests() {
+  bt = { i: 0, phase: "loading", res: {}, cam: false, live: "" }; if (!wdlg.open) wdlg.showModal(); renderBt(); keepAwake(true);
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error("nocam");
+    camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facing, width: { ideal: 640 }, height: { ideal: 480 } }, audio: false });
+    await loadPoser(); bt.cam = true;
+  } catch (e) { stopCamera(); bt.cam = false; }
+  bt.phase = "intro"; skipUncamable(); renderBt();
+}
+function skipUncamable() { while (bt.i < TESTS.length && !bt.cam && TESTS[bt.i].cam) bt.i++; if (bt.i >= TESTS.length) bt.phase = "done"; }
+function btNext() { cancelAnimationFrame(camRaf); clearInterval(bt.timer); bt.i++; bt.phase = "intro"; skipUncamable(); if (bt.phase === "done") finishTests(); else renderBt(); }
+function finishTests() {
+  cancelAnimationFrame(camRaf); stopCamera(); bt.phase = "done";
+  if (Object.keys(bt.res).length) { body.tests.push({ d: today(), ...bt.res }); saveBody(); sfx("done"); }
+  renderBt();
+}
+function testVerdict(k, v) {
+  if (k === "shoulder" || k === "hip") return v < 2 ? "สมดุลดี" : v < 4 ? "เอียงเล็กน้อย" : "เอียงชัด ลองถ่ายซ้ำ ถ้ายังเหมือนเดิมให้ปรึกษาโค้ช";
+  if (k === "knee") return v <= 70 ? "ย่อได้ลึกมาก" : v <= 90 ? "ย่อได้ลึกพอ" : "ยังตื้น ฝึกยืดสะโพกและข้อเท้าเพิ่ม";
+  return "";
+}
+function renderBt() {
+  const t = TESTS[bt.i];
+  let main = "", nav = "";
+  if (bt.phase === "loading") { main = `<p class="cook-lead" id="w-title" aria-live="polite">กำลังเปิดกล้องและโหลดตัว AI</p>`; }
+  else if (bt.phase === "done") {
+    const keys = Object.keys(bt.res);
+    main = `<div class="done-msg"><span class="big" aria-hidden="true">${ico("trophy", "huge")}</span><p class="cook-step" id="w-title">${keys.length ? "บันทึกผลทดสอบแล้ว" : "ยังไม่มีผลทดสอบ"}</p>
+      ${keys.length ? `<ul class="wolist">${TESTS.flatMap(x => x.fields).filter(([k]) => bt.res[k] != null).map(([k, n, u]) => `<li><b>${n}</b><span>${num1(bt.res[k])} ${u}</span></li>`).join("")}</ul>` : ""}
+      ${!bt.cam ? `<p class="hint">${onSite() ? "เปิดกล้องไม่ได้ ข้ามการทดสอบที่ต้องใช้กล้องไป" : "หน้านี้เปิดกล้องไม่ได้ การทดสอบท่ายืน สควอท และกระโดดใช้ได้บนเว็บ kxmziii.github.io/chiwit-ngai"}</p>` : ""}</div>`;
+    nav = `<div class="cook-nav"><span></span><button type="button" class="btn primary" data-act="wo-close">เสร็จ</button></div>`;
+  } else if (bt.phase === "intro") {
+    main = `<div class="stepno"><b>${bt.i + 1}</b><span>ทดสอบที่ ${bt.i + 1} จาก ${TESTS.length}</span></div><p class="cook-step" id="w-title">${t.name}</p><p class="cook-lead">${t.tip}</p>
+      ${t.k === "jump" && !body.height ? `<label class="flabel" for="btHeight">ส่วนสูงของคุณ (ซม.)</label><input class="field" id="btHeight" type="text" inputmode="decimal" placeholder="เช่น 172">` : ""}
+      ${!bt.cam ? `<label class="flabel" for="btManual">ไม่มีกล้อง จดผลเองได้ (${t.fields[0][2]})</label><input class="field" id="btManual" type="text" inputmode="decimal" autocomplete="off">` : ""}`;
+    nav = `<div class="cook-nav"><button type="button" class="btn" data-act="bt-skip">ข้าม</button><button type="button" class="btn primary" data-act="bt-go">${bt.cam ? "เริ่มวัด" : "บันทึก"}</button></div>`;
+  } else if (bt.phase === "measure") {
+    main = `<p class="cook-lead" id="w-title">${t.name}</p><div class="stage${facing === "user" ? " mirror" : ""}"><video id="btVideo" playsinline muted></video><canvas id="btCanvas"></canvas>
+        <div class="woover"><span id="btNum"></span></div></div><p class="wohint" id="btHint" aria-live="polite">เตรียมตัว</p>`;
+    nav = `<div class="cook-nav"><button type="button" class="btn" data-act="bt-skip">ข้าม</button><button type="button" class="btn primary" data-act="bt-stop">หยุดและบันทึก</button></div>`;
+  } else {
+    const r = t.fields.map(([k, n, u]) => `<li><b>${n}</b><span>${bt.res[k] != null ? num1(bt.res[k]) + " " + u : "วัดไม่ได้"}</span></li>${testVerdict(k, bt.res[k]) && bt.res[k] != null ? `<li><span>${testVerdict(k, bt.res[k])}</span></li>` : ""}`).join("");
+    main = `<p class="cook-step" id="w-title">${t.name}</p><ul class="wolist">${r}</ul>`;
+    nav = `<div class="cook-nav"><button type="button" class="btn" data-act="bt-retry">วัดใหม่</button><button type="button" class="btn primary" data-act="bt-next">${bt.i < TESTS.length - 1 ? "ทดสอบต่อไป" : "ดูสรุป"}</button></div>`;
+  }
+  const n = TESTS.length;
+  wdlg.innerHTML = `<div class="cook"><div class="cook-top"><span></span><span class="ttl">ทดสอบร่างกาย</span><button type="button" class="fav" data-act="wo-close" aria-label="ปิด">${ICON.close}</button></div>${segs(n, bt.phase === "done" ? n : bt.i)}<div class="cook-main">${main}</div>${nav}</div>`;
+  if (bt.phase === "measure") measure();
+}
+function drawSkel(ctx, lm, W, H) {
+  ctx.clearRect(0, 0, W, H); ctx.lineWidth = Math.max(3, W / 160); ctx.strokeStyle = "rgba(255,255,255,.9)"; ctx.fillStyle = "#3b82f6";
+  BONES.forEach(([a, b]) => { if ((lm[a].visibility || 0) > .5 && (lm[b].visibility || 0) > .5) { ctx.beginPath(); ctx.moveTo(lm[a].x * W, lm[a].y * H); ctx.lineTo(lm[b].x * W, lm[b].y * H); ctx.stroke(); } });
+}
+// One measurement: feeds every pose to the test's own handler until it reports a result
+function measure() {
+  const t = TESTS[bt.i], video = $("btVideo"), canvas = $("btCanvas"), ctx = canvas.getContext("2d");
+  video.srcObject = camStream; video.play().catch(() => {});
+  const st = { c: newCounter(), t0: 0, samples: [], minKnee: 999, base: null, baseN: 0, px: 0, minHip: 1e9, bad: 0, lastNow: 0 };
+  const hint = s => { const h = $("btHint"); if (h && h.textContent !== s) h.textContent = s; };
+  const show = s => { const e = $("btNum"); if (e && e.textContent !== String(s)) e.textContent = s; };
+  const done = res => { Object.assign(bt.res, res); cancelAnimationFrame(camRaf); clearInterval(bt.timer); bt.phase = "result"; sfx("done"); renderBt(); };
+  bt.stop = () => {
+    if (t.k === "pushup") done({ pushup: st.c.count });
+    else if (t.k === "plank") done({ plank: Math.floor(st.c.held) });
+    else if (t.k === "squat" && st.minKnee < 999) done({ knee: st.minKnee });
+    else if (t.k === "jump" && st.base && st.minHip < 1e9) done({ jump: Math.max(0, (st.base.hip - st.minHip) / st.px) });
+    else done({});
+  };
+  if (t.k === "pushup") { let left = 63; bt.timer = setInterval(() => { left--; if (left > 60) { hint(`เริ่มใน ${left - 60}`); sfx("tap"); } else if (left === 60) { beep(); st.go = true; } else if (left <= 0) { beep(); bt.stop(); } }, 1000); }
+  const loop = () => {
+    camRaf = requestAnimationFrame(loop);
+    if (video.readyState < 2) return;
+    const W = video.videoWidth, H = video.videoHeight; if (canvas.width !== W) { canvas.width = W; canvas.height = H; }
+    const now = performance.now(); if (now === st.lastNow) return; st.lastNow = now;
+    let r; try { r = poser.detectForVideo(video, now); } catch (e) { return; }
+    const lm = r && r.landmarks && r.landmarks[0];
+    if (!lm) { ctx.clearRect(0, 0, W, H); hint("ไม่เห็นตัว ถอยออกให้เห็นทั้งตัว"); return; }
+    drawSkel(ctx, lm, W, H);
+    const P = i => ({ x: lm[i].x * W, y: lm[i].y * H, v: lm[i].visibility == null ? 1 : lm[i].visibility });
+    const ok = (...ids) => ids.every(i => P(i).v > .5);
+    if (t.k === "posture") {
+      if (!ok(11, 12, 23, 24)) return hint("หันหน้าเข้ากล้อง ให้เห็นไหล่และสะโพก");
+      const tilt = (a, b) => Math.abs(Math.atan2(P(b).y - P(a).y, P(b).x - P(a).x) * 180 / Math.PI) % 180;
+      const fix = d => Math.min(d, 180 - d);
+      st.samples.push([fix(tilt(11, 12)), fix(tilt(23, 24))]);
+      hint("ยืนนิ่ง ๆ"); show(Math.max(0, 3 - Math.floor(st.samples.length / 30)));
+      if (st.samples.length >= 90) { const avg = i => st.samples.reduce((n, s) => n + s[i], 0) / st.samples.length; done({ shoulder: avg(0), hip: avg(1) }); }
+    } else if (t.k === "squat") {
+      const side = ok(23, 25, 27) ? [23, 25, 27] : ok(24, 26, 28) ? [24, 26, 28] : null;
+      if (!side) return hint("หันข้างให้กล้อง ให้เห็นสะโพกถึงเท้า");
+      const a = angle(P(side[0]), P(side[1]), P(side[2]));
+      st.minKnee = Math.min(st.minKnee, a); analyse("squat", lm, W, H, st.c, now);
+      hint(st.c.count >= 3 ? "ครบ 3 ครั้งแล้ว" : `ย่อให้ลึกที่สุด (${st.c.count}/3)`); show(Math.round(st.minKnee) + "°");
+      if (st.c.count >= 3) done({ knee: st.minKnee });
+    } else if (t.k === "jump") {
+      if (!body.height) return hint("ใส่ส่วนสูงก่อนเริ่มวัด");
+      if (!ok(0, 23, 24, 27, 28)) return hint("ถอยออกให้เห็นตั้งแต่หัวจรดเท้า");
+      const hip = (P(23).y + P(24).y) / 2, ank = (P(27).y + P(28).y) / 2, nose = P(0).y;
+      if (st.baseN < 45) { st.base = st.base || { hip: 0, span: 0 }; st.base.hip = (st.base.hip * st.baseN + hip) / (st.baseN + 1); st.base.span = (st.base.span * st.baseN + (ank - nose)) / (st.baseN + 1); st.baseN++; hint("ยืนนิ่ง ๆ ก่อน"); if (st.baseN === 45) { st.px = st.base.span / (body.height * .89); sfx("on"); } return; }
+      st.minHip = Math.min(st.minHip, hip); const cm = Math.max(0, (st.base.hip - st.minHip) / st.px);
+      hint("กระโดดสูงสุด 3 ครั้ง แล้วกดหยุด"); show(Math.round(cm) + " ซม.");
+    } else if (t.k === "pushup") {
+      if (!st.go) return; analyse("pushup", lm, W, H, st.c, now); hint(st.c.hint || "วิดต่อไป!"); show(st.c.count);
+    } else if (t.k === "plank") {
+      const before = st.c.held; analyse("plank", lm, W, H, st.c, now); show(Math.floor(st.c.held) + " วิ"); hint(st.c.hint || "ค้างไว้");
+      if (st.c.held > 3 && st.c.held === before) { st.bad += 1 / 30; if (st.bad > 2) done({ plank: Math.floor(st.c.held) }); } else st.bad = 0;
+    }
+  };
+  loop();
+}
+
 wdlg.addEventListener("cancel", ev => { ev.preventDefault(); closeWorkout(); });
 $("coachSwitch").checked = coachOn;
 $("coachSwitch").addEventListener("change", ev => { coachOn = ev.target.checked; store("life-coach-v1", [coachOn]); sfx(coachOn ? "on" : "off"); if (coachOn && !speak("พร้อมลุยแล้ว!")) toast("มือถือนี้ไม่มีเสียงพูดภาษาไทย คำปลุกใจจะขึ้นบนจอแทน"); });
@@ -3167,6 +3498,32 @@ const ACTIONS = {
   "m-add": () => openMoneyForm(),
   "go-fit": () => go("fit"), "go-fitlog": () => go("fitlog"),
   "wo-start": () => startWorkout(),
+  "b-weight": () => {
+    const kg = parseFloat(($("bWeight").value || "").replace(",", "."));
+    if (!(kg >= 20 && kg <= 250)) { sfx("warn"); toast("ใส่น้ำหนักเป็นกิโลกรัม เช่น 64.5"); $("bWeight").focus(); return; }
+    body.weights = body.weights.filter(x => x.d !== today()); body.weights.push({ d: today(), kg }); saveBody(); sfx("on"); renderBody(); toast(`บันทึกน้ำหนัก ${num1(kg)} กก. แล้ว`);
+  },
+  "b-meas": () => {
+    const e = { d: today() }; MEAS.forEach(([k]) => { const v = parseFloat(($("m-" + k).value || "").replace(",", ".")); if (v > 0 && v < 300) e[k] = v; });
+    if (Object.keys(e).length < 2) { sfx("warn"); toast("ใส่อย่างน้อย 1 ค่าเป็นเซนติเมตร"); return; }
+    body.meas = body.meas.filter(x => x.d !== today()); body.meas.push(e); saveBody(); sfx("on"); renderBody(); toast("บันทึกสัดส่วนแล้ว");
+  },
+  "ph-cam": () => startPhoto(),
+  "ph-shoot": () => shootPhoto(),
+  "ph-retake": () => { if (ph && ph.url) URL.revokeObjectURL(ph.url); startPhoto(); },
+  "ph-keep": async () => { const b = ph.blob; closeWorkout(); await storePhoto(b, phPose); phB = ""; renderBody(); },
+  "wo-flip-ph": async () => { facing = facing === "user" ? "environment" : "user"; stopCamera(); await startPhoto(); },
+  "bt-start": () => startTests(),
+  "bt-go": () => {
+    const t = TESTS[bt.i];
+    if (!bt.cam) { const v = parseFloat(($("btManual").value || "").replace(",", ".")); if (v >= 0) bt.res[t.fields[0][0]] = v; btNext(); return; }
+    if ($("btHeight")) { const h = parseFloat($("btHeight").value); if (h > 100 && h < 230) { body.height = h; saveBody(); } else { sfx("warn"); toast("ใส่ส่วนสูงเป็นเซนติเมตร เช่น 172"); return; } }
+    bt.phase = "measure"; renderBt();
+  },
+  "bt-stop": () => bt.stop && bt.stop(),
+  "bt-skip": () => btNext(),
+  "bt-retry": () => { TESTS[bt.i].fields.forEach(([k]) => delete bt.res[k]); bt.phase = "measure"; renderBt(); },
+  "bt-next": () => { if (bt.i >= TESTS.length - 1) finishTests(); else btNext(); },
   "wo-cam": () => useCamera(),
   "wo-tap": () => { wo.mode = "tap"; wo.msg = ""; beginExercise(); },
   "wo-close": () => closeWorkout(),
@@ -3246,6 +3603,12 @@ document.addEventListener("click", ev => {
   }
   if ((el = t.closest(".tab"))) { go(el.dataset.view); return; }
   if ((el = t.closest("[data-view-go]"))) { go(el.dataset.viewGo); return; }
+  if ((el = t.closest("[data-sport]"))) { setSport(el.dataset.sport); renderFit(); toast(`แผน${SPORTS[fit.sport].name} · Level ${fit.level}`); return; }
+  if ((el = t.closest("[data-team]"))) { const d = +el.dataset.team; fit.team = fit.team.includes(d) ? fit.team.filter(x => x !== d) : [...fit.team, d]; saveFit(); renderFit(); return; }
+  if ((el = t.closest("[data-phpose]"))) { phPose = el.dataset.phpose; phA = phB = ""; renderBody(); return; }
+  if ((el = t.closest("[data-pha]"))) { phA = el.dataset.pha; renderBody(); return; }
+  if ((el = t.closest("[data-phb]"))) { phB = el.dataset.phb; renderBody(); return; }
+  if ((el = t.closest("[data-delphoto]"))) { const id = el.dataset.delphoto; body.photos = body.photos.filter(x => x.id !== id); saveBody(); photoDb.del(id).catch(() => {}); phB = ""; renderBody(); toast("ลบรูปแล้ว"); return; }
   if ((el = t.closest("[data-preset]"))) {
     const p = PRESETS.find(x => x.id === el.dataset.preset), was = activePreset();
     Object.assign(state, DEFAULTS, was === p ? {} : p.set);
@@ -3296,6 +3659,13 @@ document.addEventListener("change", ev => {
     saveMoney(); sfx("on");
     const note = document.querySelector(`[data-bstat="${d.bcat}"]`);
     if (note) { note.textContent = bstat(spent, v); note.classList.toggle("over", !!v && spent > v); }
+  }
+  if (ev.target.id === "bHeight") { const h = parseFloat(ev.target.value); body.height = h > 100 && h < 230 ? h : 0; saveBody(); }
+  if (ev.target.id === "bTarget") { const w = parseFloat(ev.target.value); body.target = w > 20 && w < 250 ? w : 0; saveBody(); renderBody(); }
+  if (ev.target.id === "phFile" && ev.target.files[0]) {
+    const f = ev.target.files[0], img = new Image(), u = URL.createObjectURL(f); ev.target.value = "";
+    img.onload = async () => { const b = await shrink(img, false); URL.revokeObjectURL(u); await storePhoto(b, phPose); phB = ""; renderBody(); };
+    img.onerror = () => toast("เปิดรูปนี้ไม่ได้ ลองรูปอื่น"); img.src = u;
   }
   if (ev.target.id === "restoreFile" && ev.target.files[0]) { restoreMoney(ev.target.files[0]); ev.target.value = ""; }
   if (d.shop) { ev.target.checked ? bought.add(d.shop) : bought.delete(d.shop); store("krua-shop-v1", [...bought]); }
