@@ -608,6 +608,49 @@ dialog::backdrop { background: rgba(6, 10, 22, .55); }
 .stage.mirror .ghost { transform: none; }
 .phprev { width: 100%; max-height: 60vh; object-fit: contain; border-radius: var(--r-card); background: #0b1020; }
 label.btn { cursor: pointer; }
+
+/* ---------- Food storage ---------- */
+.slist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.srow { padding: 12px 0; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.srow:first-child { padding-top: 4px; }
+.srow:last-child { border-bottom: none; padding-bottom: 0; }
+.shead { display: flex; align-items: center; gap: 12px; width: 100%; padding: 0; border: 0; background: none; font: inherit; color: inherit; text-align: left; cursor: pointer; border-radius: var(--r-ctl); }
+.shead:focus-visible { outline: 2px solid var(--basil); outline-offset: 2px; }
+.stext { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.stext b { font-weight: 600; font-size: 16px; line-height: 1.35; }
+.stext span { font-size: 13.5px; color: var(--muted); line-height: 1.45; }
+.sleft { flex: none; font-size: 13.5px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--good-soft); color: var(--good); white-space: nowrap; }
+.sleft.soon { background: var(--turmeric-soft); color: var(--turmeric); }
+.sleft.over { background: var(--chili-soft); color: var(--chili); }
+.srow .rowbtns, .sbody .rowbtns { flex-wrap: wrap; align-items: center; }
+.srow .rowbtns { gap: 8px; }
+.srow .rowbtns .btn { flex: 0 1 auto; padding: 0 12px; }
+.srow .btn .ico, .sbody .btn .ico { width: 18px; height: 18px; }
+.sgh { margin: 14px 4px 8px; font-size: 15px; font-weight: 600; color: var(--muted); }
+#storeGuide > .sgh:first-child { margin-top: 0; }
+.sgl { display: flex; flex-direction: column; gap: 8px; }
+.sitem { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-card); box-shadow: var(--shadow); }
+.sitem summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 10px 12px; min-height: 60px; border-radius: var(--r-card); }
+.sitem summary::-webkit-details-marker { display: none; }
+.sitem summary::after { content: ""; flex: none; width: 8px; height: 8px; margin: 0 6px 4px 0; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform var(--dur) var(--ease); }
+.sitem[open] summary::after { transform: rotate(-135deg); margin-bottom: -4px; }
+.sitem summary:focus-visible { outline: 2px solid var(--basil); outline-offset: 2px; }
+.sbody { padding: 2px 14px 14px; display: flex; flex-direction: column; gap: 6px; }
+.sbody h4 { margin: 8px 0 0; font-size: 14px; font-weight: 600; color: var(--muted); }
+.sbody p { margin: 0; font-size: 15px; line-height: 1.55; }
+.shows { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; font-size: 15px; line-height: 1.55; }
+.guide .shows { padding: 0 16px 14px 34px; font-size: 14.5px; }
+.splaces { display: grid; grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); gap: 8px; }
+.splace { border: 1px solid var(--line); border-radius: var(--r-ctl); padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
+.splace .ico { width: 20px; height: 20px; color: var(--muted); }
+.splace b { font-size: 15.5px; font-weight: 600; }
+.splace span { font-size: 12.5px; color: var(--muted); }
+.splace.best { border-color: var(--basil); background: var(--basil-soft); }
+.splace.best .ico, .splace.best span { color: var(--basil-strong); }
+.sbody .stip { display: flex; gap: 8px; margin-top: 6px; padding: 8px 12px; border-radius: var(--r-ctl); background: var(--turmeric-soft); color: var(--turmeric); font-size: 14.5px; }
+.stip .ico { width: 18px; height: 18px; flex: none; margin-top: 3px; }
+.sadd { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: 14px; color: var(--muted); }
+.sdate { min-height: 44px; border: 1px solid var(--field); border-radius: var(--r-ctl); background: var(--surface); color: var(--ink); padding: 0 12px; font: inherit; font-size: 15px; }
 </style>
 
 <meta name="description" content="ผู้ช่วยเรื่องประจำวัน เริ่มจากครัว: หาเมนูจากของที่มี จัดมื้อ และทำตามทีละขั้น">
@@ -666,6 +709,10 @@ label.btn { cursor: pointer; }
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>
       <span>มื้อนี้</span><b class="badge" id="mealBadge" hidden>0</b>
     </button>
+    <button type="button" class="tab" data-view="store">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h8v3H8z"/><path d="M7 6h10l1 3v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9z"/><path d="M9.5 13h5"/></svg>
+      <span>เก็บของ</span><b class="badge" id="storeBadge" hidden>0</b>
+    </button>
     <button type="button" class="tab" data-view="kitchen">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M6 10h12M9.5 6v1.5M9.5 13v3"/></svg>
       <span>ครัวของฉัน</span>
@@ -709,6 +756,47 @@ label.btn { cursor: pointer; }
       <button type="button" id="segShop" data-act="meal-shop" aria-pressed="false">รายการซื้อของ</button>
     </div>
     <div id="mealBody" class="stack"></div>
+  </section>
+
+  <section id="view-store" aria-label="เก็บของ" hidden>
+    <div class="pagehead"><h2>เก็บของ</h2><p>เก็บเนื้อ ผัก เส้น ยังไงให้อยู่นานและปลอดภัย และนับวันของที่อยู่ในตู้ให้</p></div>
+    <div class="stack" id="storeBody">
+      <div class="card"><h3>ของในตู้ตอนนี้ <small id="stockSum"></small></h3><div id="stockBody"></div></div>
+      <details class="guide"><summary>หลักจำง่าย 8 ข้อ <small>อ่านก่อน</small></summary>
+        <ol class="shows">
+          <li>ช่องธรรมดาควรเย็นไม่เกิน 4°C ช่องฟรีซ −18°C หรือเย็นกว่า ถ้าตู้มีปุ่มหมุน ตั้งไว้กลางค่อนไปทางเย็น</li>
+          <li>ของสดและอาหารสุก วางนอกตู้ได้ไม่เกิน 2 ชั่วโมง วันร้อน ๆ แบบบ้านเรา (เกิน 32°C) ไม่เกิน 1 ชั่วโมง</li>
+          <li>ของดิบไว้ชั้นล่างสุด ของพร้อมกินไว้ชั้นบน กันน้ำจากเนื้อดิบหยดใส่</li>
+          <li>อย่ายัดตู้จนแน่น ลมเย็นต้องไหลได้ ตู้ถึงจะเย็นทั่ว</li>
+          <li>ของเก่าไว้ข้างหน้า ของใหม่ไว้ข้างหลัง ใช้ของเก่าก่อนเสมอ</li>
+          <li>เขียนชื่อกับวันที่ติดกล่องทุกครั้ง หรือกด "เก็บในตู้เย็น" ในหน้านี้ให้แอปนับวันแทน</li>
+          <li>ช่องฟรีซหยุดเชื้อโรคไว้ แต่ไม่ได้ฆ่า ของที่เก็บนานเกินเวลาในแอปแค่ไม่อร่อย (แห้ง จืด) ส่วนตอนละลายแล้วเชื้อจะกลับมาโตต่อ</li>
+          <li>ไม่แน่ใจว่ายังกินได้ไหม ทิ้งดีกว่า เชื้อบางตัวไม่มีกลิ่นและไม่เปลี่ยนสี</li>
+        </ol></details>
+      <details class="guide"><summary>ละลายของแช่แข็ง <small>ดู</small></summary>
+        <ol class="shows">
+          <li>ดีที่สุด: ย้ายลงช่องธรรมดาข้ามคืน ชิ้นบาง 1 คืน ชิ้นหนาหรือไก่ทั้งตัว 1–2 วัน</li>
+          <li>รีบ: ใส่ถุงปิดสนิท แช่ในน้ำเย็น (ไม่ใช่น้ำร้อน) เปลี่ยนน้ำทุก 30 นาที ชิ้นละครึ่งกิโลใช้ราว 1 ชั่วโมง</li>
+          <li>รีบมาก: ไมโครเวฟโหมดละลาย แล้วทำอาหารทันที</li>
+          <li>ห้ามวางละลายบนโต๊ะหรือในซิงก์ ผิวนอกจะอุ่นจนเชื้อโต ขณะที่ข้างในยังแข็งอยู่</li>
+          <li>ละลายในตู้เย็นแล้ว แช่แข็งกลับได้ (แต่จะไม่อร่อยเท่าเดิม) ถ้าละลายด้วยน้ำหรือไมโครเวฟ ต้องทำให้สุกก่อน ค่อยแช่แข็งใหม่</li>
+        </ol></details>
+      <details class="guide"><summary>แช่แข็งให้ยังอร่อย <small>ดู</small></summary>
+        <ol class="shows">
+          <li>แบ่งเป็นชุดละมื้อก่อนแช่ จะได้หยิบเท่าที่ใช้</li>
+          <li>ใส่ถุงซิปแล้วไล่ลมออกให้หมด เคล็ดลับ: ค่อย ๆ จุ่มถุงลงในน้ำ น้ำจะดันลมออก แล้วรูดปิด ช่วยกันผิวแห้งขาว (ไหม้เย็น)</li>
+          <li>วางถุงแบนให้แข็งก่อน แล้วค่อยตั้งเรียงเหมือนหนังสือ ประหยัดที่และละลายเร็ว</li>
+          <li>ของร้อนให้หายร้อนก่อนเข้าช่องฟรีซ จะได้ไม่ทำให้ของอื่นละลาย</li>
+          <li>ผักส่วนใหญ่ต้องลวกก่อนแช่แข็ง ไม่งั้นจะเหนียวและสีหมอง ผักใบอย่างผักกาดแช่แข็งไม่ได้</li>
+        </ol></details>
+      <div>
+        <div class="searchbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input class="search" id="sq" type="search" placeholder="ค้นหา เช่น สเต็ก ผักบุ้ง เส้นใหญ่" aria-label="ค้นหาวิธีเก็บวัตถุดิบ" autocomplete="off">
+        </div>
+        <div class="shortcuts" id="sgroups" role="group" aria-label="หมวดวัตถุดิบ"></div>
+      </div>
+      <div id="storeGuide"></div>
+    </div>
   </section>
 
   <section id="view-kitchen" aria-label="ครัวของฉัน" hidden>
@@ -1756,7 +1844,7 @@ const SFX = {
   warn: [{ f: 220, d: .14, g: .05, type: "square" }]
 };
 // Actions whose sound differs from a plain tap. null = the action plays its own sound once it knows the outcome.
-const ACT_SFX = { "bt-start": "open", "ph-cam": "open", "bt-skip": "off", "bt-next": "next", "bt-go": "next", "b-weight": null, "b-meas": null, "ph-keep": "on", "wo-start": "open", "wo-cam": "open", "wo-tap": "open", "wo-close": "back", "wo-next": "next", "wo-skip": "off", "wo-go": "next", "wo-minus": "off", "wo-plus": "tap", "wo-plus1": "tap", "wo-meal": "open", shuffle: null, "shop-add": null, "m-save": null, "m-save-more": null, "m-wipe": null, "m-delete": "off", "m-close": "back",
+const ACT_SFX = { "go-store": "open", "bt-start": "open", "ph-cam": "open", "bt-skip": "off", "bt-next": "next", "bt-go": "next", "b-weight": null, "b-meas": null, "ph-keep": "on", "wo-start": "open", "wo-cam": "open", "wo-tap": "open", "wo-close": "back", "wo-next": "next", "wo-skip": "off", "wo-go": "next", "wo-minus": "off", "wo-plus": "tap", "wo-plus1": "tap", "wo-meal": "open", shuffle: null, "shop-add": null, "m-save": null, "m-save-more": null, "m-wipe": null, "m-delete": "off", "m-close": "back",
   "m-add": "open", "rec-add": "open", "shop-pay": "open", "toast-act": "on", back: "back", close: "back", "close-filters": "back", reset: "off", "clear-meal": "off",
   "equip-none": "off", "pantry-clear": "off", "equip-all": "on", "open-filters": "open", "start-cook": "next", "cook-meal": "next", "cook-pay": "open", install: "on" };
 function sfx(name) {
@@ -1780,7 +1868,10 @@ function sfx(name) {
 // Picks the sound for a tap before anything changes, so "on" and "off" reflect what the tap is about to do
 function clickSound(t) {
   let el;
-  if (t.closest("[data-sport], [data-team], [data-phpose], [data-pha], [data-phb]")) return sfx("tap");
+  if (t.closest("[data-sport], [data-team], [data-phpose], [data-pha], [data-phb], [data-sg], [data-sopen]")) return sfx("tap");
+  if (t.closest("[data-sadd], [data-sfreeze], [data-sthaw]")) return sfx("on");
+  if (t.closest("[data-sused]")) return sfx("off");
+  if (t.closest("[data-scook]")) return sfx("open");
   if (t.closest(".tab, [data-preset], [data-f], [data-t], [data-th], [data-done], [data-jump], [data-key], [data-mtype], [data-mcat], [data-mdate], [data-mmonth], [data-lt], [data-lcat], [data-emoji], [data-day]")) return sfx("tap");
   if (t.closest("[data-view-go], [data-open], [data-tx], [data-statcat]")) return sfx("open");
   if (t.closest("[data-quick]")) return sfx("on");
@@ -1803,10 +1894,10 @@ $("sfxSwitch").addEventListener("change", ev => { sfxOn = ev.target.checked; sto
 // Every topic of the app is listed here. To add one later: add its views and tabs to the page, then describe it in this list.
 const APP_NAME = "ชีวิตง่าย";
 const TOPICS = [
-  { id: "kitchen", name: "ครัวบ้านเรา", icon: "chef", tint: "t1", start: "menu", views: ["menu", "meal", "kitchen"],
+  { id: "kitchen", name: "ครัวบ้านเรา", icon: "chef", tint: "t1", start: "menu", views: ["menu", "meal", "store", "kitchen"],
     desc: "หาเมนูจากของที่มี จัดมื้อ และทำตามทีละขั้น",
-    stat: () => `ทำได้ ${RECIPES.filter(canMake).length} จาก ${RECIPES.length} สูตร` + (mealItems().length ? ` · มื้อนี้ ${mealItems().length} เมนู` : ""),
-    quick: [["shuffle", "สุ่มจัดมื้อ"], ["go-meal", "มื้อนี้"], ["go-kitchen", "ครัวของฉัน"]] },
+    stat: () => `ทำได้ ${RECIPES.filter(canMake).length} จาก ${RECIPES.length} สูตร` + (mealItems().length ? ` · มื้อนี้ ${mealItems().length} เมนู` : "") + (stockDue() ? ` · ของใกล้หมดอายุ ${stockDue()} อย่าง` : ""),
+    quick: [["shuffle", "สุ่มจัดมื้อ"], ["go-meal", "มื้อนี้"], ["go-store", "เก็บของ"], ["go-kitchen", "ครัวของฉัน"]] },
   { id: "money", name: "รายจ่าย", icon: "wallet", tint: "t4", start: "money", views: ["money", "ledger", "stats", "budget"],
     desc: "จดรายจ่ายในไม่กี่แตะ ดูสรุป และคุมงบรายเดือน",
     stat: () => { const spent = sum(txIn(monthKey(today())));
@@ -1869,6 +1960,7 @@ function go(v, setHash = true) {
   if (v === "fitbody") renderBody();
   if (v === "meal") renderMealPage();
   if (v === "kitchen") renderKitchen();
+  if (v === "store") renderStore();
   if (v === "menu") render();
   if (setHash) { try { if (location.hash !== "#" + v) location.hash = v; } catch (e) {} }
   window.scrollTo(0, scrollPos[v] || 0);
@@ -1918,9 +2010,10 @@ function renderShortcuts() {
   const n = filterCount(); $("fBadge").hidden = !n; $("fBadge").textContent = n;
 }
 function resetFilters() {
-  $("q").value = ""; Object.assign(state, DEFAULTS);
+  $("q").value = ""; usesId = ""; Object.assign(state, DEFAULTS);
   renderShortcuts(); render(); if (fdlg.open) renderFilters();
 }
+let usesId = ""; // set from the storage page: show only recipes that use this pantry item
 function filtered() {
   // Ignore Thai tone marks and similar signs so "สปาเก็ตตี้" still finds "สปาเกตตี"
   const norm = s => s.toLowerCase().replace(/[็-์]/g, "");
@@ -1935,6 +2028,7 @@ function filtered() {
     (!state.fast || r.time <= 15) &&
     (!state.easy || r.level === "ง่าย") &&
     (!state.stocked || !lacking(r).length) &&
+    (!usesId || needOf(r).includes(usesId)) &&
     (!q || norm(r.name).includes(q) || norm(originLabel(r)).includes(q) || r.ing.some(x => norm(x).includes(q))));
 }
 // One row per recipe, used in every list. The button on the right changes with where the row is shown.
@@ -1957,8 +2051,8 @@ function render() {
   const list = filtered();
   const ok = list.filter(canMake).sort(sortList);
   const no = list.filter(r => !canMake(r)).sort((a, b) => missing(a).length - missing(b).length || sortList(a, b));
-  const narrowed = filterCount() > 0 || $("q").value.trim();
-  const clear = narrowed ? `<p class="active">กำลังกรองอยู่ พบ ${list.length} สูตร <button type="button" class="link" data-act="reset">ล้างตัวกรอง</button></p>` : "";
+  const narrowed = filterCount() > 0 || $("q").value.trim() || usesId;
+  const clear = narrowed ? `<p class="active">${usesId ? `เมนูที่ใช้${esc(PNAME(usesId))} ` : "กำลังกรองอยู่ "}พบ ${list.length} สูตร <button type="button" class="link" data-act="reset">ล้างตัวกรอง</button></p>` : "";
   if (!list.length) {
     const why = state.fav && !favs.size ? "ยังไม่มีเมนูโปรด แตะรูปหัวใจที่เมนูไหนก็ได้เพื่อเก็บไว้" : "ไม่พบสูตรที่ตรงกับคำค้นหรือตัวกรองที่เลือก";
     $("results").innerHTML = `<div class="empty"><p>${why}</p><button type="button" class="btn" data-act="reset">ล้างตัวกรอง</button></div>`;
@@ -2113,7 +2207,8 @@ function addBought() {
   sfx("on");
   const ids = new Set(add.flatMap(x => x.lack));
   ids.forEach(i => pantry.add(i)); savePantry(); renderMealPage();
-  toast(`เพิ่ม ${ids.size} อย่างลงตู้เย็นแล้ว`);
+  const tracked = trackBought(ids);
+  toast(`เพิ่ม ${ids.size} อย่างลงตู้เย็นแล้ว` + (tracked ? ` · นับวันให้ ${tracked} อย่างในหน้าเก็บของ` : ""));
 }
 
 /* ---------- Recipe screen ---------- */
@@ -3503,6 +3598,420 @@ function refocus(sel) {
   const root = wdlg.open ? wdlg : mdlg.open ? mdlg : fdlg.open ? fdlg : dlg.open ? dlg : $("view-" + view);
   const b = root.querySelector(sel); if (b) b.focus({ preventScroll: true });
 }
+/* ---------- Food storage: how to keep each ingredient, and a day count for what is in the fridge now ----------
+   Times follow common food-safety charts (USDA FoodKeeper style) and lean short, because kitchens here are hot.
+   Fridge and room times are days; freezer times are months and mean "still tastes good" (frozen food stays safe longer). */
+Object.entries({
+  fridge: '<rect x="6" y="3" width="12" height="18" rx="2"/><path d="M6 10h12M9.5 6v1.5M9.5 13v3"/>',
+  snow: '<path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9M9.5 4.5 12 6l2.5-1.5M9.5 19.5 12 18l2.5 1.5"/>',
+  jar: '<path d="M8 3h8v3H8z"/><path d="M7 6h10l1 3v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9z"/><path d="M9.5 13h5"/>',
+  tick: '<path d="m5 12 5 5 9-10"/>',
+  alert: '<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/>'
+}).forEach(([k, v]) => { if (!LI[k]) LI[k] = v; });
+
+const SGROUPS = [["meat", "เนื้อสัตว์"], ["sea", "อาหารทะเล"], ["dairy", "ไข่ นม เนย"], ["veg", "ผัก"], ["herb", "สมุนไพร"], ["fruit", "ผลไม้"],
+  ["carb", "ข้าว เส้น ขนมปัง"], ["sauce", "ซอส น้ำซุป"], ["cooked", "ของที่ทำแล้ว"]];
+const SPLACE = { fridge: ["ตู้เย็น", "fridge"], freezer: ["ช่องฟรีซ", "snow"], room: ["นอกตู้เย็น", "home"] };
+const THAW = "ย้ายลงช่องธรรมดาข้ามคืนดีที่สุด รีบก็ใส่ถุงปิดสนิทแช่น้ำเย็น เปลี่ยนน้ำทุก 30 นาที อย่าวางละลายบนโต๊ะหรือในซิงก์";
+const BAD_MEAT = "กลิ่นเปรี้ยวหรือเหม็น ผิวลื่นเป็นเมือก สีเขียวหรือเทาคล้ำ";
+// id, group, emoji, name, pantry id, best place, fridge days, freezer months, room days, how-to steps, spoil signs, extras
+const S = (id, g, e, n, p, best, fr, fz, rm, how, bad, x = {}) => ({ id, g, e, n, p, best, fr, fz, rm, how, bad, ...x });
+const STORE = [
+  S("steak", "meat", "🥩", "สเต็ก เนื้อวัวเป็นชิ้น", "beef", "fridge", [3, 5], [6, 12], null, [
+    "ซับเลือดให้แห้งด้วยกระดาษ ห่อแน่นด้วยฟิล์มหรือใส่ถุงซิป ไล่ลมออก",
+    "วางบนจานที่ชั้นล่างสุดของตู้เย็น กันน้ำจากเนื้อหยดใส่ของอื่น",
+    "ยังไม่ได้ทำใน 3 วัน แบ่งชิ้นละ 1 มื้อแล้วแช่ช่องฟรีซเลย อย่ารอจนใกล้เสีย"],
+    BAD_MEAT, { a: "ริบอาย สันนอก สันใน เนื้อวัว วากิว", thaw: "ย้ายลงช่องธรรมดาข้ามคืน ชิ้นหนา 1.5–2 ซม. ใช้ราว 12–24 ชม. แล้วพักนอกตู้ 20–30 นาที ซับให้แห้งก่อนย่าง ผิวจะเกรียมสวย",
+      tip: "เนื้อที่ตรงกลางเป็นสีน้ำตาลอมม่วงเพราะไม่โดนอากาศ เป็นเรื่องปกติ ไม่ได้แปลว่าเสีย" }),
+  S("mince", "meat", "🥩", "เนื้อวัวบด", "mince", "fridge", [1, 2], [3, 4], null, [
+    "เนื้อบดเสียเร็วกว่าเนื้อชิ้น เพราะผิวโดนอากาศเยอะ ใช้ภายใน 1–2 วัน",
+    "แบ่งใส่ถุงซิปถุงละมื้อ กดให้แบนบาง ๆ แช่แข็งเร็ว และละลายเร็ว"],
+    BAD_MEAT, { a: "เนื้อสับ แฮมเบอร์เกอร์", thaw: THAW, tip: "เนื้อบดต้องทำให้สุกทั่วทั้งชิ้นเสมอ ไม่กินแบบสุกครึ่ง ๆ เหมือนสเต็ก" }),
+  S("slice", "meat", "🥩", "เนื้อสไลซ์บาง (ชาบู ผัด)", "", "fridge", [2, 3], [3, 4], null, [
+    "ใส่กล่องหรือถุงปิดสนิท วางชั้นล่างสุด",
+    "แช่แข็ง: วางแผ่นเนื้อคั่นด้วยฟิล์มเป็นชั้น ๆ หยิบใช้ทีละมื้อได้"],
+    BAD_MEAT, { a: "เนื้อวัว ชาบู", thaw: "ชิ้นบางละลายในตู้เย็นแค่ไม่กี่ชั่วโมง หรือใส่ลงหม้อชาบูจากแข็งได้เลย" }),
+  S("chicken", "meat", "🍗", "ไก่ดิบ (อก สะโพก น่อง ปีก)", "chicken", "fridge", [1, 2], [6, 9], null, [
+    "ไม่ต้องล้างไก่ในซิงก์ น้ำที่กระเด็นพาเชื้อไปทั่ว ซับให้แห้งพอ",
+    "ใส่กล่องหรือถุงปิดสนิท วางชั้นล่างสุดของตู้เย็น",
+    "ไม่ใช้ใน 1–2 วัน แช่ช่องฟรีซทันที"],
+    "กลิ่นเปรี้ยว เนื้อเหนียวเป็นเมือก สีเทา", { a: "ไก่", thaw: "ย้ายลงตู้เย็นข้ามคืน ไก่ทั้งตัวใช้ 1–2 วัน ห้ามละลายบนโต๊ะ",
+      tip: "หั่นไก่ดิบแล้ว ล้างเขียงกับมีดด้วยน้ำยาล้างจานก่อนหั่นผักที่กินสดทุกครั้ง" }),
+  S("marinate", "meat", "🍖", "เนื้อ ไก่ ที่หมักไว้", "", "fridge", [1, 2], [3, 4], null, [
+    "หมักในตู้เย็นเสมอ ไม่หมักทิ้งไว้นอกตู้",
+    "น้ำหมักที่โดนเนื้อดิบ ถ้าจะเอามาราดกิน ต้องต้มให้เดือดก่อน",
+    "หมักเสร็จแล้วแช่แข็งทั้งถุงได้เลย ละลายเมื่อไหร่ก็พร้อมทำ"],
+    BAD_MEAT, { a: "หมัก", thaw: THAW }),
+  S("sausage", "meat", "🌭", "ไส้กรอก เบคอนเนื้อ (เปิดแล้ว)", "bacon", "fridge", [5, 7], [1, 2], null, [
+    "ยังไม่เปิด ดูวันหมดอายุบนห่อ",
+    "เปิดแล้ว ห่อส่วนที่เหลือให้แน่น ใส่กล่องปิด ใช้ภายใน 1 สัปดาห์"],
+    "เป็นเมือก กลิ่นเปรี้ยว มีจุดรา", { a: "ไส้กรอกไก่ เบคอน" }),
+
+  S("fish", "sea", "🐟", "ปลาสด", "fish", "fridge", [1, 2], [3, 6], null, [
+    "ล้างแล้วซับให้แห้ง ควักไส้ออกถ้ายังไม่ได้ควัก",
+    "ห่อแน่น ใส่กล่อง วางบนน้ำแข็งในตู้เย็นยิ่งดี",
+    "ปลาที่มีมันเยอะ เช่น แซลมอน แช่แข็งได้สั้นกว่า ราว 2–3 เดือน"],
+    "กลิ่นคาวฉุนแบบแอมโมเนีย ตาขุ่น เหงือกสีคล้ำ กดเนื้อแล้วไม่เด้งกลับ", { a: "แซลมอน ปลากะพง ปลานิล", thaw: THAW }),
+  S("shrimp", "sea", "🦐", "กุ้งสด", "shrimp", "freezer", [1, 2], [3, 6], null, [
+    "ไม่ได้ทำวันนี้ แช่แข็งเลยดีที่สุด กุ้งเสียเร็วมาก",
+    "เด็ดหัวออกก่อนเก็บ ช่วยให้อยู่ได้นานขึ้น (เก็บหัวไว้ทำน้ำซุปได้)",
+    "แช่แข็ง: ใส่ถุงหรือกล่อง เติมน้ำให้ท่วมนิดหน่อย กันผิวแห้ง"],
+    "กลิ่นแอมโมเนีย หัวดำ เนื้อเละ เปลือกหลุดง่ายผิดปกติ", { thaw: "ละลายในตู้เย็น หรือแช่ทั้งถุงในน้ำเย็นราว 30 นาที" }),
+  S("squid", "sea", "🦑", "ปลาหมึกสด", "squid", "fridge", [1, 2], [3, 6], null, [
+    "ล้าง ดึงไส้และแผ่นใสออก ซับให้แห้ง",
+    "หั่นตามที่จะใช้ แบ่งใส่ถุงแช่แข็งทีละมื้อ"],
+    "กลิ่นแรง ผิวลื่นเป็นเมือก สีชมพูอมเหลือง", { a: "หมึก", thaw: THAW }),
+  S("clam", "sea", "🐚", "หอยลาย หอยแมลงภู่ (ยังเป็น)", "clam", "fridge", [1, 2], null, null, [
+    "ใส่ชามไม่ปิดฝา คลุมด้วยผ้าชุบน้ำหมาด ๆ เก็บในตู้เย็น",
+    "อย่าใส่ถุงปิดสนิทหรือแช่น้ำเปล่า หอยจะตาย",
+    "ก่อนทำ แช่น้ำเกลือ 20–30 นาทีให้คายทราย"],
+    "เปลือกอ้าอยู่แล้วเคาะแล้วไม่ปิด หรือเปลือกแตก ให้ทิ้งตัวนั้น มีกลิ่นเหม็น", { a: "หอย", tip: "ต้มแล้วตัวไหนไม่อ้า ทิ้งตัวนั้นไป" }),
+
+  S("egg", "dairy", "🥚", "ไข่ไก่", "egg", "fridge", [21, 35], null, [5, 7], [
+    "ไม่ต้องล้างก่อนเก็บ ล้างแล้วเชื้อเข้าทางเปลือกง่ายขึ้น ล้างตอนจะใช้",
+    "เก็บทั้งแผงไว้ชั้นในของตู้เย็น ไม่ใช่ที่ประตู (เปิดปิดบ่อย อุณหภูมิแกว่ง)",
+    "ไข่ที่เคยแช่เย็นแล้ว อย่าเอาออกมาวางนาน ๆ จะมีหยดน้ำเกาะเปลือก"],
+    "ใส่ชามน้ำแล้วลอยขึ้นมา ไม่ควรใช้ ตอกแล้วมีกลิ่นเหม็น", { tip: "ไข่ต้มสุกเก็บในตู้เย็นได้ราว 1 สัปดาห์" }),
+  S("milk", "dairy", "🥛", "นมสด (เปิดแล้ว)", "milk", "fridge", [5, 7], null, null, [
+    "ปิดฝาให้สนิท เก็บชั้นในของตู้ ไม่ใช่ประตู",
+    "ดูวันหมดอายุบนกล่องด้วย ถ้ากล่องบอกเร็วกว่า ให้เชื่อกล่อง",
+    "นม UHT ยังไม่เปิดเก็บนอกตู้ได้ เปิดแล้วต้องแช่เย็น"],
+    "กลิ่นเปรี้ยว จับตัวเป็นก้อน", { a: "นม" }),
+  S("butter", "dairy", "🧈", "เนย", "butter", "fridge", [30, 90], [6, 9], null, [
+    "ห่อด้วยกระดาษเดิมหรือใส่กล่องปิด เนยดูดกลิ่นอื่นในตู้ง่าย",
+    "ตัดก้อนเล็ก ๆ ออกมาใช้ ที่เหลือแช่เย็นไว้",
+    "ซื้อมาเยอะ แช่ช่องฟรีซได้ทั้งก้อน"],
+    "กลิ่นหืน รสขม ขึ้นรา"),
+  S("cheese", "dairy", "🧀", "ชีส", "cheese", "fridge", [7, 28], [3, 6], null, [
+    "ชีสแข็ง (พาร์มีซาน เชดดาร์) ห่อกระดาษแล้วใส่ถุง อยู่ได้ 3–4 สัปดาห์",
+    "ชีสนิ่ม (มอซซาเรลลา ครีมชีส) อยู่ได้ราว 1 สัปดาห์หลังเปิด",
+    "มอซซาเรลลาขูดแช่แข็งได้ ใช้ทำพิซซ่าหรืออบได้เลย"],
+    "ชีสแข็งมีราจุดเล็ก ตัดออกรอบ ๆ 2–3 ซม. ที่เหลือใช้ได้ ชีสนิ่มมีราต้องทิ้งทั้งก้อน", { a: "พาร์มีซาน มอซซาเรลลา" }),
+  S("cream", "dairy", "🥛", "วิปปิ้งครีม (เปิดแล้ว)", "cream", "fridge", [5, 7], [2, 3], null, [
+    "ปิดปากกล่องให้สนิท หรือเทใส่ขวดปิดฝา",
+    "ใช้ไม่หมด แช่แข็งในถาดน้ำแข็ง ไว้ใส่ซอสหรือซุป (แต่จะตีเป็นวิปไม่ขึ้นแล้ว)"],
+    "กลิ่นเปรี้ยว เป็นก้อน รสขม", { a: "ครีม" }),
+  S("coconut", "dairy", "🥥", "กะทิ", "coconut", "fridge", [2, 4], [1, 3], null, [
+    "กะทิสดคั้นเอง ใช้ให้หมดใน 1–2 วัน อากาศร้อนเสียเร็วมาก",
+    "กะทิกล่องเปิดแล้ว เทใส่ภาชนะมีฝา แช่ตู้เย็น ใช้ใน 3–4 วัน",
+    "แช่แข็งในถาดน้ำแข็งได้ ละลายแล้วอาจแยกชั้น คนให้เข้ากัน เหมาะกับทำแกง"],
+    "กลิ่นหรือรสเปรี้ยว มีฟอง เป็นก้อนเหนียว"),
+
+  S("leafy", "veg", "🥬", "ผักใบ (ผักกาด คะน้า ผักสลัด)", "lettuce", "fridge", [3, 5], null, null, [
+    "ยังไม่ต้องล้าง ล้างตอนจะใช้ ถ้าล้างแล้วต้องสะบัดให้แห้งสนิทก่อนเก็บ",
+    "ห่อด้วยกระดาษซับ ใส่กล่องหรือถุง เก็บในช่องผัก",
+    "เด็ดใบเน่าออกก่อน ใบเน่าใบเดียวทำให้ใบอื่นเสียตาม"],
+    "ใบเหลือง เละ เป็นเมือก มีกลิ่น", { a: "ผักกาดหอม คะน้า กวางตุ้ง ผักสลัด" }),
+  S("morning", "veg", "🌿", "ผักบุ้ง", "morning", "fridge", [2, 3], null, null, [
+    "ห่อกระดาษซับหรือกระดาษหนังสือพิมพ์ ใส่ถุง เก็บช่องผัก",
+    "ผักบุ้งเหี่ยวเร็ว ซื้อแล้วใช้ใน 2–3 วัน"],
+    "ใบเหลือง ก้านเละ เป็นเมือก"),
+  S("cabbage", "veg", "🥬", "กะหล่ำปลี", "", "fridge", [7, 14], null, null, [
+    "เก็บทั้งหัว ไม่ต้องล้าง ห่อฟิล์มหรือใส่ถุง",
+    "ลอกใช้ทีละใบจากด้านนอก หัวที่เหลืออยู่ได้นานกว่าการผ่าครึ่ง",
+    "ผ่าแล้ว ห่อฟิล์มแนบรอยตัด ใช้ใน 2–3 วัน"],
+    "ใบนอกเละดำ (ลอกทิ้งได้) ถ้าเละถึงข้างในหรือมีกลิ่นให้ทิ้ง"),
+  S("broccoli", "veg", "🥦", "บรอกโคลี", "", "fridge", [3, 5], [6, 12], null, [
+    "ใส่ถุงเจาะรูหรือห่อกระดาษ เก็บช่องผัก",
+    "แช่แข็ง: หั่นเป็นดอก ลวกน้ำเดือด 2–3 นาที แช่น้ำเย็นจัด สะเด็ดให้แห้ง แล้วค่อยแช่"],
+    "ดอกเหลือง มีจุดดำ กลิ่นเหม็น"),
+  S("tomato", "veg", "🍅", "มะเขือเทศ", "tomato", "room", [3, 5], null, [2, 4], [
+    "ยังไม่สุกเต็มที่ วางนอกตู้เย็นในที่ร่ม ให้สุกเอง รสจะดีกว่า",
+    "สุกแล้วยังไม่ใช้ เข้าตู้เย็นได้ ก่อนกินเอาออกมาวางให้หายเย็น รสจะกลับมา",
+    "วางคว่ำด้านขั้วลง ช่วยไม่ให้ช้ำ"],
+    "เละ มีน้ำซึม ขึ้นรา"),
+  S("onion", "veg", "🧅", "หอมใหญ่", "onion", "room", [7, 10], null, [21, 30], [
+    "เก็บในที่แห้ง เย็น มืด อากาศถ่ายเท เช่น ตะกร้าโปร่ง",
+    "อย่าเก็บติดกับมันฝรั่ง ทั้งคู่จะเสียเร็วขึ้น",
+    "หั่นแล้ว ใส่กล่องปิดสนิทในตู้เย็น ใช้ในราว 1 สัปดาห์"],
+    "นิ่ม มีน้ำซึม ขึ้นราดำ ถ้าแค่งอกต้นเขียว ตัดส่วนงอกออก ที่เหลือยังใช้ได้"),
+  S("garlic", "veg", "🧄", "หอมแดง กระเทียม", "shallot", "room", [5, 7], null, [30, 60], [
+    "เก็บทั้งหัวในตะกร้าโปร่ง ที่แห้งและไม่โดนแดด",
+    "ปอกแล้ว ใส่กล่องปิดเข้าตู้เย็น ใช้ในราว 1 สัปดาห์",
+    "อย่าเก็บกระเทียมสดดองในน้ำมันไว้นอกตู้เย็น เสี่ยงเชื้อโบทูลินัม"],
+    "นิ่ม ขึ้นรา กลิ่นเหม็นเปรี้ยว", { a: "หอมแดง กระเทียม" }),
+  S("potato", "veg", "🥔", "มันฝรั่ง", "potato", "room", null, null, [14, 21], [
+    "เก็บในที่มืด แห้ง เย็น ในถุงกระดาษหรือตะกร้า ไม่ต้องเข้าตู้เย็น",
+    "แยกห่างจากหอมใหญ่",
+    "ไม่ต้องล้างจนกว่าจะใช้"],
+    "ตัดตาที่งอกและส่วนสีเขียวออก ถ้าเขียวเยอะ นิ่มหรือเหี่ยวมาก ให้ทิ้ง ส่วนสีเขียวมีสารพิษ"),
+  S("carrot", "veg", "🥕", "แครอท", "carrot", "fridge", [14, 21], null, null, [
+    "ตัดใบออกก่อน ใบจะดูดความชื้นจากหัว",
+    "ใส่ถุงหรือกล่องรองกระดาษซับ เก็บช่องผัก"],
+    "นิ่มงอได้ เป็นเมือก ขึ้นรา"),
+  S("mushroom", "veg", "🍄", "เห็ด", "mushroom", "fridge", [3, 7], null, null, [
+    "ใส่ถุงกระดาษหรือกล่องรองกระดาษ ไม่ใส่ถุงพลาสติกปิดสนิท จะชื้นและเละ",
+    "ไม่ต้องล้างก่อนเก็บ ล้างหรือเช็ดตอนจะใช้",
+    "เห็ดเข็มทองเก็บในห่อเดิมได้ ใช้ภายใน 1 สัปดาห์"],
+    "เป็นเมือก มีจุดดำ กลิ่นเปรี้ยว", { a: "เห็ดฟาง เห็ดหอม เห็ดเข็มทอง เห็ดออรินจิ", tip: "เห็ดเข็มทองต้องทำให้สุกเสมอ ไม่กินดิบ" }),
+  S("chili", "veg", "🌶️", "พริกสด", "chili", "fridge", [7, 14], [4, 6], null, [
+    "เด็ดขั้วออก เลือกเม็ดที่ช้ำทิ้ง",
+    "ใส่กล่องรองกระดาษซับ ไม่ต้องล้าง",
+    "ใช้ไม่ทัน แช่แข็งทั้งเม็ดได้ หยิบมาหั่นหรือตำได้เลย"],
+    "นิ่ม เหี่ยวดำ ขึ้นรา", { a: "พริกขี้หนู พริกชี้ฟ้า" }),
+  S("celery", "veg", "🌿", "ขึ้นฉ่าย", "celery", "fridge", [5, 7], null, null, [
+    "ห่อกระดาษซับหรือฟอยล์ ใส่ถุง เก็บช่องผัก",
+    "ขึ้นฉ่ายจีนต้นเล็กเหี่ยวเร็ว ใช้ภายในไม่กี่วัน"],
+    "เหี่ยวนิ่ม ใบเหลือง เป็นเมือก"),
+  S("papaya", "veg", "🥗", "มะละกอดิบ (ส้มตำ)", "papaya", "fridge", [3, 7], null, null, [
+    "ทั้งลูก ห่อกระดาษเข้าตู้เย็น อยู่ได้ราว 1 สัปดาห์",
+    "สับเส้นแล้ว ใส่กล่องปิดสนิทในตู้เย็น ใช้ใน 3 วัน ก่อนตำแช่น้ำเย็นให้กรอบ"],
+    "เส้นมีน้ำเมือก กลิ่นเปรี้ยว เนื้อเริ่มเหลืองนิ่ม (เริ่มสุก)", { a: "ส้มตำ" }),
+
+  S("scallion", "herb", "🌿", "ต้นหอม ผักชี", "scallion", "fridge", [5, 7], [2, 3], null, [
+    "เด็ดใบเน่าออก ไม่ต้องล้าง",
+    "ห่อกระดาษซับชื้นหมาด ๆ ใส่กล่องปิด เก็บช่องผัก",
+    "หรือแช่รากในแก้วน้ำ ครอบถุงไว้ในตู้เย็น เปลี่ยนน้ำทุก 2 วัน",
+    "ต้นหอมหั่นแล้วแช่แข็งในกล่อง โรยใส่ซุปหรือผัดได้เลย"],
+    "ใบเหลือง เละ มีกลิ่น", { a: "ผักชี ต้นหอม" }),
+  S("basil", "herb", "🌿", "กะเพรา โหระพา", "basil", "room", [3, 4], null, [2, 3], [
+    "ไม่ชอบความเย็นจัด เข้าตู้เย็นตรง ๆ ใบจะดำ",
+    "แช่ก้านในแก้วน้ำ วางในบ้านที่ไม่โดนแดด เหมือนปักดอกไม้",
+    "หรือเด็ดใบใส่กล่องรองกระดาษ วางที่ประตูตู้เย็น (ส่วนที่เย็นน้อยสุด)"],
+    "ใบดำ เละ", { a: "กะเพรา โหระพา" }),
+  S("tomyum", "herb", "🌿", "ข่า ตะไคร้ ใบมะกรูด", "tomyum", "fridge", [14, 21], [3, 6], null, [
+    "ใส่ถุงปิดสนิท เก็บช่องผัก อยู่ได้ 2–3 สัปดาห์",
+    "หั่นเป็นชุดต้มยำ ข่า ตะไคร้ ใบมะกรูด แบ่งใส่ถุงแช่แข็ง หยิบใส่หม้อได้เลยไม่ต้องละลาย"],
+    "ขึ้นรา เหี่ยวแห้งมาก ใบมะกรูดดำ", { a: "ต้มยำ ข่า ตะไคร้ มะกรูด" }),
+  S("ginger", "herb", "🌿", "ขิง", "ginger", "fridge", [14, 21], [3, 6], null, [
+    "ไม่ต้องปอก ใส่ถุงไล่ลม เก็บช่องผัก",
+    "แช่แข็งทั้งแง่ง เวลาใช้ขูดตอนยังแข็ง ง่ายกว่าขิงสด"],
+    "นิ่มย่น ขึ้นรา"),
+  S("herbs", "herb", "🌿", "โรสแมรี ไทม์ พาร์สลีย์", "herb", "fridge", [7, 14], [3, 6], null, [
+    "ห่อกระดาษซับชื้นหมาด ๆ ใส่ถุง เก็บช่องผัก",
+    "พาร์สลีย์ แช่ก้านในแก้วน้ำในตู้เย็นแบบเดียวกับผักชี",
+    "สับใส่ถาดน้ำแข็ง เติมน้ำมันมะกอกให้ท่วม แช่แข็ง ใส่ลงกระทะได้เลย"],
+    "ดำ เละ ขึ้นรา", { a: "โรสแมรี่ ไทม์ พาร์สลีย์ ทารากอน" }),
+
+  S("banana", "fruit", "🍌", "กล้วย", "banana", "room", [5, 7], [2, 3], [3, 5], [
+    "วางหรือแขวนนอกตู้เย็น แยกจากผลไม้อื่น กล้วยทำให้ผลไม้ข้าง ๆ สุกเร็ว",
+    "สุกแล้วเข้าตู้เย็นได้ เปลือกจะดำแต่เนื้อข้างในยังดี",
+    "สุกงอม ปอกแล้วหั่นแช่แข็ง ไว้ปั่นสมูทตี้"],
+    "เนื้อเละมีน้ำ กลิ่นหมักเหมือนเหล้า ขึ้นรา"),
+  S("cutfruit", "fruit", "🍉", "ผลไม้ปอกหั่นแล้ว", "", "fridge", [2, 3], null, null, [
+    "ใส่กล่องปิดสนิท เข้าตู้เย็นทันทีหลังหั่น",
+    "ผลไม้หั่นแล้ววางนอกตู้ได้ไม่เกิน 2 ชม. วันร้อน ๆ ไม่เกิน 1 ชม."],
+    "มีน้ำเยิ้ม กลิ่นเปรี้ยว ผิวลื่น", { a: "แตงโม มะม่วง สับปะรด มะละกอสุก" }),
+  S("lime", "fruit", "🍋", "มะนาว", "lime", "fridge", [21, 28], [3, 4], [5, 7], [
+    "ใส่ถุงหรือกล่องปิด เก็บในตู้เย็น อยู่ได้ 3–4 สัปดาห์",
+    "นอกตู้เย็นอยู่ได้ราว 1 สัปดาห์",
+    "ช่วงมะนาวถูก คั้นน้ำใส่ถาดน้ำแข็งแช่แข็งไว้ (ช่องฟรีซคือเวลาของน้ำมะนาวแช่แข็ง)"],
+    "เปลือกแข็งเหี่ยว ขึ้นราสีเขียวฟ้า", { a: "เลมอน" }),
+
+  S("rice", "carb", "🍚", "ข้าวสาร", "rice", "room", null, null, [180, 365], [
+    "ใส่ถังหรือกล่องปิดสนิท ในที่แห้ง เย็น ไม่โดนแดด",
+    "ใช้ของเก่าให้หมดก่อน ค่อยเติมของใหม่ ไม่เทรวมกัน",
+    "ข้าวกล้องมีน้ำมันมากกว่า หืนเร็วกว่า เก็บได้ราว 6 เดือน"],
+    "มีมอดหรือหนอนเยอะ กลิ่นอับ ขึ้นรา", { a: "ข้าวหอมมะลิ ข้าวกล้อง ข้าวญี่ปุ่น" }),
+  S("cookedrice", "carb", "🍚", "ข้าวสวยที่เหลือ", "", "fridge", [1, 2], [1, 1], null, [
+    "ทำให้เย็นเร็ว ๆ โดยแผ่ในกล่องตื้น แล้วเข้าตู้เย็นภายใน 1 ชั่วโมง",
+    "อย่าทิ้งไว้ในหม้อหุงข้าวโหมดอุ่นข้ามวัน หรือวางนอกตู้นาน ๆ",
+    "อุ่นให้ร้อนจัดทั่วทั้งจาน และอุ่นซ้ำแค่ครั้งเดียว",
+    "แช่แข็งเป็นก้อนละมื้อ เอาออกมาเข้าไมโครเวฟได้เลย"],
+    "กลิ่นเปรี้ยว เป็นเมือก ขึ้นรา", { a: "ข้าวสวย ข้าวค้าง ข้าวผัด",
+      tip: "ข้าวสุกที่วางนอกตู้นาน มีเชื้อที่สร้างสารพิษ ซึ่งอุ่นร้อนแล้วก็ไม่หาย ข้าวผัดจึงควรใช้ข้าวที่เก็บในตู้เย็นมา" }),
+  S("sticky", "carb", "🍙", "ข้าวเหนียวนึ่งแล้ว", "sticky", "fridge", [1, 2], [1, 1], null, [
+    "ห่อพลาสติกให้แน่นกันแห้ง แช่ตู้เย็น",
+    "เวลากิน นึ่งใหม่ หรือพรมน้ำนิดหน่อยแล้วคลุมเข้าไมโครเวฟ จะนุ่มเหมือนใหม่"],
+    "กลิ่นเปรี้ยว เป็นเมือก ขึ้นรา"),
+  S("pasta", "carb", "🍝", "เส้นพาสต้าแห้ง", "pasta", "room", null, null, [365, 730], [
+    "ยังไม่เปิด เก็บในห่อเดิมในที่แห้ง",
+    "เปิดแล้ว ใส่โหลหรือถุงซิปปิดสนิท กันมอดและความชื้น"],
+    "มีมอด มีจุดรา กลิ่นอับ", { a: "สปาเกตตี เพนเน่ มักกะโรนี" }),
+  S("cookedpasta", "carb", "🍝", "พาสต้าต้มแล้ว", "", "fridge", [3, 5], [1, 2], null, [
+    "สะเด็ดน้ำ คลุกน้ำมันมะกอกนิดหน่อยกันเส้นติดกัน",
+    "ใส่กล่องปิด แยกจากซอสถ้าทำได้",
+    "อุ่นโดยลวกน้ำเดือด 30 วินาที หรือผัดรวมกับซอสเลย"],
+    "กลิ่นเปรี้ยว เส้นเป็นเมือก ขึ้นรา", { a: "สปาเกตตี" }),
+  S("flat", "carb", "🍜", "เส้นใหญ่ เส้นก๋วยเตี๋ยวสด", "flat", "room", [2, 3], null, [1, 1], [
+    "ดีที่สุดคือใช้ภายในวันที่ซื้อ เก็บนอกตู้ในที่ร่ม",
+    "เข้าตู้เย็นแล้วเส้นจะแข็งและหักง่าย ก่อนใช้เข้าไมโครเวฟ 30–60 วินาที หรือลวกน้ำร้อนแป๊บเดียว ให้กลับมานุ่ม",
+    "อย่าทิ้งไว้นอกตู้ข้ามคืนตอนอากาศร้อน"],
+    "กลิ่นเปรี้ยว เป็นเมือก มีจุดราสีต่าง ๆ", { a: "ก๋วยเตี๋ยว เส้นเล็ก เส้นหมี่ ผัดซีอิ๊ว" }),
+  S("eggnoodle", "carb", "🍜", "บะหมี่สด เกี๊ยว", "", "fridge", [3, 5], [1, 2], null, [
+    "ใส่ถุงปิดสนิท แช่ตู้เย็น",
+    "แช่แข็งเป็นก้อนละมื้อ ลวกจากแข็งได้เลยไม่ต้องละลาย"],
+    "กลิ่นเปรี้ยว มีจุดรา เส้นเหนียวเป็นเมือก", { a: "บะหมี่ เกี๊ยว" }),
+  S("glass", "carb", "🍜", "วุ้นเส้น", "glass", "room", [1, 2], null, [365, 730], [
+    "เส้นแห้ง เก็บในห่อปิดสนิทในที่แห้ง อยู่ได้นาน",
+    "แช่น้ำแล้วใช้ไม่หมด สะเด็ดน้ำใส่กล่องแช่ตู้เย็น ใช้ภายใน 1–2 วัน"],
+    "เส้นที่แช่แล้วมีกลิ่นหรือเป็นเมือก"),
+  S("bread", "carb", "🍞", "ขนมปัง", "bread", "room", null, [2, 3], [2, 4], [
+    "เก็บในถุงปิดนอกตู้เย็น ตู้เย็นทำให้ขนมปังแข็งเร็วขึ้น",
+    "กินไม่ทัน แช่แข็งเป็นแผ่น ปิ้งจากแข็งได้เลย"],
+    "ขึ้นราแม้จุดเดียวให้ทิ้งทั้งถุง เส้นใยราลามลึกกว่าที่ตาเห็น", { a: "ขนมปังแผ่น" }),
+  S("flour", "carb", "🌾", "แป้งสาลี", "flour", "room", null, null, [180, 240], [
+    "ใส่กล่องปิดสนิท กันมอดและความชื้น",
+    "อย่าชิมแป้งดิบหรือแป้งที่ผสมแล้วแต่ยังไม่สุก"],
+    "มีมอด จับตัวเป็นก้อนชื้น กลิ่นอับหรือหืน"),
+
+  S("stock", "sauce", "🍲", "น้ำสต็อก น้ำซุปทำเอง", "", "fridge", [3, 4], [2, 3], null, [
+    "ทำให้เย็นเร็ว ๆ แบ่งใส่ภาชนะเล็ก ตั้งในอ่างน้ำแข็ง แล้วเข้าตู้เย็นภายใน 2 ชม.",
+    "แช่แข็งในถาดน้ำแข็งหรือถุงซิปวางแบน หยิบใช้ทีละนิดได้",
+    "อุ่นให้เดือดก่อนใช้ทุกครั้ง"],
+    "กลิ่นเปรี้ยว ขุ่นผิดปกติ มีฟอง", { a: "น้ำซุป สต็อก" }),
+  S("tomatosauce", "sauce", "🥫", "ซอสมะเขือเทศพาสต้าทำเอง", "", "fridge", [3, 5], [3, 4], null, [
+    "รอให้หายร้อน ใส่ขวดหรือกล่องปิดสนิท",
+    "ทำทีละเยอะ แบ่งถุงละมื้อแช่แข็ง วันไหนรีบแค่ต้มเส้น"],
+    "ขึ้นราที่ผิว มีฟอง กลิ่นเปรี้ยวผิดปกติ", { a: "ซอสพาสต้า ซอสมะเขือเทศ" }),
+  S("paste", "sauce", "🌶️", "พริกแกงทำเอง", "", "fridge", [5, 7], [3, 6], null, [
+    "ใส่ขวดแก้วสะอาด ปิดฝา แช่ตู้เย็น ใช้ภายใน 1 สัปดาห์",
+    "เก็บนานกว่านั้น แบ่งเป็นก้อนละมื้อแช่แข็ง",
+    "พริกแกงสำเร็จรูปเปิดแล้ว เก็บในตู้เย็นตามที่ห่อบอก"],
+    "ขึ้นรา กลิ่นเปรี้ยวหรือหืน", { a: "พริกแกง แกงเขียวหวาน แกงแดง" }),
+  S("namjim", "sauce", "🥣", "น้ำจิ้มสด (ซีฟู้ด แจ่ว)", "", "fridge", [2, 3], null, null, [
+    "ทำแค่พอกินแต่ละครั้งดีที่สุด รสมะนาวจะขมและเพี้ยนเร็ว",
+    "เตรียมของแห้งไว้ก่อนได้ เช่น ข้าวคั่ว พริกป่น เก็บโหลแห้ง แล้วผสมมะนาวตอนจะกิน"],
+    "กลิ่นเปรี้ยวบูด มีฟอง", { a: "น้ำจิ้ม แจ่ว ซีฟู้ด" }),
+  S("garlicoil", "sauce", "🧄", "น้ำมันกระเทียม น้ำมันสมุนไพรทำเอง", "", "fridge", [3, 4], [3, 4], null, [
+    "ต้องแช่ตู้เย็นเสมอ และใช้ภายใน 4 วัน",
+    "ห้ามวางนอกตู้เย็น กระเทียมสดในน้ำมันไม่มีอากาศ เป็นที่ที่เชื้อโบทูลินัมเติบโตได้",
+    "อยากเก็บนาน แช่แข็งในถาดน้ำแข็ง"],
+    "ดูไม่ออกเสมอไป เชื้อนี้ไม่มีกลิ่น จึงต้องทำตามเวลาเคร่ง ๆ", { a: "กระเทียม น้ำมัน" }),
+  S("bottled", "sauce", "🥫", "ซอสหอยนางรม มายองเนส (เปิดแล้ว)", "", "fridge", [60, 90], null, null, [
+    "เปิดแล้วเก็บในตู้เย็น ดูคำแนะนำบนขวดด้วย",
+    "น้ำปลา ซีอิ๊ว ซอสถั่วเหลือง วางนอกตู้ได้ ปิดฝาให้สนิท ไม่โดนแดด",
+    "ใช้ช้อนสะอาดตักเสมอ"],
+    "ขึ้นรา แยกชั้นผิดปกติ กลิ่นหืนหรือเปรี้ยว", { a: "ซอส มายองเนส ซอสหอยนางรม" }),
+
+  S("leftover", "cooked", "🍛", "กับข้าวที่เหลือ (ผัด แกง ต้ม)", "", "fridge", [3, 4], [2, 3], null, [
+    "ตักแบ่งใส่กล่องตื้น ๆ ให้เย็นเร็ว แล้วเข้าตู้เย็นภายใน 2 ชม. วันร้อน ๆ ภายใน 1 ชม.",
+    "ไม่ต้องรอให้เย็นสนิทก่อนเข้าตู้ อุ่น ๆ เข้าได้เลย แต่อย่าใส่หม้อใหญ่ที่ร้อนจัดทั้งหม้อ",
+    "อุ่นให้เดือดหรือร้อนจัดทั่วทั้งจาน อุ่นแค่ส่วนที่จะกิน",
+    "แกงกะทิเสียเร็ว อย่าวางนอกตู้ข้ามคืน"],
+    "กลิ่นเปรี้ยว มีฟอง เป็นเมือก ขึ้นรา ถ้าไม่แน่ใจ ทิ้งดีกว่า", { a: "แกง กับข้าว ของเหลือ" }),
+  S("cookedmeat", "cooked", "🥩", "เนื้อ ไก่ ที่สุกแล้ว (สเต็กเหลือ)", "", "fridge", [3, 4], [2, 3], null, [
+    "ห่อแน่นหรือใส่กล่องปิด",
+    "สเต็กเหลือ หั่นบาง ๆ แล้วอุ่นในกระทะร้อนเร็ว ๆ หรือกินเย็นกับสลัด เนื้อจะไม่สุกเกิน"],
+    "กลิ่นเปรี้ยว ผิวลื่น ขึ้นรา", { a: "สเต็ก ไก่ทอด ไก่ย่าง" }),
+  S("fried", "cooked", "🍤", "ของทอด", "", "fridge", [3, 4], [1, 2], null, [
+    "รอให้หายร้อนก่อนปิดฝา ไม่งั้นไอน้ำทำให้แป้งนิ่ม",
+    "อุ่นด้วยหม้อทอดไร้น้ำมันหรือเตาอบ จะกรอบกว่าไมโครเวฟ"],
+    "กลิ่นหืน เปรี้ยว ขึ้นรา", { a: "ทอด" }),
+  S("somtam", "cooked", "🥗", "ส้มตำ ยำ", "", "fridge", [1, 1], null, null, [
+    "ทำแล้วกินให้หมดภายในมื้อ ไม่ควรเก็บข้ามวัน",
+    "ถ้ามีของดิบ เช่น ปูดอง กุ้งแช่น้ำปลา ยิ่งต้องรีบกิน",
+    "อยากเตรียมล่วงหน้า แยกเส้นมะละกอกับน้ำปรุงไว้ ตำหรือยำตอนจะกิน"],
+    "มีน้ำเยิ้ม กลิ่นเปรี้ยวบูด", { a: "ส้มตำ ยำ ลาบ" })
+];
+const sItem = id => STORE.find(i => i.id === id);
+const sRangeOf = (it, pl) => pl === "freezer" ? it.fz : pl === "fridge" ? it.fr : it.rm;
+const placesOf = it => ["fridge", "freezer", "room"].filter(pl => sRangeOf(it, pl)).sort((a, b) => (b === it.best) - (a === it.best));
+function durText(r, months) {
+  const [a, b] = r, two = (x, y, u) => x === y ? `${x} ${u}` : `${x}–${y} ${u}`;
+  if (months) return two(a, b, "เดือน");
+  if (a >= 365) return two(Math.round(a / 365), Math.round(b / 365), "ปี");
+  if (a >= 60) return two(Math.round(a / 30), Math.round(b / 30), "เดือน");
+  if (a >= 14 && a % 7 === 0 && b % 7 === 0) return two(a / 7, b / 7, "สัปดาห์");
+  return two(a, b, "วัน");
+}
+const rangeText = (it, pl) => durText(sRangeOf(it, pl), pl === "freezer");
+const placeVerb = pl => pl === "room" ? "นอกตู้เย็น" : "ใน" + SPLACE[pl][0];
+
+/* What is in the fridge now. The count uses the short end of each range, so the app errs on the safe side. */
+var stock = load("krua-store-v1", []).filter(e => sItem(e.id));
+let sGroup = "", sOpen = "";
+function saveStock() { store("krua-store-v1", stock); renderStoreBadge(); }
+const spanDays = (it, pl) => pl === "freezer" ? it.fz[0] * 30 : sRangeOf(it, pl)[0];
+function daysLeft(e) {
+  const it = sItem(e.id); if (!it || !sRangeOf(it, e.pl)) return 999;
+  return Math.round((addDays(parseYmd(e.d), spanDays(it, e.pl)) - parseYmd(today())) / 864e5);
+}
+const stockDue = () => (stock || []).filter(e => daysLeft(e) <= 1).length;
+function renderStoreBadge() { const n = stockDue(), b = $("storeBadge"); if (b) { b.hidden = !n; b.textContent = n; } }
+function leftText(n) {
+  if (n < 0) return `เลยมา ${-n} วัน`;
+  if (n === 0) return "ควรใช้วันนี้";
+  if (n === 1) return "ใช้ภายในพรุ่งนี้";
+  if (n >= 60) return `อีกราว ${Math.round(n / 30)} เดือน`;
+  return `ใช้ภายใน ${n} วัน`;
+}
+function stockHTML() {
+  if (!stock.length) return `<p class="hint">ยังไม่มีของที่นับวันไว้ เปิดวิธีเก็บด้านล่าง แล้วกดปุ่ม "เก็บในตู้เย็น" หรือ "เก็บในช่องฟรีซ" แอปจะบอกว่าควรใช้ก่อนวันไหน ของที่ติ๊กว่าซื้อแล้วในรายการซื้อของก็จะมาอยู่ตรงนี้เอง</p>`;
+  const list = stock.map(e => ({ e, it: sItem(e.id), n: daysLeft(e) })).sort((a, b) => a.n - b.n);
+  return `<ul class="slist">` + list.map(({ e, it, n }) => {
+    const cls = n < 0 ? "over" : n <= 1 ? "soon" : "";
+    const more = [];
+    if (e.pl !== "freezer" && it.fz) more.push(`<button type="button" class="btn small" data-sfreeze="${e.u}">${ico("snow")}ย้ายไปช่องฟรีซ</button>`);
+    if (e.pl === "freezer" && it.fr) more.push(`<button type="button" class="btn small" data-sthaw="${e.u}">${ico("fridge")}เอาออกมาละลาย</button>`);
+    if (it.p && PITEMS.some(p => p.id === it.p)) more.push(`<button type="button" class="btn small" data-scook="${it.p}">${ico("utensils")}หาเมนู</button>`);
+    return `<li class="srow">
+      <button type="button" class="shead" data-sopen="${it.id}" aria-label="${esc(it.n)} ${SPLACE[e.pl][0]} ${leftText(n)} แตะเพื่อดูวิธีเก็บ"><span class="thumb sm" aria-hidden="true">${it.e}</span>
+        <span class="stext"><b>${esc(it.n)}</b><span>${SPLACE[e.pl][0]} · เก็บ${dayLabel(e.d)}</span></span>
+        <span class="sleft ${cls}">${leftText(n)}</span></button>
+      ${n < 0 ? `<p class="decay over">${ico("alert")}เลยเวลาที่แนะนำแล้ว ดูและดมก่อน ถ้าไม่แน่ใจให้ทิ้ง</p>` : ""}
+      <div class="rowbtns"><button type="button" class="btn small" data-sused="${e.u}">${ico("tick")}ใช้หมดแล้ว</button>${more.join("")}</div>
+    </li>`;
+  }).join("") + `</ul>`;
+}
+function guideItem(it) {
+  const places = placesOf(it);
+  return `<details class="sitem" id="s-${it.id}" ${sOpen === it.id ? "open" : ""}><summary>
+      <span class="thumb sm" aria-hidden="true">${it.e}</span>
+      <span class="stext"><b>${esc(it.n)}</b><span>${places.map(pl => `${SPLACE[pl][0]} ${rangeText(it, pl)}`).join(" · ")}</span></span></summary>
+    <div class="sbody">
+      <div class="splaces">${places.map(pl => `<div class="splace ${pl === it.best ? "best" : ""}">${ico(SPLACE[pl][1])}<b>${rangeText(it, pl)}</b><span>${SPLACE[pl][0]}${pl === it.best ? " · แนะนำ" : ""}</span></div>`).join("")}</div>
+      <h4>วิธีเก็บ</h4><ol class="shows">${it.how.map(h => `<li>${esc(h)}</li>`).join("")}</ol>
+      ${it.thaw ? `<h4>ละลาย</h4><p>${esc(it.thaw)}</p>` : ""}
+      <h4>ดูว่าเสียหรือยัง</h4><p>${esc(it.bad)}</p>
+      ${it.tip ? `<p class="stip">${ico("bulb")}<span>${esc(it.tip)}</span></p>` : ""}
+      <div class="sadd"><label for="sd-${it.id}">เริ่มเก็บ</label><select class="sdate" id="sd-${it.id}">${["วันนี้", "เมื่อวาน", "2 วันก่อน", "3 วันก่อน"].map((t, i) => `<option value="${i}">${t}</option>`).join("")}</select></div>
+      <div class="rowbtns">${places.map(pl => `<button type="button" class="btn small ${pl === it.best ? "primary" : ""}" data-sadd="${it.id}|${pl}">${ico(SPLACE[pl][1])}เก็บ${placeVerb(pl)}</button>`).join("")}</div>
+    </div></details>`;
+}
+const normS = s => s.toLowerCase().replace(/[็-์\s]/g, "");
+function renderStore() {
+  const q = normS($("sq").value);
+  const items = STORE.filter(it => (!sGroup || it.g === sGroup) && (!q || normS(it.n + it.e + (it.a || "")).includes(q)));
+  $("stockBody").innerHTML = stockHTML();
+  $("stockSum").textContent = stock.length ? `${stock.length} อย่าง` : "";
+  $("sgroups").innerHTML = [["", "ทั้งหมด"], ...SGROUPS].map(([g, n]) => `<button type="button" class="sc" data-sg="${g}" aria-pressed="${sGroup === g}">${n}</button>`).join("");
+  $("storeGuide").innerHTML = items.length
+    ? SGROUPS.filter(([g]) => items.some(it => it.g === g)).map(([g, n]) => `<h3 class="sgh">${n}</h3><div class="sgl">${items.filter(it => it.g === g).map(guideItem).join("")}</div>`).join("")
+    : `<div class="empty"><p>ไม่เจอ "${esc($("sq").value.trim())}" ลองคำอื่น เช่น เนื้อ ไก่ ผัก เส้น</p></div>`;
+  renderStoreBadge();
+}
+function addStock(id, pl, back = 0) {
+  const it = sItem(id); if (!it || !sRangeOf(it, pl)) return;
+  const e = { u: newId(), id, pl, d: ymd(addDays(new Date(), -back)) };
+  stock.push(e); saveStock();
+  if (it.p && PITEMS.some(p => p.id === it.p) && !pantry.has(it.p)) { pantry.add(it.p); savePantry(); }
+  sOpen = ""; renderStore();
+  toast(`เก็บ${it.n}${placeVerb(pl)}แล้ว · ${leftText(daysLeft(e))}`);
+}
+function useStock(u) {
+  const e = stock.find(x => x.u === u); if (!e) return;
+  const it = sItem(e.id), hadPantry = !!it.p && pantry.has(it.p);
+  stock = stock.filter(x => x !== e);
+  const dropPantry = hadPantry && !stock.some(x => sItem(x.id).p === it.p);
+  if (dropPantry) { pantry.delete(it.p); savePantry(); }
+  saveStock(); renderStore();
+  toast(`เอา${it.n}ออกจากรายการแล้ว`, { label: "เอาคืน", fn: () => { stock.push(e); if (dropPantry) { pantry.add(it.p); savePantry(); } saveStock(); renderStore(); } });
+}
+function moveStock(u, pl) {
+  const e = stock.find(x => x.u === u), it = e && sItem(e.id); if (!it || !sRangeOf(it, pl)) return;
+  e.pl = pl; e.d = today(); saveStock(); renderStore();
+  toast(pl === "freezer" ? `ย้ายไปช่องฟรีซแล้ว อร่อยสุดภายใน ${rangeText(it, "freezer")}` : `ละลายในตู้เย็น แล้วใช้ภายใน ${rangeText(it, "fridge")}`);
+}
+function openGuide(id) {
+  sGroup = ""; $("sq").value = ""; sOpen = id; renderStore();
+  const d = $("s-" + id); if (d) { d.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); d.querySelector("summary").focus({ preventScroll: true }); }
+}
+// Items ticked as bought on the shopping list start their day count too, if they spoil within a month
+function trackBought(ids) {
+  let n = 0;
+  ids.forEach(pid => {
+    const it = STORE.find(i => i.p === pid); if (!it || spanDays(it, it.best) > 30) return;
+    if (stock.some(e => e.id === it.id && e.d === today())) return;
+    stock.push({ u: newId(), id: it.id, pl: it.best, d: today() }); n++;
+  });
+  if (n) saveStock();
+  return n;
+}
+$("sq").addEventListener("input", renderStore);
+$("storeBody").addEventListener("toggle", ev => { if (ev.target.matches(".sitem") && ev.target.open) sOpen = ev.target.id.slice(2); }, true);
+renderStoreBadge();
+
 const ACTIONS = {
   "open-filters": () => { renderFilters(); fdlg.showModal(); },
   "close-filters": () => fdlg.close(),
@@ -3511,6 +4020,7 @@ const ACTIONS = {
   "go-kitchen": () => { setOnboarded(); go("kitchen"); },
   "go-menu": () => go("menu"),
   "go-meal": () => go("meal"),
+  "go-store": () => go("store"),
   "go-money": () => go("money"), "go-ledger": () => go("ledger"), "go-stats": () => go("stats"), "go-budget": () => go("budget"),
   "m-add": () => openMoneyForm(),
   "go-fit": () => go("fit"), "go-fitlog": () => go("fitlog"),
@@ -3620,6 +4130,13 @@ document.addEventListener("click", ev => {
   }
   if ((el = t.closest(".tab"))) { go(el.dataset.view); return; }
   if ((el = t.closest("[data-view-go]"))) { go(el.dataset.viewGo); return; }
+  if ((el = t.closest("[data-sg]"))) { sGroup = el.dataset.sg; renderStore(); return; }
+  if ((el = t.closest("[data-sadd]"))) { const [id, pl] = el.dataset.sadd.split("|"); addStock(id, pl, +($("sd-" + id) || {}).value || 0); return; }
+  if ((el = t.closest("[data-sused]"))) { useStock(el.dataset.sused); return; }
+  if ((el = t.closest("[data-sfreeze]"))) { moveStock(el.dataset.sfreeze, "freezer"); return; }
+  if ((el = t.closest("[data-sthaw]"))) { moveStock(el.dataset.sthaw, "fridge"); return; }
+  if ((el = t.closest("[data-scook]"))) { resetFilters(); usesId = el.dataset.scook; go("menu"); render(); return; }
+  if ((el = t.closest("[data-sopen]"))) { openGuide(el.dataset.sopen); return; }
   if ((el = t.closest("[data-sport]"))) { setSport(el.dataset.sport); renderFit(); toast(`แผน${SPORTS[fit.sport].name} · Level ${fit.level}`); return; }
   if ((el = t.closest("[data-team]"))) { const d = +el.dataset.team; fit.team = fit.team.includes(d) ? fit.team.filter(x => x !== d) : [...fit.team, d]; saveFit(); renderFit(); return; }
   if ((el = t.closest("[data-phpose]"))) { phPose = el.dataset.phpose; phA = phB = ""; renderBody(); return; }
