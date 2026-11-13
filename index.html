@@ -581,6 +581,15 @@ dialog::backdrop { background: rgba(6, 10, 22, .55); }
 .dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin: 0 4px 0 8px; vertical-align: -1px; }
 .dot.full { background: var(--good); } .dot.part { background: var(--good-soft); border: 1px solid var(--good); }
 .brow > b { font-size: 18px; font-variant-numeric: tabular-nums; }
+
+/* ---------- Coach lines ---------- */
+.coach { margin: 0; padding: 10px 14px; border-radius: var(--r-ctl); background: var(--turmeric-soft); color: var(--turmeric); font-size: 17px; font-weight: 700; text-align: center; line-height: 1.45; }
+.coach:empty { display: none; }
+.coach.big { font-size: 20px; width: 100%; }
+.rest .coach { width: 100%; }
+.pepcard { gap: 8px; }
+.peplab { font-size: 13px; font-weight: 600; color: var(--turmeric); }
+.pepq { margin: 0; font-size: 19px; font-weight: 700; line-height: 1.45; text-wrap: balance; }
 </style>
 
 <meta name="description" content="ผู้ช่วยเรื่องประจำวัน เริ่มจากครัว: หาเมนูจากของที่มี จัดมื้อ และทำตามทีละขั้น">
@@ -650,6 +659,8 @@ dialog::backdrop { background: rgba(6, 10, 22, .55); }
       <h3>ตั้งค่า</h3>
       <label class="switch" for="sfxSwitch"><input type="checkbox" role="switch" id="sfxSwitch"><span>เสียงเอฟเฟกต์</span></label>
       <p class="hint">เสียงตอนแตะปุ่ม เพิ่มเมนู และทำเสร็จ ส่วนเสียงเตือนหมดเวลาจะดังเสมอแม้ปิดไว้</p>
+      <label class="switch" for="coachSwitch"><input type="checkbox" role="switch" id="coachSwitch"><span>เสียงโค้ชพูดปลุกใจ</span></label>
+      <p class="hint">ตอนออกกำลังกาย โค้ชจะพูดให้กำลังใจ ใช้ได้ถ้ามือถือมีเสียงพูดภาษาไทย ถ้าไม่มี คำปลุกใจจะขึ้นบนจออย่างเดียว</p>
     </div>
   </section>
 
@@ -2812,7 +2823,7 @@ function decayNote() {
   if (fit.last === today()) return { cls: "ok", text: "วันนี้ออกกำลังกายแล้ว พักได้ถึงวันที่ " + parseYmd(ymd(addDays(new Date(), GRACE + 1))).toLocaleDateString("th-TH", { weekday: "short", day: "numeric", month: "short" }) + " โดย level ไม่ลด" };
   const left = GRACE - missed;
   if (left > 0) return { cls: "ok", text: `พักได้อีก ${left} วัน ก่อน level จะลด` };
-  if (left === 0) return { cls: "warn", text: "วันนี้เป็นวันสุดท้ายที่พักได้ ถ้าพรุ่งนี้ยังไม่ออกกำลังกาย level จะลด 1" };
+  if (left === 0) return { cls: "warn", text: "วันนี้เป็นวันสุดท้ายที่พักได้ ถ้าพรุ่งนี้ยังไม่ออกกำลังกาย level จะลด 1 ซ้อมสัก 10 นาทีก็ยังดี!" };
   return { cls: "over", text: `หายไป ${missed} วันแล้ว level ลดไปแล้ว ออกกำลังกายวันนี้เพื่อหยุดการลด` };
 }
 function streak() {
@@ -2910,6 +2921,42 @@ function analyse(k, lm, W, H, c, now) {
   return "";
 }
 
+/* Coach: short pep lines shown on screen and, when the phone has a Thai voice, spoken aloud.
+   Written for this app; none are quotes attributed to real players. */
+const PEP = {
+  start: ["ลงสนามได้! วันนี้มาทำให้ดีกว่าเมื่อวาน", "ปีศาจไม่ได้เกิดมาเก่ง ปีศาจซ้อมทุกวัน", "ร่างกายพร้อม ใจต้องพร้อมกว่า ลุย!", "ทุกครั้งที่ทำวันนี้ คืออีกก้าวสู่ GOAT", "เริ่มเลย! ไม่มีใครเก่งขึ้นจากการนั่งเฉย ๆ"],
+  half: ["มาครึ่งทางแล้ว อย่าเพิ่งผ่อน!", "ครึ่งแรกจบ ครึ่งหลังคือของจริง!", "ดีมาก รักษาจังหวะไว้!", "ครึ่งทางแล้ว ใจสู้กว่าเดิมอีกนิด!"],
+  last: ["ช่วงสุดท้ายแล้ว ทุ่มให้หมด!", "ครั้งสุดท้ายคือครั้งที่สร้างคุณ!", "ใกล้แล้ว อย่ายอมแพ้ตอนนี้!", "อีกนิดเดียว แชมป์ไม่หยุดตรงนี้!"],
+  lastHold: ["วินาทีสุดท้ายแล้ว ค้างไว้!", "ใกล้แล้ว ใจห้ามหลุด!", "ทนอีกนิด ปีศาจไม่ปล่อยมือ!"],
+  exDone: ["เก่งมาก! ผ่านไปอีกท่า", "นั่นแหละ! แบบนี้แหละปีศาจ", "เป๊ะ! ท่าต่อไปรออยู่", "สุดยอด! ไปต่อ!"],
+  rest: ["หายใจลึก ๆ นักกีฬาตัวจริงพักอย่างมีเป้าหมาย", "ดื่มน้ำนิดนึง แล้วกลับมาโหดกว่าเดิม", "พักสั้น ๆ แต่ใจอย่าพัก", "คลายแขนขา เตรียมท่าต่อไป"],
+  finishFull: ["จบแมตช์วันนี้ ชนะขาด!", "วันนี้คุณเอาชนะตัวเองเมื่อวานได้แล้ว", "ทำครบทุกท่า วินัยแบบนี้แหละที่สร้างแชมป์", "เยี่ยมมาก! พรุ่งนี้มาต่อ"],
+  finishPartial: ["ไม่ครบไม่เป็นไร การมาลงสนามคือชัยชนะแรก", "พรุ่งนี้กลับมาทำให้ครบ ปีศาจไม่ยอมแพ้", "วันนี้ได้ซ้อมแล้ว ดีกว่าไม่ได้ทำเลย"],
+  levelUp: ["เลื่อนขั้นแล้ว! ระดับใหม่ ความท้าทายใหม่", "Level ใหม่ปลดล็อก! คุณแกร่งขึ้นจริง ๆ", "ขึ้นขั้นแล้ว! ปีศาจตัวจริงกำลังมา"],
+  daily: ["ปีศาจไม่ได้เกิดมาเก่ง ปีศาจคือคนที่ซ้อมตอนคนอื่นพัก", "ความเก่งมาจากเรื่องเล็ก ๆ ที่ทำซ้ำทุกวัน", "อย่าเทียบกับคนอื่น เทียบกับตัวเองเมื่อวาน", "วินัยคือการทำ แม้ตอนที่ไม่อยากทำ", "นักกีฬาตัวจริงชนะตั้งแต่ตอนซ้อม ก่อนลงแข่งจริง", "พักได้ แต่อย่าหยุด", "ทุก level ที่ได้มา คือหลักฐานว่าคุณไม่ยอมแพ้", "เหงื่อวันนี้ คือความมั่นใจในสนามวันพรุ่งนี้", "เหนื่อยแค่ไหนก็ซ้อมได้สัก 10 นาที", "ตำนานทุกคน เคยเป็นมือใหม่มาก่อน"]
+};
+let coachOn = load("life-coach-v1", [true])[0] !== false;
+const pick = kind => { const l = PEP[kind]; return l[Math.floor(Math.random() * l.length)]; };
+const dailyPep = () => PEP.daily[dayNo(today()) % PEP.daily.length];
+function thaiVoice() { try { return speechSynthesis.getVoices().find(v => /^th/i.test(v.lang)); } catch (e) { return null; } }
+// Speak only with a Thai voice; any other voice would mangle Thai text, so the line stays on screen instead
+function speak(text) {
+  if (!coachOn || !("speechSynthesis" in window)) return false;
+  const v = thaiVoice(); if (!v) return false;
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = v.lang; u.voice = v; u.rate = 1.05; speechSynthesis.speak(u); return true; } catch (e) { return false; }
+}
+function pep(kind) {
+  const text = pick(kind); if (wo) wo.coachText = text;
+  const el = $("woCoach"); if (el) el.textContent = text;
+  speak(text); return text;
+}
+try { speechSynthesis.getVoices(); } catch (e) {}
+function pepCard() {
+  const n = streak();
+  return `<div class="card pepcard"><span class="peplab">คำปลุกใจวันนี้</span><p class="pepq">“${esc(dailyPep())}”</p>
+    ${n >= 2 ? `<p class="decay ok">${ico("flame")} ทำต่อเนื่อง ${n} วันแล้ว อย่าให้ไฟดับ!</p>` : ""}</div>`;
+}
+
 /* Workout runner */
 const wdlg = $("wdlg");
 let wo = null, camStream = null, camRaf = 0, facing = "user";
@@ -2940,7 +2987,11 @@ async function useCamera() {
     renderWo();
   }
 }
-function beginExercise() { wo.phase = "ex"; wo.c = newCounter(); wo.c.count = wo.counts[wo.i] || 0; renderWo(); if (wo.mode === "cam") runCam(); }
+function beginExercise() {
+  wo.phase = "ex"; wo.c = newCounter(); wo.c.count = wo.counts[wo.i] || 0;
+  if (!wo.started) { wo.started = true; wo.coachText = pick("start"); } else wo.coachText = "";
+  renderWo(); if (wo.coachText) speak(wo.coachText); if (wo.mode === "cam") runCam();
+}
 function runCam() {
   cancelAnimationFrame(camRaf);
   const video = $("woVideo"), canvas = $("woCanvas"); if (!video || !camStream) return;
@@ -2969,10 +3020,15 @@ function runCam() {
 }
 function setHint(text, warn) { const h = $("woHint"); if (h && h.textContent !== text) { h.textContent = text; h.classList.toggle("warn", !!warn); } }
 function setCount(n) {
-  const it = woItem(); wo.counts[wo.i] = Math.max(0, n); if (wo.c) { if (EX[it.k].hold) wo.c.held = wo.counts[wo.i]; else wo.c.count = wo.counts[wo.i]; }
+  const it = woItem(), prev = wo.counts[wo.i] || 0; wo.counts[wo.i] = Math.max(0, n);
+  const now = wo.counts[wo.i], half = Math.ceil(it.target / 2), near = EX[it.k].hold ? 5 : 3;
+  if (now > prev && now < it.target) {
+    if (it.target - now === near && it.target >= near * 2) pep(EX[it.k].hold ? "lastHold" : "last");
+    else if (prev < half && now >= half && it.target >= 6) pep("half");
+  } if (wo.c) { if (EX[it.k].hold) wo.c.held = wo.counts[wo.i]; else wo.c.count = wo.counts[wo.i]; }
   const el = $("woNum"); if (el) el.textContent = wo.counts[wo.i];
   const bar = $("woBar"); if (bar) bar.style.width = Math.min(100, wo.counts[wo.i] / it.target * 100) + "%";
-  if (woDone(it) && !wo.finishing) { wo.finishing = true; sfx("done"); setTimeout(() => { wo.finishing = false; nextExercise(); }, 700); }
+  if (woDone(it) && !wo.finishing) { wo.finishing = true; sfx("done"); pep("exDone"); setTimeout(() => { wo.finishing = false; nextExercise(); }, 700); }
 }
 let holdTick = 0;
 function toggleHold() {
@@ -2983,7 +3039,7 @@ function nextExercise() {
   if (!wo || wo.phase !== "ex") return;
   clearInterval(holdTick); holdTick = 0;
   if (wo.i >= wo.list.length - 1) return finishWorkout();
-  wo.i++; wo.phase = "rest"; wo.restEnd = Date.now() + restFor(fit.level) * 1000; renderWo();
+  wo.i++; wo.restText = pick("rest"); wo.phase = "rest"; wo.restEnd = Date.now() + restFor(fit.level) * 1000; renderWo();
 }
 let restTimer = 0;
 function renderRestTick() {
@@ -3008,7 +3064,7 @@ function finishWorkout() {
   fit.log.push({ d: t, ts: Date.now(), lv: fit.level, ex: res, full });
   if (fit.log.length > 400) fit.log = fit.log.slice(-400);
   saveFit();
-  wo.phase = "done"; wo.result = { full, up }; renderWo();
+  wo.phase = "done"; wo.result = { full, up, text: pick(up ? "levelUp" : full ? "finishFull" : "finishPartial") }; renderWo(); speak(wo.result.text);
   if (up) sfx("shuffle"); else if (full) sfx("done");
   if (view === "fit" || view === "fitlog" || view === "home") renderFitViews();
 }
@@ -3022,6 +3078,7 @@ function renderWo() {
     body = `<div class="stepno"><b>${fit.level}</b><span>Level ${fit.level} · ${rankOf(fit.level)}</span></div>
       <p class="cook-step" id="w-title">วันนี้ ${n} ท่า ประมาณ ${estMin(wo.list)} นาที</p>
       <ol class="wolist">${wo.list.map(x => `<li><b>${EX[x.k].name}</b><span>${x.target} ${EX[x.k].hold ? "วินาที" : "ครั้ง"}${roundsFor(fit.level) > 1 ? ` · รอบ ${x.round}` : ""}</span></li>`).join("")}</ol>
+      <p class="coach">“${esc(dailyPep())}”</p>
       <div class="tip"><b>ตั้งกล้อง</b>วางมือถือพิงไว้ห่าง 2–3 เมตร ให้เห็นตั้งแต่หัวจรดเท้า แสงพอ และมีคนเดียวในภาพ ภาพจากกล้องประมวลผลในเครื่องเท่านั้น ไม่มีการบันทึกหรือส่งไปไหน</div>
       ${wo.msg ? `<p class="warn" role="alert">${esc(wo.msg)}</p>` : ""}
       ${wo.phase === "loading" ? `<p class="cook-lead" id="woLoad" aria-live="polite">กำลังขออนุญาตใช้กล้อง</p>` : ""}`;
@@ -3035,13 +3092,14 @@ function renderWo() {
         <p class="wohint" id="woHint" aria-live="polite">เริ่มได้เลย</p>`
       : `<button type="button" class="tapzone" ${ex.hold ? `data-act="wo-hold"` : `data-act="wo-plus"`}><span id="woNum">${cnt}</span><small>/ ${it.target} ${unit}</small>
           <em>${ex.hold ? (holdTick ? "แตะเพื่อหยุดเวลา" : "แตะเพื่อเริ่มจับเวลา") : "แตะทุกครั้งที่ทำครบ 1 ครั้ง"}</em></button>`}
+      <p class="coach" id="woCoach" aria-live="polite">${esc(wo.coachText || "")}</p>
       <div class="tbar" aria-hidden="true"><i id="woBar" style="width:${Math.min(100, cnt / it.target * 100)}%"></i></div>
       <div class="trow"><button type="button" class="btn" data-act="wo-minus">−1</button><button type="button" class="btn" data-act="wo-plus1">+1</button>
         ${wo.mode === "cam" ? `<button type="button" class="btn" data-act="wo-flip">สลับกล้อง</button>` : ""}</div></div>`;
     nav = `<div class="cook-nav"><button type="button" class="btn" data-act="wo-skip"><span>ข้ามท่านี้</span></button>
       <button type="button" class="btn primary" data-act="wo-next"><span>${cnt >= it.target ? "ท่าต่อไป" : "จบท่านี้"}</span></button></div>`;
   } else if (wo.phase === "rest") {
-    body = `<div class="rest"><p class="cook-lead">พักหายใจ</p><div class="tbig" id="woRest" role="timer">${restFor(fit.level)}</div>
+    body = `<div class="rest"><p class="coach">${esc(wo.restText || "")}</p><p class="cook-lead">พักหายใจ</p><div class="tbig" id="woRest" role="timer">${restFor(fit.level)}</div>
       <p class="cook-step">ต่อไป: ${ex.name} ${it.target} ${ex.hold ? "วินาที" : "ครั้ง"}</p><p class="cook-lead">${ex.tip}</p></div>`;
     nav = `<div class="cook-nav"><button type="button" class="btn" data-act="wo-rest10"><span>+10 วินาที</span></button>
       <button type="button" class="btn primary" data-act="wo-go"><span>เริ่มเลย</span></button></div>`;
@@ -3049,6 +3107,7 @@ function renderWo() {
     const r = wo.result || {};
     body = `<div class="done-msg">${r.up ? `<span class="lvup">Level ${fit.level}</span><p class="cook-step">เลื่อนขั้นแล้ว! ${rankOf(fit.level)}</p>`
         : `<span class="big" aria-hidden="true">${ico(r.full ? "trophy" : "activity", "huge")}</span><p class="cook-step">${r.full ? "ทำครบทุกท่าแล้ว" : "บันทึกการฝึกแล้ว"}</p>`}
+      <p class="coach big">${esc(r.text || "")}</p>
       <p class="cook-lead">${r.full ? (fit.level >= MAX_LV ? "ถึงระดับสูงสุดแล้ว รักษาฟอร์มไว้" : `อีก ${NEED - fit.prog} วันที่ทำครบ จะขึ้น Level ${fit.level + 1}`) : "ยังทำไม่ครบทุกท่า ครั้งนี้เลยยังไม่นับเพื่อเลื่อนขั้น แต่ลองใหม่ได้ทุกเมื่อ"}</p>
       <ul class="wolist">${wo.list.map((x, i) => `<li><b>${EX[x.k].name}</b><span>${wo.counts[i] || 0} / ${x.target}</span></li>`).join("")}</ul>
       <div class="donebtns"><button type="button" class="btn" data-act="wo-meal">${ico("utensils")}หาเมนูหลังซ้อม</button></div></div>`;
@@ -3072,7 +3131,7 @@ function levelCard() {
 function renderFitViews() { if (view === "fit") renderFit(); if (view === "fitlog") renderFitLog(); if (view === "home") renderHome(); }
 function renderFit() {
   const list = workoutFor(), doneToday = fit.log.some(x => x.d === today() && x.full);
-  $("fitBody").innerHTML = levelCard() + `
+  $("fitBody").innerHTML = levelCard() + pepCard() + `
     <div class="card"><h3>ฝึกวันนี้ <small>${list.length} ท่า · ประมาณ ${estMin(list)} นาที</small></h3>
       <ol class="wolist">${list.map(x => `<li><b>${EX[x.k].name}</b><span>${x.target} ${EX[x.k].hold ? "วินาที" : "ครั้ง"}${roundsFor(fit.level) > 1 ? ` · รอบ ${x.round}` : ""}</span></li>`).join("")}</ol>
       ${doneToday ? `<p class="decay ok">${ico("check")} วันนี้ทำครบแล้ว ฝึกซ้ำได้ แต่จะไม่นับเพื่อเลื่อนขั้นเพิ่ม</p>` : ""}
@@ -3095,6 +3154,8 @@ function renderFitLog() {
     ${fit.log.length ? `<div class="card"><h3>ล่าสุด</h3>${[...fit.log].reverse().slice(0, 8).map(x => `<div class="brow"><span class="txt"><b>${dayLabel(x.d)} · Level ${x.lv}</b><small>${Object.entries(x.ex).map(([k, v]) => `${EX[k] ? EX[k].name : k} ${v}`).join(" · ")}</small></span>${x.full ? `<span class="decay ok">ครบ</span>` : `<span class="decay">ไม่ครบ</span>`}</div>`).join("")}</div>` : ""}`;
 }
 wdlg.addEventListener("cancel", ev => { ev.preventDefault(); closeWorkout(); });
+$("coachSwitch").checked = coachOn;
+$("coachSwitch").addEventListener("change", ev => { coachOn = ev.target.checked; store("life-coach-v1", [coachOn]); sfx(coachOn ? "on" : "off"); if (coachOn && !speak("พร้อมลุยแล้ว!")) toast("มือถือนี้ไม่มีเสียงพูดภาษาไทย คำปลุกใจจะขึ้นบนจอแทน"); });
 const decayed = applyDecay();
 if (decayed) setTimeout(() => toast(`หายไป ${decayed.missed} วัน level ลดจาก ${decayed.from} เป็น ${decayed.to}`), 600);
 
