@@ -1,6 +1,6 @@
 // Service worker: keeps a copy of the app on the phone so it opens without a connection.
 // The app itself is fetched from the network first, so a new version shows up as soon as the phone is online.
-const CACHE = "chiwit-ngai-v6";
+const CACHE = "chiwit-ngai-v7";
 const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png"];
 
 self.addEventListener("install", event => {
