@@ -681,11 +681,18 @@ label.btn { cursor: pointer; }
 .wodemo ~ .tapzone { min-height: min(28vh, 240px); }
 .rest .wodemo { margin-top: 4px; }
 
-.stagedemo { position: absolute; left: 8px; bottom: 8px; width: 96px; z-index: 2; opacity: .92; pointer-events: none; }
+.stagedemo { position: absolute; left: 8px; top: 8px; width: 96px; z-index: 2; opacity: .92; pointer-events: none; }
 .stagedemo .demo { box-shadow: var(--shadow); }
 .withdemo li { align-items: center; justify-content: flex-start; }
 .withdemo li b { flex: 1; }
 .withdemo .demo { width: 60px; flex: none; }
+
+/* ---------- Camera depth meter ---------- */
+.gauge { position: absolute; right: 10px; top: 12%; bottom: 12%; width: 14px; border-radius: 999px; background: rgba(0,0,0,.35); border: 2px solid rgba(255,255,255,.85); z-index: 2; pointer-events: none; overflow: hidden; }
+.gauge i { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--g, 0) * 100%); background: var(--turmeric); transition: height 80ms linear; }
+.gauge.hit i { background: var(--good); }
+.woex .trow { flex-wrap: wrap; }
+.woex .trow .btn { flex: 1 1 64px; white-space: nowrap; }
 </style>
 
 <meta name="description" content="ผู้ช่วยเรื่องประจำวัน เริ่มจากครัว: หาเมนูจากของที่มี จัดมื้อ และทำตามทีละขั้น">
@@ -3035,81 +3042,179 @@ function bestStreak() {
 
 /* Pose AI: MediaPipe Pose Landmarker running in the browser. Video never leaves the phone. */
 const MP_VER = "0.10.14";
-let poser = null, poserLoading = null;
+const POSE_MODEL = n => `https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_${n}/float16/1/pose_landmarker_${n}.task`;
+let poser = null, poserLoading = null, poserKind = "", mpVision = null, mpFiles = null;
+async function makePoser(kind) {
+  if (!mpVision) {
+    mpVision = await import(`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VER}/vision_bundle.mjs`);
+    mpFiles = await mpVision.FilesetResolver.forVisionTasks(`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VER}/wasm`);
+  }
+  const opts = d => ({ baseOptions: { modelAssetPath: POSE_MODEL(kind), delegate: d }, runningMode: "VIDEO", numPoses: 1, minPoseDetectionConfidence: .4, minPosePresenceConfidence: .4, minTrackingConfidence: .4 });
+  try { return await mpVision.PoseLandmarker.createFromOptions(mpFiles, opts("GPU")); }
+  catch (e) { return await mpVision.PoseLandmarker.createFromOptions(mpFiles, opts("CPU")); }
+}
+// The full model sees tricky angles and lying-down moves much better. Phones too slow for it fall back to lite.
 async function loadPoser() {
   if (poser) return poser;
   if (!poserLoading) poserLoading = (async () => {
-    const vision = await import(`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VER}/vision_bundle.mjs`);
-    const files = await vision.FilesetResolver.forVisionTasks(`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VER}/wasm`);
-    const opts = d => ({ baseOptions: { modelAssetPath: "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task", delegate: d }, runningMode: "VIDEO", numPoses: 1 });
-    try { poser = await vision.PoseLandmarker.createFromOptions(files, opts("GPU")); }
-    catch (e) { poser = await vision.PoseLandmarker.createFromOptions(files, opts("CPU")); }
+    const want = load("life-posemodel-v1", ["full"])[0] === "lite" ? "lite" : "full";
+    try { poser = await makePoser(want); poserKind = want; }
+    catch (e) { if (want === "lite") throw e; poser = await makePoser("lite"); poserKind = "lite"; }
     return poser;
   })();
   try { return await poserLoading; } catch (e) { poserLoading = null; throw e; }
 }
+let speedAvg = 0, speedN = 0, poserSwapping = false;
+function checkSpeed(ms) {
+  speedN++; if (speedN < 15) return; // the first frames are slow while the GPU warms up
+  speedAvg = speedAvg ? speedAvg * .92 + ms * .08 : ms;
+  if (poserKind !== "full" || poserSwapping || speedN < 60 || speedAvg < 65) return;
+  poserSwapping = true;
+  makePoser("lite").then(p2 => { const old = poser; poser = p2; poserKind = "lite"; store("life-posemodel-v1", ["lite"]); try { old.close(); } catch (e) {} })
+    .catch(() => {}).finally(() => { poserSwapping = false; });
+}
 const BONES = [[11, 12], [11, 13], [13, 15], [12, 14], [14, 16], [11, 23], [12, 24], [23, 24], [23, 25], [25, 27], [24, 26], [26, 28]];
 function angle(a, b, c) { const d = Math.abs(Math.atan2(a.y - b.y, a.x - b.x) - Math.atan2(c.y - b.y, c.x - b.x)) * 180 / Math.PI; return d > 180 ? 360 - d : d; }
-// Rep counter: one small state machine per exercise, fed one pose per video frame
-function newCounter() { return { phase: "up", count: 0, held: 0, hint: "", shallow: false, sm: [], lk: "down", rk: "down", t: 0 }; }
-function smooth(c, v) { c.sm.push(v); if (c.sm.length > 4) c.sm.shift(); return c.sm.reduce((a, b) => a + b, 0) / c.sm.length; }
-function analyse(k, lm, W, H, c, now) {
-  const P = i => ({ x: lm[i].x * W, y: lm[i].y * H, v: lm[i].visibility == null ? 1 : lm[i].visibility });
-  const seen = (...ids) => ids.every(i => P(i).v > .5);
-  const L = { sh: P(11), el: P(13), wr: P(15), hip: P(23), kn: P(25), an: P(27) }, R = { sh: P(12), el: P(14), wr: P(16), hip: P(24), kn: P(26), an: P(28) };
-  const vis = s => [s.sh, s.el, s.hip, s.kn, s.an].reduce((n, p) => n + p.v, 0);
-  const S = vis(L) >= vis(R) ? L : R; // the side facing the camera
+/* Rep counter v2, works from any camera angle.
+   Angles come from MediaPipe's 3D world landmarks (metres, centred on the hips), so a knee bend reads the same
+   whether the phone sees you from the front, the side or a diagonal. Each joint is smoothed, short dropouts are
+   bridged with the last good position, and the thresholds adapt to how far this person actually straightens. */
+const JOINTS = [0, 11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28];
+const sub3 = (a, b) => ({ x: a.x - b.x, y: a.y - b.y, z: a.z - b.z });
+const len3 = u => Math.hypot(u.x, u.y, u.z);
+const mid3 = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, z: (a.z + b.z) / 2, v: Math.min(a.v, b.v) });
+const clamp01 = x => Math.max(0, Math.min(1, x));
+function ang3(a, b, c) {
+  const u = sub3(a, b), w = sub3(c, b), d = len3(u) * len3(w);
+  return d ? Math.acos(Math.max(-1, Math.min(1, (u.x * w.x + u.y * w.y + u.z * w.z) / d))) * 180 / Math.PI : 180;
+}
+// How far a segment leans away from vertical: 0 = upright, 90 = flat. The world y axis points down like the image.
+function lean(a, b) { const u = sub3(a, b), l = len3(u); return l ? Math.acos(Math.min(1, Math.abs(u.y) / l)) * 180 / Math.PI : 0; }
+// One Euro filter: smooth when still, quick when moving fast, so jitter goes away without lagging fast reps
+function euro(f, x, dt) {
+  if (f.x == null || !(dt > 0)) { f.x = x; f.d = 0; return x; }
+  const a = cut => { const r = 2 * Math.PI * cut * dt; return r / (r + 1); };
+  f.d += a(1) * ((x - f.x) / dt - f.d);
+  f.x += a(1.6 + 1.2 * Math.abs(f.d)) * (x - f.x);
+  return f.x;
+}
+// Sensitivity: how deep a rep must go before it counts. The choice is kept on the phone.
+const CAM_SENS = [["ง่าย", .75], ["ปกติ", 1], ["เข้ม", 1.12]];
+let camSens = Math.min(2, Math.max(0, load("life-camsens-v1", [1])[0] | 0));
+function newCounter() { return { phase: "up", count: 0, held: 0, hint: "", t: 0, f: {}, p: {}, seenAt: {}, gauge: 0, L: { phase: "up" }, R: { phase: "up" }, bad: 0, lost: 0, knee: 180 }; }
+// Builds this frame's smoothed 3D joints. Joints the camera can't see keep their last position for up to 0.7 s.
+function track(c, lm, wl, W, H, now, dt) {
+  const s = Math.max(W, H) || 1;
+  JOINTS.forEach(i => {
+    const im = lm[i], v = im.visibility == null ? 1 : im.visibility;
+    const src = wl && wl[i] ? wl[i] : { x: im.x * W / s, y: im.y * H / s, z: (im.z || 0) * W / s };
+    const old = c.p[i];
+    if (v < .25 && old && now - (c.seenAt[i] || 0) < 700) { c.p[i] = { ...old, v: Math.max(old.v * .9, .2) }; return; }
+    const f = c.f[i] || (c.f[i] = { x: {}, y: {}, z: {} });
+    c.p[i] = { x: euro(f.x, src.x, dt), y: euro(f.y, src.y, dt), z: euro(f.z, src.z, dt), v };
+    if (v >= .25) c.seenAt[i] = now;
+  });
+  return c.p;
+}
+// Two-sided measures: average both sides when both are clear, otherwise trust the clearer side
+function fuse(l, r, vl, vr) { if (vl > .5 && vr > .5) return (l + r) / 2; if (vl < .3 && vr < .3) return null; return (l * vl + r * vr) / (vl + vr); }
+// The rep machine. s is a signal that is high when extended (standing, arms straight) and drops during the rep.
+// The "top" learns this person's own straight position, so a rep counts at a set depth below that, not at a fixed angle.
+function cycle(st, s, o, now, dt) {
+  const k = CAM_SENS[camSens][1], depth = o.depth * k;
+  if (st.top == null) st.top = s;
+  if (st.phase === "up") st.top = Math.max(s, st.top - 6 * dt);
+  const top = Math.min(st.top, o.topMax || 180);
+  const downT = Math.min(top - depth, o.cap + (k - 1) * -20), upT = top - depth * (o.back || .35);
+  st.gauge = clamp01((top - s) / Math.max(1, top - downT));
+  if (st.phase === "up") {
+    st.peak = Math.max(st.peak || 0, st.gauge);
+    if (s <= downT) { st.phase = "down"; st.tDown = now; st.peak = 0; st.low = s; return "down"; }
+    if (st.gauge < .15 && st.peak > .5) { st.peak = 0; return "shallow"; }
+  } else {
+    st.low = Math.min(st.low, s);
+    if (s >= upT && now - st.tDown > (o.minMs || 180)) { st.phase = "up"; st.peak = 0; return "rep"; }
+  }
+  return "";
+}
+function analyse(k, lm, W, H, c, now, wl) {
   const dt = c.t ? Math.min(.25, (now - c.t) / 1000) : 0; c.t = now;
+  const p = track(c, lm, wl, W, H, now, dt);
+  const v = i => p[i].v, any = (...g) => g.some(ids => ids.every(i => v(i) > .3));
   const rep = () => { c.count++; c.hint = ""; sfx("tap"); };
+  // Ask the person to step back only when the needed joints stay hidden for half a second
+  const need = (ok, msg) => { if (ok) { c.lost = 0; return ""; } c.lost += dt; return c.lost > .5 ? msg : ""; };
+  const kneeL = ang3(p[23], p[25], p[27]), kneeR = ang3(p[24], p[26], p[28]);
+  const knee = fuse(kneeL, kneeR, Math.min(v(23), v(25), v(27)), Math.min(v(24), v(26), v(28)));
+  const shM = mid3(p[11], p[12]), hipM = mid3(p[23], p[24]), anM = mid3(p[27], p[28]);
+  const torsoLean = lean(shM, hipM);
+  if (knee != null) c.knee = knee;
   switch (k) {
     case "squat": {
-      if (!seen(23, 25, 27) && !seen(24, 26, 28)) return "ถอยออกให้เห็นตั้งแต่สะโพกถึงเท้า";
-      const a = smooth(c, seen(23, 25, 27, 24, 26, 28) ? (angle(L.hip, L.kn, L.an) + angle(R.hip, R.kn, R.an)) / 2 : angle(S.hip, S.kn, S.an));
-      if (c.phase === "up") { if (a < 100) { c.phase = "down"; c.hint = "ดีมาก ลุกขึ้น"; } else if (a < 135) { c.shallow = true; c.hint = "ย่อลงอีกนิด"; } }
-      else if (a > 160) { c.phase = "up"; rep(); }
-      if (c.phase === "up" && a > 165 && c.shallow) { c.shallow = false; c.hint = "ครั้งนั้นไม่นับ ย่อให้ต้นขาขนานพื้น"; }
-      return "";
-    }
-    case "pushup": case "plank": {
-      if (!seen(11, 23, 27) && !seen(12, 24, 28)) return "หันข้างให้กล้อง ให้เห็นทั้งตัว";
-      const line = angle(S.sh, S.hip, S.an), flat = Math.abs(S.sh.y - S.an.y) < Math.abs(S.sh.x - S.an.x) * .6;
-      if (!flat) { c.hint = k === "plank" ? "ลงท่าแพลงก์ ลำตัวขนานพื้น" : "ลงท่าวิดพื้น ลำตัวขนานพื้น"; return ""; }
-      const sag = line < 160 ? ((S.hip.y > (S.sh.y + S.an.y) / 2) ? "ยกสะโพกขึ้นนิด ลำตัวให้ตรง" : "ลดสะโพกลงนิด ลำตัวให้ตรง") : "";
-      if (k === "plank") { if (!sag) { c.held += dt; c.hint = "ตรงดีมาก ค้างไว้"; } else c.hint = sag + " (เวลาหยุดเดิน)"; return ""; }
-      const a = smooth(c, angle(S.sh, S.el, S.wr));
-      if (c.phase === "up") { if (a < 95) { c.phase = "down"; c.hint = sag || "ดันขึ้น"; } }
-      else if (a > 155) { c.phase = "up"; rep(); if (sag) c.hint = sag; }
-      return "";
-    }
-    case "jack": {
-      if (!seen(11, 12, 15, 16, 27, 28)) return "ถอยออกให้เห็นทั้งตัว ตั้งแต่มือถึงเท้า";
-      const shW = Math.abs(L.sh.x - R.sh.x), feet = Math.abs(L.an.x - R.an.x), up = L.wr.y < L.sh.y && R.wr.y < R.sh.y;
-      if (c.phase === "up") { if (up && feet > shW * 1.4) c.phase = "open"; }
-      else if (!up && L.wr.y > L.sh.y && feet < shW * 1.15) { c.phase = "up"; rep(); }
+      const block = need(any([23, 25, 27], [24, 26, 28]), "ถอยออกให้เห็นตั้งแต่สะโพกถึงเท้า"); if (block || knee == null) return block;
+      const r = cycle(c, knee, { depth: 60, cap: 120, back: .35 }, now, dt);
+      if (r === "down") c.hint = c.low < 100 ? "ลึกสวย ลุกขึ้น" : "ดีมาก ลุกขึ้น";
+      else if (r === "rep") rep();
+      else if (r === "shallow") c.hint = "เกือบนับแล้ว ย่อลงอีกนิด";
       return "";
     }
     case "lunge": {
-      if (!seen(23, 25, 27) || !seen(24, 26, 28)) return "หันข้างให้กล้อง ให้เห็นทั้งสองขา";
-      const a = smooth(c, Math.min(angle(L.hip, L.kn, L.an), angle(R.hip, R.kn, R.an)));
-      if (c.phase === "up") { if (a < 105) { c.phase = "down"; c.hint = "ดันกลับขึ้น"; } }
-      else if (a > 155) { c.phase = "up"; rep(); }
+      const block = need(any([23, 25, 27]) && any([24, 26, 28]), "ให้เห็นทั้งสองขา ตั้งแต่สะโพกถึงเท้า"); if (block) return block;
+      const r = cycle(c, Math.min(kneeL, kneeR), { depth: 55, cap: 120, back: .35 }, now, dt);
+      if (r === "down") c.hint = "ดันกลับขึ้น"; else if (r === "rep") rep(); else if (r === "shallow") c.hint = "เกือบนับแล้ว ย่อเข่าหลังลงอีกนิด";
+      return "";
+    }
+    case "pushup": case "plank": {
+      const block = need(any([11, 23, 27], [12, 24, 28]), "ให้เห็นทั้งตัว ตั้งแต่ไหล่ถึงเท้า"); if (block) return block;
+      const lineL = ang3(p[11], p[23], p[27]), lineR = ang3(p[12], p[24], p[28]);
+      const line = fuse(lineL, lineR, Math.min(v(11), v(23), v(27)), Math.min(v(12), v(24), v(28))) || 180;
+      const flat = torsoLean > 50;
+      if (!flat) { c.gauge = 0; c.hint = k === "plank" ? "ลงท่าแพลงก์ ลำตัวขนานพื้น" : "ลงท่าวิดพื้น ลำตัวขนานพื้น"; return ""; }
+      // Which way the body bends: compare the hips with the straight line from shoulders to ankles
+      const sagDown = hipM.y > (shM.y + anM.y) / 2;
+      const sag = line < 152 ? (sagDown ? "ยกสะโพกขึ้นนิด ลำตัวให้ตรง" : "ลดสะโพกลงนิด ลำตัวให้ตรง") : "";
+      if (k === "plank") {
+        c.bad = sag ? c.bad + dt : 0; c.gauge = clamp01((line - 120) / 40);
+        if (c.bad < .8) { c.held += dt; c.hint = sag || "ตรงดีมาก ค้างไว้"; } else c.hint = sag + " (เวลาหยุดเดิน)";
+        return "";
+      }
+      const elL = ang3(p[11], p[13], p[15]), elR = ang3(p[12], p[14], p[16]);
+      const el = fuse(elL, elR, Math.min(v(11), v(13), v(15)), Math.min(v(12), v(14), v(16)));
+      if (el == null) return need(false, "ให้เห็นแขนด้วย ตั้งแต่ไหล่ถึงมือ");
+      const r = cycle(c, el, { depth: 60, cap: 115, back: .4 }, now, dt);
+      if (r === "down") c.hint = sag || "ดันขึ้น"; else if (r === "rep") { rep(); if (sag) c.hint = sag; } else if (r === "shallow") c.hint = "เกือบนับแล้ว ลงให้ลึกอีกนิด";
+      return "";
+    }
+    case "jack": {
+      const block = need(any([11, 13, 23]) && any([12, 14, 24]), "ถอยออกให้เห็นทั้งตัว ตั้งแต่มือถึงเท้า"); if (block) return block;
+      // Arm raise measured at the shoulder against the torso: 0 = arms down, 180 = straight overhead
+      const raise = fuse(ang3(p[23], p[11], p[13]), ang3(p[24], p[12], p[14]), Math.min(v(11), v(13)), Math.min(v(12), v(14)));
+      if (raise == null) return "";
+      const r = cycle(c, 180 - raise, { depth: 85, cap: 85, back: .45, topMax: 180 }, now, dt);
+      const hipW = Math.max(.12, len3(sub3(p[23], p[24]))), feet = len3(sub3(p[27], p[28])) / hipW;
+      if (r === "down") { c.wide = feet; c.hint = ""; }
+      else if (c.phase === "down") c.wide = Math.max(c.wide || 0, feet);
+      if (r === "rep") { rep(); if ((c.wide || 0) < 1.4) c.hint = "นับแล้ว กางขาให้กว้างด้วยนะ"; }
+      else if (r === "shallow") c.hint = "ยกแขนให้สูงเหนือหัว";
       return "";
     }
     case "knees": {
-      if (!seen(23, 24, 25, 26)) return "ถอยออกให้เห็นตั้งแต่สะโพกถึงเข่า";
-      const leg = Math.max(30, Math.abs(S.hip.y - S.an.y) || 120);
-      [["lk", L], ["rk", R]].forEach(([key, s]) => {
-        const lifted = s.kn.y < s.hip.y + leg * .25, down = s.kn.y > s.hip.y + leg * .4;
-        if (c[key] === "down" && lifted) c[key] = "up";
-        else if (c[key] === "up" && down) { c[key] = "down"; rep(); }
+      const block = need(any([11, 23, 25]) || any([12, 24, 26]), "ถอยออกให้เห็นตั้งแต่ไหล่ถึงเข่า"); if (block) return block;
+      // Each leg on its own: hip bend between torso and thigh, standing is about 175, knee at hip height about 90
+      [[c.L, 11, 23, 25], [c.R, 12, 24, 26]].forEach(([st, a, b, d]) => {
+        if (Math.min(v(a), v(b), v(d)) < .2 && !st.top) return;
+        if (cycle(st, ang3(p[a], p[b], p[d]), { depth: 50, cap: 130, back: .5, minMs: 120 }, now, dt) === "rep") rep();
       });
+      c.gauge = Math.max(c.L.gauge || 0, c.R.gauge || 0);
       return "";
     }
     case "sprawl": {
-      if (!seen(11, 23) && !seen(12, 24)) return "หันข้างให้กล้อง ให้เห็นทั้งตัว";
-      const dx = Math.abs(S.sh.x - S.hip.x), dy = Math.abs(S.sh.y - S.hip.y);
-      if (c.phase === "up") { if (dy < dx * .5) { c.phase = "down"; c.hint = "ลุกกลับเร็ว ๆ"; } }
-      else if (dy > dx * 1.5) { c.phase = "up"; rep(); }
+      const block = need(any([11, 23, 27], [12, 24, 28]), "ให้เห็นทั้งตัว ตั้งแต่หัวจรดเท้า"); if (block) return block;
+      // Height of the hips above the feet, in leg lengths: standing about 0.95, on the floor below 0.35
+      const leg = Math.max(.4, (len3(sub3(p[23], p[25])) + len3(sub3(p[25], p[27])) + len3(sub3(p[24], p[26])) + len3(sub3(p[26], p[28]))) / 2);
+      const h = Math.max(0, (anM.y - hipM.y) / leg) * 100, upright = torsoLean < 40 ? 0 : 15;
+      const r = cycle(c, Math.max(0, h - upright), { depth: 55, cap: 42, back: .3, minMs: 300 }, now, dt);
+      if (r === "down") c.hint = "ลุกกลับเร็ว ๆ"; else if (r === "rep") rep(); else if (r === "shallow") c.hint = "ทิ้งตัวให้ถึงพื้น";
       return "";
     }
   }
@@ -3191,28 +3296,32 @@ function runCam() {
   cancelAnimationFrame(camRaf);
   const video = $("woVideo"), canvas = $("woCanvas"); if (!video || !camStream) return;
   video.srcObject = camStream; video.play().catch(() => {});
-  const ctx = canvas.getContext("2d"); let lastT = -1;
+  const ctx = canvas.getContext("2d"), fresh = newFrames(video); let lastT = -1, missT = 0;
   const loop = () => {
     camRaf = requestAnimationFrame(loop);
-    if (!wo || wo.phase !== "ex" || video.readyState < 2) return;
+    if (!wo || wo.phase !== "ex" || video.readyState < 2 || !fresh()) return;
     const W = video.videoWidth, H = video.videoHeight; if (canvas.width !== W) { canvas.width = W; canvas.height = H; }
-    const now = performance.now(); if (now === lastT) return; lastT = now;
+    const now = performance.now(); if (now <= lastT) return; lastT = now;
     let res; try { res = poser.detectForVideo(video, now); } catch (e) { return; }
-    ctx.clearRect(0, 0, W, H);
-    const lm = res && res.landmarks && res.landmarks[0];
+    checkSpeed(performance.now() - now);
+    const lm = res && res.landmarks && res.landmarks[0], wl = res && res.worldLandmarks && res.worldLandmarks[0];
     const it = woItem(), c = wo.c;
-    if (!lm) { setHint("ไม่เห็นตัว ถอยออกให้เห็นทั้งตัวในกรอบ", true); return; }
-    ctx.lineWidth = Math.max(3, W / 160); ctx.strokeStyle = "rgba(255,255,255,.9)"; ctx.fillStyle = "#3b82f6";
-    BONES.forEach(([a, b]) => { if ((lm[a].visibility || 0) > .5 && (lm[b].visibility || 0) > .5) { ctx.beginPath(); ctx.moveTo(lm[a].x * W, lm[a].y * H); ctx.lineTo(lm[b].x * W, lm[b].y * H); ctx.stroke(); } });
-    [11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28].forEach(i => { if ((lm[i].visibility || 0) > .5) { ctx.beginPath(); ctx.arc(lm[i].x * W, lm[i].y * H, Math.max(4, W / 110), 0, 7); ctx.fill(); } });
+    if (!lm) { ctx.clearRect(0, 0, W, H); if (!missT) missT = now; if (now - missT > 600) { setHint("ไม่เห็นตัว ถอยออกให้เห็นทั้งตัวในกรอบ", true); setGauge(0, false); } return; }
+    missT = 0; drawSkel(ctx, lm, W, H);
     const before = c.count, beforeHeld = Math.floor(c.held);
-    const block = analyse(EX[it.k].detect || it.k, lm, W, H, c, now);
-    setHint(block || c.hint, !!block);
+    const block = analyse(EX[it.k].detect || it.k, lm, W, H, c, now, wl);
+    setHint(block || c.hint, !!block); setGauge(block ? 0 : c.gauge, c.phase === "down");
     if (EX[it.k].hold) { if (Math.floor(c.held) !== beforeHeld) setCount(Math.floor(c.held)); }
     else if (c.count !== before) setCount(c.count);
   };
   loop();
 }
+// Run the AI at most about 30 times a second, matching the camera, not on every screen refresh (60 to 120 a second)
+function newFrames(video) {
+  let t = -1, last = 0;
+  return () => { const now = performance.now(); if (video.currentTime === t || now - last < 30) return false; t = video.currentTime; last = now; return true; };
+}
+function setGauge(g, hit) { const el = $("woGauge"); if (!el) return; el.style.setProperty("--g", (g || 0).toFixed(3)); el.classList.toggle("hit", !!hit); }
 function setHint(text, warn) { const h = $("woHint"); if (h && h.textContent !== text) { h.textContent = text; h.classList.toggle("warn", !!warn); } }
 function setCount(n) {
   const it = woItem(), prev = wo.counts[wo.i] || 0; wo.counts[wo.i] = Math.max(0, n);
@@ -3274,15 +3383,15 @@ function renderWo() {
       <p class="cook-step" id="w-title">วันนี้ ${n} ท่า ประมาณ ${estMin(wo.list)} นาที</p>
       <ol class="wolist withdemo">${wo.list.map(x => `<li>${demoSVG(x.k)}<b>${EX[x.k].name}</b><span>${x.target} ${EX[x.k].hold ? "วินาที" : "ครั้ง"}${roundsFor(fit.level) > 1 ? ` · รอบ ${x.round}` : ""}</span></li>`).join("")}</ol>
       <p class="coach">“${esc(dailyPep())}”</p>
-      <div class="tip"><b>ตั้งกล้อง</b>วางมือถือพิงไว้ห่าง 2–3 เมตร ให้เห็นตั้งแต่หัวจรดเท้า แสงพอ และมีคนเดียวในภาพ ภาพจากกล้องประมวลผลในเครื่องเท่านั้น ไม่มีการบันทึกหรือส่งไปไหน</div>
+      <div class="tip"><b>ตั้งกล้อง</b>วางมือถือพิงไว้ห่าง 2–3 เมตร ให้เห็นตั้งแต่หัวจรดเท้า จะหันหน้า หันข้าง หรือเฉียงก็นับได้ แสงพอ และมีคนเดียวในภาพ แถบด้านขวาของจอบอกว่าลงลึกพอหรือยัง ถ้าเต็มแถบคือนับ ภาพจากกล้องประมวลผลในเครื่องเท่านั้น ไม่มีการบันทึกหรือส่งไปไหน</div>
       ${wo.msg ? `<p class="warn" role="alert">${esc(wo.msg)}</p>` : ""}
       ${wo.phase === "loading" ? `<p class="cook-lead" id="woLoad" aria-live="polite">กำลังขออนุญาตใช้กล้อง</p>` : ""}`;
     nav = `<div class="cook-nav"><button type="button" class="btn" data-act="wo-tap">${ico("tap")}<span>นับเอง</span></button>
       <button type="button" class="btn primary" data-act="wo-cam" ${wo.phase === "loading" ? "disabled" : ""}>${ico("camera")}<span>${wo.phase === "loading" ? "กำลังเปิด..." : "ใช้กล้องนับให้"}</span></button></div>`;
   } else if (wo.phase === "ex") {
     const cnt = wo.counts[wo.i] || 0, unit = ex.hold ? "วินาที" : "ครั้ง";
-    body = `<div class="woex"><div class="woname"><b id="w-title">${ex.name}</b><span>${ex.cam && wo.mode === "cam" ? ex.cam + " · " : ""}${ex.tip}</span></div>
-      ${wo.mode === "cam" && !ex.time ? `<div class="stage${facing === "user" ? " mirror" : ""}"><video id="woVideo" playsinline muted></video><canvas id="woCanvas"></canvas><div class="stagedemo">${demoSVG(it.k)}</div>
+    body = `<div class="woex"><div class="woname"><b id="w-title">${ex.name}</b><span>${ex.cam && wo.mode === "cam" ? "มุมไหนก็นับได้ ชัดสุดถ้า" + ex.cam + " · " : ""}${ex.tip}</span></div>
+      ${wo.mode === "cam" && !ex.time ? `<div class="stage${facing === "user" ? " mirror" : ""}"><video id="woVideo" playsinline muted></video><canvas id="woCanvas"></canvas><div class="stagedemo">${demoSVG(it.k)}</div>${ex.hold ? "" : `<div class="gauge" id="woGauge" aria-hidden="true"><i></i></div>`}
         <div class="woover"><span id="woNum">${cnt}</span><small>/ ${it.target} ${unit}</small></div></div>
         <p class="wohint" id="woHint" aria-live="polite">เริ่มได้เลย</p>`
       : `<div class="wodemo">${demoSVG(it.k)}</div><button type="button" class="tapzone" ${ex.hold ? `data-act="wo-hold"` : `data-act="wo-plus"`}><span id="woNum">${cnt}</span><small>/ ${it.target} ${unit}</small>
@@ -3290,7 +3399,7 @@ function renderWo() {
       <p class="coach" id="woCoach" aria-live="polite">${esc(wo.coachText || "")}</p>
       <div class="tbar" aria-hidden="true"><i id="woBar" style="width:${Math.min(100, cnt / it.target * 100)}%"></i></div>
       <div class="trow"><button type="button" class="btn" data-act="wo-minus">−1</button><button type="button" class="btn" data-act="wo-plus1">+1</button>
-        ${wo.mode === "cam" ? `<button type="button" class="btn" data-act="wo-flip">สลับกล้อง</button>` : ""}</div></div>`;
+        ${wo.mode === "cam" ? `<button type="button" class="btn" data-act="wo-flip">สลับกล้อง</button>${ex.hold ? "" : `<button type="button" class="btn" data-act="wo-sens" aria-label="ความไวในการนับ">ความไว: ${CAM_SENS[camSens][0]}</button>`}` : ""}</div></div>`;
     nav = `<div class="cook-nav"><button type="button" class="btn" data-act="wo-skip"><span>ข้ามท่านี้</span></button>
       <button type="button" class="btn primary" data-act="wo-next"><span>${cnt >= it.target ? "ท่าต่อไป" : "จบท่านี้"}</span></button></div>`;
   } else if (wo.phase === "rest") {
@@ -3757,12 +3866,15 @@ function renderBt() {
 }
 function drawSkel(ctx, lm, W, H) {
   ctx.clearRect(0, 0, W, H); ctx.lineWidth = Math.max(3, W / 160); ctx.strokeStyle = "rgba(255,255,255,.9)"; ctx.fillStyle = "#3b82f6";
-  BONES.forEach(([a, b]) => { if ((lm[a].visibility || 0) > .5 && (lm[b].visibility || 0) > .5) { ctx.beginPath(); ctx.moveTo(lm[a].x * W, lm[a].y * H); ctx.lineTo(lm[b].x * W, lm[b].y * H); ctx.stroke(); } });
+  const ok = i => (lm[i].visibility == null ? 1 : lm[i].visibility) > .3;
+  BONES.forEach(([a, b]) => { if (ok(a) && ok(b)) { ctx.beginPath(); ctx.moveTo(lm[a].x * W, lm[a].y * H); ctx.lineTo(lm[b].x * W, lm[b].y * H); ctx.stroke(); } });
+  [11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28].forEach(i => { if (ok(i)) { ctx.beginPath(); ctx.arc(lm[i].x * W, lm[i].y * H, Math.max(4, W / 110), 0, 7); ctx.fill(); } });
 }
 // One measurement: feeds every pose to the test's own handler until it reports a result
 function measure() {
   const t = TESTS[bt.i], video = $("btVideo"), canvas = $("btCanvas"), ctx = canvas.getContext("2d");
   video.srcObject = camStream; video.play().catch(() => {});
+  const fresh = newFrames(video);
   const st = { c: newCounter(), t0: 0, samples: [], minKnee: 999, base: null, baseN: 0, px: 0, minHip: 1e9, bad: 0, lastNow: 0 };
   const hint = s => { const h = $("btHint"); if (h && h.textContent !== s) h.textContent = s; };
   const show = s => { const e = $("btNum"); if (e && e.textContent !== String(s)) e.textContent = s; };
@@ -3777,11 +3889,12 @@ function measure() {
   if (t.k === "pushup") { let left = 63; bt.timer = setInterval(() => { left--; if (left > 60) { hint(`เริ่มใน ${left - 60}`); sfx("tap"); } else if (left === 60) { beep(); st.go = true; } else if (left <= 0) { beep(); bt.stop(); } }, 1000); }
   const loop = () => {
     camRaf = requestAnimationFrame(loop);
-    if (video.readyState < 2) return;
+    if (video.readyState < 2 || !fresh()) return;
     const W = video.videoWidth, H = video.videoHeight; if (canvas.width !== W) { canvas.width = W; canvas.height = H; }
-    const now = performance.now(); if (now === st.lastNow) return; st.lastNow = now;
+    const now = performance.now(); if (now <= st.lastNow) return; st.lastNow = now;
     let r; try { r = poser.detectForVideo(video, now); } catch (e) { return; }
-    const lm = r && r.landmarks && r.landmarks[0];
+    checkSpeed(performance.now() - now);
+    const lm = r && r.landmarks && r.landmarks[0], wl = r && r.worldLandmarks && r.worldLandmarks[0];
     if (!lm) { ctx.clearRect(0, 0, W, H); hint("ไม่เห็นตัว ถอยออกให้เห็นทั้งตัว"); return; }
     drawSkel(ctx, lm, W, H);
     const P = i => ({ x: lm[i].x * W, y: lm[i].y * H, v: lm[i].visibility == null ? 1 : lm[i].visibility });
@@ -3794,10 +3907,8 @@ function measure() {
       hint("ยืนนิ่ง ๆ"); show(Math.max(0, 3 - Math.floor(st.samples.length / 30)));
       if (st.samples.length >= 90) { const avg = i => st.samples.reduce((n, s) => n + s[i], 0) / st.samples.length; done({ shoulder: avg(0), hip: avg(1) }); }
     } else if (t.k === "squat") {
-      const side = ok(23, 25, 27) ? [23, 25, 27] : ok(24, 26, 28) ? [24, 26, 28] : null;
-      if (!side) return hint("หันข้างให้กล้อง ให้เห็นสะโพกถึงเท้า");
-      const a = angle(P(side[0]), P(side[1]), P(side[2]));
-      st.minKnee = Math.min(st.minKnee, a); analyse("squat", lm, W, H, st.c, now);
+      if (!ok(23, 25, 27) && !ok(24, 26, 28)) return hint("ให้เห็นตั้งแต่สะโพกถึงเท้า");
+      analyse("squat", lm, W, H, st.c, now, wl); st.minKnee = Math.min(st.minKnee, st.c.knee);
       hint(st.c.count >= 3 ? "ครบ 3 ครั้งแล้ว" : `ย่อให้ลึกที่สุด (${st.c.count}/3)`); show(Math.round(st.minKnee) + "°");
       if (st.c.count >= 3) done({ knee: st.minKnee });
     } else if (t.k === "jump") {
@@ -3808,9 +3919,9 @@ function measure() {
       st.minHip = Math.min(st.minHip, hip); const cm = Math.max(0, (st.base.hip - st.minHip) / st.px);
       hint("กระโดดสูงสุด 3 ครั้ง แล้วกดหยุด"); show(Math.round(cm) + " ซม.");
     } else if (t.k === "pushup") {
-      if (!st.go) return; analyse("pushup", lm, W, H, st.c, now); hint(st.c.hint || "วิดต่อไป!"); show(st.c.count);
+      if (!st.go) return; analyse("pushup", lm, W, H, st.c, now, wl); hint(st.c.hint || "วิดต่อไป!"); show(st.c.count);
     } else if (t.k === "plank") {
-      const before = st.c.held; analyse("plank", lm, W, H, st.c, now); show(Math.floor(st.c.held) + " วิ"); hint(st.c.hint || "ค้างไว้");
+      const before = st.c.held; analyse("plank", lm, W, H, st.c, now, wl); show(Math.floor(st.c.held) + " วิ"); hint(st.c.hint || "ค้างไว้");
       if (st.c.held > 3 && st.c.held === before) { st.bad += 1 / 30; if (st.bad > 2) done({ plank: Math.floor(st.c.held) }); } else st.bad = 0;
     }
   };
@@ -4297,6 +4408,11 @@ const ACTIONS = {
   "wo-plus": () => setCount((wo.counts[wo.i] || 0) + 1),
   "wo-plus1": () => setCount((wo.counts[wo.i] || 0) + 1),
   "wo-minus": () => setCount((wo.counts[wo.i] || 0) - 1),
+  "wo-sens": () => {
+    camSens = (camSens + 2) % 3; store("life-camsens-v1", [camSens]);
+    const b = wdlg.querySelector('[data-act="wo-sens"]'); if (b) b.textContent = "ความไว: " + CAM_SENS[camSens][0];
+    toast(["ง่าย: ย่อไม่ลึกมากก็นับ เหมาะกับวันที่กล้องเห็นไม่ชัด", "ปกติ: นับเมื่อลงลึกพอดี", "เข้ม: ต้องลงลึกเต็มท่าถึงจะนับ"][camSens]);
+  },
   "wo-hold": () => toggleHold(),
   "wo-next": () => nextExercise(),
   "wo-skip": () => nextExercise(),
