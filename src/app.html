@@ -648,6 +648,70 @@ label.btn { cursor: pointer; }
 .sadd { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: 14px; color: var(--muted); }
 .sdate { min-height: 44px; border: 1px solid var(--field); border-radius: var(--r-ctl); background: var(--surface); color: var(--ink); padding: 0 12px; font: inherit; font-size: 15px; }
 
+/* ---------- Chef training ---------- */
+.chefhero { gap: 14px; }
+.chefrank { display: flex; align-items: center; gap: 12px; }
+.chefrank .stext b { font-size: 19px; }
+.cbar { height: 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+.cbar i { display: block; height: 100%; background: var(--basil); border-radius: 999px; transition: width var(--dur) var(--ease); }
+.cweek { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+.cweek span { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.cweek i { width: 34px; height: 34px; border-radius: 50%; border: 1.5px dashed var(--field); display: grid; place-items: center; }
+.cweek .on i { background: var(--good); border: none; color: var(--surface); }
+.cweek .now i { outline: 2px solid var(--basil); outline-offset: 2px; }
+.cweek small { font-size: 12.5px; color: var(--muted); }
+.cweek .ico { width: 18px; height: 18px; }
+.cnext { display: flex; flex-direction: column; gap: 14px; }
+.cstat { width: 40px; height: 40px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); border: 1px solid var(--line); font-weight: 600; font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.cstat.ok { background: var(--good-soft); border-color: transparent; color: var(--good); }
+.cstat .ico { width: 20px; height: 20px; }
+.cnext .cstat { background: var(--basil-soft); color: var(--basil-strong); border-color: transparent; }
+.seg.three { grid-template-columns: repeat(3, 1fr); }
+.seg button small { font-size: 12.5px; color: var(--muted); }
+.sgh small { font-weight: 400; margin-left: 6px; }
+#chefTabBody > .sgh:first-child { margin-top: 0; }
+.csub { margin: -4px 4px 8px; font-size: 13.5px; }
+.cacts { margin-top: 8px; }
+.sbody .rowbtns .btn.small { flex: 0 1 auto; }
+.clist { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.crow { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-card); padding: 12px; display: flex; flex-direction: column; gap: 10px; box-shadow: var(--shadow); }
+.crow.next { border-color: var(--basil); box-shadow: inset 0 0 0 1px var(--basil), var(--shadow); }
+.crow.next .cstat { background: var(--basil); color: var(--on-basil); border-color: transparent; }
+.crhead { display: flex; gap: 12px; align-items: flex-start; }
+.clook { margin: 0; display: flex; gap: 8px; font-size: 14.5px; color: var(--turmeric); background: var(--turmeric-soft); padding: 8px 12px; border-radius: var(--r-ctl); }
+.clook .ico { width: 18px; height: 18px; flex: none; margin-top: 2px; }
+.crow .rowbtns { gap: 8px; }
+.crow .rowbtns .btn { flex: 0 1 auto; }
+.cres { display: flex; flex-direction: column; gap: 2px; text-align: left; border: 1px solid var(--line); background: var(--surface-2); border-radius: var(--r-ctl); padding: 8px 12px; font: inherit; font-size: 14px; color: inherit; cursor: pointer; min-height: 44px; }
+.cst { color: var(--turmeric); letter-spacing: 1px; }
+.ctemps { list-style: none; margin: 0; padding: 0 14px 8px; display: flex; flex-direction: column; }
+.ctemps li { display: grid; grid-template-columns: 1fr auto; gap: 0 10px; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: 14.5px; }
+.ctemps li span:last-child { grid-column: 1 / -1; color: var(--muted); font-size: 13px; }
+.csum { margin: 0 4px 10px; }
+.clog { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.centry { display: flex; gap: 12px; align-items: flex-start; width: 100%; text-align: left; padding: 12px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); font: inherit; color: inherit; cursor: pointer; box-shadow: var(--shadow); }
+.centry:focus-visible, .cres:focus-visible { outline: 2px solid var(--basil); outline-offset: 2px; }
+.cthumb { width: 56px; height: 56px; border-radius: var(--r-ctl); object-fit: cover; flex: none; background: var(--surface-2); }
+.centry .thumb.sm { width: 56px; height: 56px; font-size: 26px; }
+.stext b small { font-weight: 500; font-size: 12.5px; color: var(--basil-strong); background: var(--basil-soft); padding: 1px 8px; border-radius: 999px; margin-left: 4px; white-space: nowrap; }
+.cfbs { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.cfbs i { font-style: normal; font-size: 12.5px; padding: 2px 8px; border-radius: 999px; background: var(--chili-soft); color: var(--chili); }
+.cfbs i.good { background: var(--good-soft); color: var(--good); }
+.stext .cnextnote { margin-top: 4px; color: var(--ink); }
+.cform .ta { min-height: 84px; padding: 12px 14px; resize: vertical; line-height: 1.5; }
+.cform .decay { align-items: flex-start; }
+.cform .decay .ico { margin-top: 3px; }
+.cstars { display: flex; gap: 2px; }
+.cstars button { width: 48px; height: 48px; border: none; background: none; font-size: 32px; line-height: 1; color: var(--line); cursor: pointer; border-radius: var(--r-ctl); }
+.cstars button.on { color: #e0a100; }
+.cstars button:focus-visible { outline: 2px solid var(--basil); }
+.ccost { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 8px 12px; font-size: 15px; }
+.cunit { display: inline-flex; align-items: center; gap: 8px; }
+.cphoto { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.cphoto img { width: 96px; height: 96px; object-fit: cover; border-radius: var(--r-card); }
+.cfgroup { display: flex; flex-direction: column; gap: 20px; }
+.cfgroup:empty { display: none; }
+
 /* ---------- Move demos ---------- */
 .demo { display: block; width: 100%; height: auto; background: var(--basil-soft); border-radius: 10px; }
 .demo .dg { stroke: var(--basil-mid); stroke-width: 2; stroke-linecap: round; }
@@ -738,9 +802,13 @@ label.btn { cursor: pointer; }
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h8v3H8z"/><path d="M7 6h10l1 3v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9z"/><path d="M9.5 13h5"/></svg>
       <span>เก็บของ</span><b class="badge" id="storeBadge" hidden>0</b>
     </button>
+    <button type="button" class="tab" data-view="chef">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15.5V20h10v-4.5M6.5 15.5a4 4 0 0 1-.6-7.9A5 5 0 0 1 12 4a5 5 0 0 1 6.1 3.6 4 4 0 0 1-.6 7.9zM7 17.5h10"/></svg>
+      <span>ฝึกเชฟ</span>
+    </button>
     <button type="button" class="tab" data-view="kitchen">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M6 10h12M9.5 6v1.5M9.5 13v3"/></svg>
-      <span>ครัวของฉัน</span>
+      <span>ครัวฉัน</span>
     </button>
   </nav>
 </header>
@@ -781,6 +849,11 @@ label.btn { cursor: pointer; }
       <button type="button" id="segShop" data-act="meal-shop" aria-pressed="false">รายการซื้อของ</button>
     </div>
     <div id="mealBody" class="stack"></div>
+  </section>
+
+  <section id="view-chef" aria-label="ฝึกเชฟ" hidden>
+    <div class="pagehead"><h2>ฝึกเป็นเชฟ</h2><p>ฝึกพื้นฐานทีละทักษะ ทำเมนูซ้ำจนแม่น และจดทุกครั้งว่าครั้งหน้าจะแก้อะไร</p></div>
+    <div class="stack" id="chefBody"></div>
   </section>
 
   <section id="view-store" aria-label="เก็บของ" hidden>
@@ -1871,7 +1944,7 @@ const SFX = {
 // Actions whose sound differs from a plain tap. null = the action plays its own sound once it knows the outcome.
 const ACT_SFX = { "demo-close": "back", "demo-slow": "tap", "go-store": "open", "bt-start": "open", "ph-cam": "open", "bt-skip": "off", "bt-next": "next", "bt-go": "next", "b-weight": null, "b-meas": null, "ph-keep": "on", "wo-start": "open", "wo-cam": "open", "wo-tap": "open", "wo-close": "back", "wo-next": "next", "wo-skip": "off", "wo-go": "next", "wo-minus": "off", "wo-plus": "tap", "wo-plus1": "tap", "wo-meal": "open", shuffle: null, "shop-add": null, "m-save": null, "m-save-more": null, "m-wipe": null, "m-delete": "off", "m-close": "back",
   "m-add": "open", "rec-add": "open", "shop-pay": "open", "toast-act": "on", back: "back", close: "back", "close-filters": "back", reset: "off", "clear-meal": "off",
-  "equip-none": "off", "pantry-clear": "off", "equip-all": "on", "open-filters": "open", "start-cook": "next", "cook-meal": "next", "cook-pay": "open", install: "on" };
+  "equip-none": "off", "pantry-clear": "off", "equip-all": "on", "open-filters": "open", "start-cook": "next", "cook-meal": "next", "cook-pay": "open", install: "on", "go-chef": "open", "c-log": "open", "c-save": null, "c-delete": "off", "cook-chef": "open" };
 function sfx(name) {
   if (!sfxOn) return;
   try {
@@ -1920,10 +1993,10 @@ $("sfxSwitch").addEventListener("change", ev => { sfxOn = ev.target.checked; sto
 // Every topic of the app is listed here. To add one later: add its views and tabs to the page, then describe it in this list.
 const APP_NAME = "ชีวิตง่าย";
 const TOPICS = [
-  { id: "kitchen", name: "ครัวบ้านเรา", icon: "chef", tint: "t1", start: "menu", views: ["menu", "meal", "store", "kitchen"],
+  { id: "kitchen", name: "ครัวบ้านเรา", icon: "chef", tint: "t1", start: "menu", views: ["menu", "meal", "store", "chef", "kitchen"],
     desc: "หาเมนูจากของที่มี จัดมื้อ และทำตามทีละขั้น",
-    stat: () => `ทำได้ ${RECIPES.filter(canMake).length} จาก ${RECIPES.length} สูตร` + (mealItems().length ? ` · มื้อนี้ ${mealItems().length} เมนู` : "") + (stockDue() ? ` · ของใกล้หมดอายุ ${stockDue()} อย่าง` : ""),
-    quick: [["shuffle", "สุ่มจัดมื้อ"], ["go-meal", "มื้อนี้"], ["go-store", "เก็บของ"], ["go-kitchen", "ครัวของฉัน"]] },
+    stat: () => `ทำได้ ${RECIPES.filter(canMake).length} จาก ${RECIPES.length} สูตร` + (mealItems().length ? ` · มื้อนี้ ${mealItems().length} เมนู` : "") + (stockDue() ? ` · ของใกล้หมดอายุ ${stockDue()} อย่าง` : "") + chefStat(),
+    quick: [["shuffle", "สุ่มจัดมื้อ"], ["go-meal", "มื้อนี้"], ["go-store", "เก็บของ"], ["go-chef", "ฝึกเชฟ"], ["go-kitchen", "ครัวของฉัน"]] },
   { id: "money", name: "รายจ่าย", icon: "wallet", tint: "t4", start: "money", views: ["money", "ledger", "stats", "budget"],
     desc: "จดรายจ่ายในไม่กี่แตะ ดูสรุป และคุมงบรายเดือน",
     stat: () => { const spent = sum(txIn(monthKey(today())));
@@ -1987,6 +2060,7 @@ function go(v, setHash = true) {
   if (v === "meal") renderMealPage();
   if (v === "kitchen") renderKitchen();
   if (v === "store") renderStore();
+  if (v === "chef") renderChef();
   if (v === "menu") render();
   if (setHash) { try { if (location.hash !== "#" + v) location.hash = v; } catch (e) {} }
   window.scrollTo(0, scrollPos[v] || 0);
@@ -2482,6 +2556,7 @@ function renderCook() {
     const fav = favs.has(r.key);
     main = `<div class="done-msg"><span class="big" aria-hidden="true">${emoji(r)}</span><p class="cook-step" id="dlg-title">${esc(r.name)} เสร็จแล้ว</p><p class="cook-lead">ขอให้อร่อยกับมื้อนี้</p>
       <div class="donebtns"><button type="button" class="btn" data-fav="${esc(r.key)}" aria-pressed="${fav}">${ICON.heart}${fav ? "อยู่ในเมนูโปรดแล้ว" : "เก็บเป็นเมนูโปรด"}</button>
+      <button type="button" class="btn" data-act="cook-chef">${ico("chef")}จดลงบันทึกฝึกเชฟ</button>
       <button type="button" class="btn" data-act="cook-pay">${ico("receipt")}จดค่าวัตถุดิบ</button></div></div>`;
   } else {
     const next = r.steps[step + 1];
@@ -4344,7 +4419,421 @@ $("sq").addEventListener("input", renderStore);
 $("storeBody").addEventListener("toggle", ev => { if (ev.target.matches(".sitem") && ev.target.open) sOpen = ev.target.id.slice(2); }, true);
 renderStoreBadge();
 
+/* ---------- Chef training: skills to pass, a 10-round steak series, and a cooking journal ---------- */
+const CSTAGES = [
+  ["knife", "มีด", "หั่นให้ชิ้นเท่ากัน อาหารจะสุกพร้อมกันและดูสวย"],
+  ["heat", "ไฟและความร้อน", "รู้ว่าเมื่อไหร่ใช้ไฟแรง เมื่อไหร่ใช้ไฟอ่อน"],
+  ["taste", "ปรุงรส", "ชิมเป็น ปรุงเป็น และแก้รสที่พลาดได้"],
+  ["sauce", "น้ำซุปและซอส", "ของที่ทำให้อาหารบ้านดูเป็นอาหารร้าน"],
+  ["pro", "นิสัยครัวมืออาชีพ", "เร็ว สะอาด ปลอดภัย แบบครัวร้านอาหาร"],
+  ["boss", "คิดแบบเจ้าของร้าน", "ต้นทุน ของเหลือ และเมนูของตัวเอง"]
+];
+// need = how many practice rounds usually come before the pass test
+const CSKILLS = [
+  { id: "kgrip", g: "knife", n: "จับมีดและมือกรงเล็บ", need: 3,
+    how: ["จับมีดโดยให้นิ้วโป้งกับนิ้วชี้บีบที่โคนใบมีด ไม่ได้จับแค่ด้าม", "มืออีกข้างงอปลายนิ้วเข้าเหมือนกรงเล็บแมว ให้ข้อนิ้วแตะข้างใบมีด", "เลื่อนมือกรงเล็บถอยหลังทีละนิด มีดตามไป ช้าแต่ถูกดีกว่าเร็วแต่โดนนิ้ว"],
+    pass: "หั่นแตงกวา 1 ลูกเป็นแว่น โดยปลายนิ้วไม่ยื่นออกมาหน้าข้อนิ้วเลย",
+    warn: "มีดคมปลอดภัยกว่ามีดทื่อ เพราะไม่ลื่นไถล วางผ้าเปียกใต้เขียงกันเขียงเลื่อน" },
+  { id: "konion", g: "knife", n: "หั่นหัวหอมเต๋า", need: 5, r: ["บีฟสตูว์", "ชิลีคอนคาร์เน"],
+    how: ["ผ่าครึ่งจากหัวลงท้าย ปอกเปลือก เก็บโคนรากไว้ ชั้นหอมจะไม่แตก", "กรีดตามยาวเป็นแนวถี่ ๆ ไม่ต้องตัดถึงโคน", "หั่นขวางลงมา จะได้เต๋าเล็กเท่า ๆ กัน"],
+    pass: "หอมใหญ่ 1 หัว หั่นเต๋าขนาดใกล้กันได้ภายใน 2 นาที" },
+  { id: "kjul", g: "knife", n: "หั่นเส้นและหั่นเต๋าผัก", need: 5, r: ["ผักผัดเนยกระเทียม", "ซุปมิเนสโตรเน่"],
+    how: ["หั่นแครอทเป็นแผ่นหนาเท่ากัน ราว 3 มม.", "ซ้อนแผ่นแล้วหั่นเป็นเส้นยาวเท่าไม้ขีด", "รวบเส้นแล้วหั่นขวาง จะได้เต๋าเล็ก"],
+    pass: "แครอท 1 หัว เส้นหนาเท่ากันจนวางเทียบแล้วแทบแยกไม่ออก" },
+  { id: "kmince", g: "knife", n: "สับกระเทียม พริก สมุนไพร", need: 3, r: ["สปาเกตตีอาลิโอ โอลิโอ", "ชิมิชูร์รี"],
+    how: ["ทุบกระเทียมด้วยสันมีด เปลือกจะหลุดง่าย", "ใช้มืออีกข้างกดสันปลายมีดไว้ แล้วโยกมีดขึ้นลง", "กวาดรวมเป็นกองแล้วสับซ้ำ จนละเอียดเท่ากัน"],
+    pass: "สับกระเทียม 1 หัวละเอียดเสมอกัน ไม่มีชิ้นโต" },
+  { id: "kgrain", g: "knife", n: "แล่เนื้อสวนเสี้ยน", need: 3, r: ["เนื้อผัดน้ำมันหอย", "กิวด้ง ข้าวหน้าเนื้อ"],
+    how: ["ดูเส้นใยบนเนื้อว่าวิ่งไปทางไหน", "วางมีดตั้งฉากกับเส้นใย แล้วแล่บาง ๆ", "แช่ช่องฟรีซ 20 นาทีก่อน เนื้อจะแข็งขึ้นนิด แล่บางได้ง่าย"],
+    pass: "ผัดเนื้อออกมานุ่ม เคี้ยวแล้วไม่เป็นเส้นเหนียว" },
+  { id: "kcare", g: "knife", n: "ดูแลมีดให้คม", need: 1,
+    how: ["หั่นบนเขียงไม้หรือเขียงพลาสติกเท่านั้น ไม่หั่นบนจานหรือกระจก", "ล้างแล้วเช็ดแห้งทันที ไม่แช่ทิ้งในอ่าง เพราะคนที่ล้วงมือลงไปอาจโดนบาด", "ลับด้วยแท่งลับมีดหรือหินลับ ครั้งแรกให้ผู้ใหญ่สอน"],
+    pass: "มีดหั่นมะเขือเทศสุกขาดได้โดยไม่ต้องกด" },
+
+  { id: "hegg", g: "heat", n: "คุมไฟด้วยไข่", need: 5, r: ["ออมเล็ตฝรั่งเศส", "ไข่กระทะ"],
+    how: ["ไข่ดาว: ไฟกลาง น้ำมันพอเคลือบ ได้ขอบกรอบ ไข่แดงเยิ้ม", "ไข่คน: ไฟอ่อน คนช้า ๆ ยกออกตอนยังดูเปียกนิด ๆ เพราะจะสุกต่อเอง", "ออมเล็ต: ไฟกลางค่อนอ่อน ผิวเหลืองเรียบ ไม่มีสีน้ำตาล"],
+    pass: "ทำไข่ครบ 3 แบบ แต่ละแบบออกมาตามที่ตั้งใจ" },
+  { id: "hrice", g: "heat", n: "หุงข้าวด้วยหม้อธรรมดา", need: 3, r: ["ข้าวสวย"],
+    how: ["ซาวข้าว 2-3 น้ำ จนน้ำใสขึ้น", "ข้าวหอมมะลิ 1 ถ้วย น้ำราว 1¼ ถ้วย ข้าวใหม่ใส่น้ำน้อยลงนิด", "เดือดแล้วลดไฟอ่อนสุด ปิดฝา 15 นาที ปิดไฟ พักอีก 10 นาทีโดยไม่เปิดฝา"],
+    pass: "ข้าวสุกทั่ว ไม่แฉะ ก้นหม้อไม่ไหม้ 3 ครั้งติดกัน" },
+  { id: "hsear", g: "heat", n: "จี่เนื้อให้เกรียม", need: 3, r: ["ริบอายสเต็ก ซอสพริกไทยดำ"],
+    how: ["ซับเนื้อให้แห้งด้วยกระดาษ ผิวเปียกจะกลายเป็นนึ่งแทนที่จะเกรียม", "กระทะต้องร้อนจัดจนน้ำมันเริ่มมีควันบาง ๆ", "ไม่ใส่เนื้อแน่นกระทะ และไม่ขยับจนกว่าด้านล่างจะเป็นสีน้ำตาลเข้ม"],
+    pass: "เนื้อมีเปลือกสีน้ำตาลเข้มทั่วทั้งด้าน ไม่ไหม้ดำ" },
+  { id: "hwok", g: "heat", n: "ผัดไฟแรงแบบไทย", need: 3, r: ["ผัดผักบุ้งไฟแดง", "เนื้อผัดพริกไทยดำ"],
+    how: ["เตรียมของทุกอย่างใส่ถ้วยก่อน ผัดไฟแรงไม่มีเวลาหั่นเพิ่ม", "ใส่ของที่สุกช้าก่อน ของที่สุกเร็วทีหลัง", "ผัดเร็ว ๆ ไม่เกิน 2-3 นาที ผักต้องยังเขียวกรอบ"],
+    pass: "ผัดผักบุ้งออกมาเขียว กรอบ ไม่มีน้ำนองจาน" },
+  { id: "hblanch", g: "heat", n: "ลวกผักให้เขียวกรอบ", need: 2, r: ["เนื้อผัดบรอกโคลี"],
+    how: ["ต้มน้ำเยอะ ๆ ใส่เกลือหยิบมือ ให้เดือดจัด", "ใส่ผักแค่ 30-90 วินาที แล้วแต่ชนิดผัก", "ตักใส่น้ำเย็นจัดทันที สีเขียวจะสดและผักหยุดสุก"],
+    pass: "บรอกโคลีสีเขียวสด กรอบนอกนุ่มใน" },
+  { id: "hfry", g: "heat", n: "ทอดให้กรอบไม่อมน้ำมัน", need: 3, r: ["ไก่คาราอาเกะ", "ไก่ทอดหาดใหญ่"],
+    how: ["น้ำมันพร้อมเมื่อจุ่มตะเกียบไม้แล้วมีฟองเล็ก ๆ ขึ้นรอบ ๆ (ราว 170-180°C)", "ทอดทีละน้อย ใส่เยอะน้ำมันจะเย็นลงและของจะอมน้ำมัน", "พักบนตะแกรง ไม่วางซ้อนกันจนไอน้ำทำให้แฉะ"],
+    pass: "ไก่ทอดกรอบ สุกถึงกระดูก ไม่มันเยิ้ม",
+    warn: "ถ้าน้ำมันติดไฟ ปิดเตาแล้วเอาฝาปิด ห้ามใช้น้ำดับเด็ดขาด ทอดตอนมีผู้ใหญ่อยู่ด้วย" },
+
+  { id: "ttaste", g: "taste", n: "ชิมทุกขั้น", need: 5,
+    how: ["ชิมก่อนปรุง หลังปรุง และก่อนเสิร์ฟ ใช้ช้อนชิมแยก ไม่ใช้ช้อนคน", "ปรุงทีละน้อย เติมได้ แต่เอาออกไม่ได้", "ถามตัวเองทุกครั้งว่า ขาดเค็ม ขาดเปรี้ยว ขาดหวาน หรือขาดเผ็ด"],
+    pass: "ทำอาหาร 5 ครั้ง ชิมอย่างน้อย 3 รอบทุกครั้ง จนติดเป็นนิสัย" },
+  { id: "tbal", g: "taste", n: "บาลานซ์ 4 รสแบบไทย", need: 3, r: ["น้ำจิ้มซีฟู้ด", "ลาบเนื้อ"],
+    how: ["ทำน้ำจิ้มซีฟู้ดหรือน้ำยำ แบ่งใส่ถ้วยเล็ก 5 ถ้วย", "เก็บถ้วยแรกไว้เทียบ อีก 4 ถ้วยเติมน้ำปลา มะนาว น้ำตาล พริก ถ้วยละอย่าง", "ชิมเทียบกับถ้วยแรก จะรู้ว่าแต่ละรสดึงรสอื่นยังไง"],
+    pass: "ทำน้ำจิ้มซีฟู้ดให้ที่บ้านชิม แล้วทุกคนบอกว่าพอดี" },
+  { id: "tsalt", g: "taste", n: "เข้าใจเกลือ", need: 2, r: ["น้ำสต็อกไก่"],
+    how: ["แบ่งน้ำซุปใส 3 ถ้วย ใส่เกลือน้อย กลาง มาก", "ชิมเรียงกัน เกลือที่พอดีทำให้รสอื่นชัดขึ้น ไม่ใช่แค่เค็มขึ้น", "ลองโรยเกลือเนื้อทิ้งไว้ก่อนจี่ 1 ชั่วโมง เทียบกับโรยตอนจะจี่"],
+    pass: "ชิมแล้วบอกได้ว่าถ้วยไหนเกลือพอดี โดยไม่ต้องดูว่าใส่ไปเท่าไร" },
+  { id: "tfix", g: "taste", n: "แก้รสที่พลาด", need: 3,
+    how: ["เค็มไป: เติมน้ำหรือน้ำซุป เปรี้ยวหรือหวานนิดหน่อยช่วยกลบได้", "เผ็ดไป: เติมกะทิ นม หรือน้ำตาลนิดหน่อย กินกับข้าวหรือแตงกวา", "จืดไป: เติมเกลือก่อน แล้วค่อยชิมว่าต้องเปรี้ยวเพิ่มไหม"],
+    pass: "แก้อาหารที่รสผิดให้กลับมาอร่อยได้ 3 ครั้ง" },
+  { id: "tmortar", g: "taste", n: "ตำน้ำพริกด้วยครก", need: 3, r: ["น้ำพริกหนุ่ม", "ส้มตำไทย"],
+    how: ["ตำของแข็งก่อน เช่น กระเทียม พริก แล้วค่อยใส่ของนิ่ม", "ตำให้แหลกแต่ยังมีเนื้อสัมผัส ไม่ต้องเนียนเหมือนปั่น", "ชิมแล้วปรุงในครก คลุกให้เข้ากัน"],
+    pass: "น้ำพริกหนุ่มหอม เผ็ด เค็มพอดี ที่บ้านชิมแล้วผ่าน" },
+
+  { id: "schick", g: "sauce", n: "น้ำซุปไก่จากโครงไก่", need: 2, r: ["น้ำสต็อกไก่"],
+    how: ["ลวกโครงไก่ในน้ำเดือด 2 นาที เทน้ำทิ้ง ล้างให้สะอาด", "ใส่น้ำเย็นใหม่กับผักหัว เช่น หัวไชเท้า หอมใหญ่ ต้มไฟอ่อน ไม่ให้เดือดพล่าน", "ช้อนฟองออก เคี่ยว 1-2 ชั่วโมง กรองแล้วแช่เย็น"],
+    pass: "น้ำซุปใส หอม ไม่ขุ่น" },
+  { id: "sbeef", g: "sauce", n: "น้ำซุปกระดูกเนื้อ", need: 2, r: ["น้ำสต็อกเนื้อ", "เฝอเนื้อ"],
+    how: ["อบหรือคั่วกระดูกเนื้อให้เป็นสีน้ำตาลก่อน ซุปจะหอมเข้ม", "ต้มไฟอ่อนกับหอมใหญ่ แครอท ขึ้นฉ่าย อย่างน้อย 3 ชั่วโมง", "แช่เย็นข้ามคืน ไขมันจะลอยแข็งที่ผิว ตักออกได้ง่าย"],
+    pass: "ซุปเนื้อสีเข้ม รสลึก เอาไปทำเฝอหรือสตูว์ได้" },
+  { id: "span", g: "sauce", n: "ซอสจากกระทะหลังจี่", need: 3,
+    how: ["หลังจี่เนื้อ อย่าล้างกระทะ คราบสีน้ำตาลที่ติดก้นคือรสชาติ", "ลดไฟ ใส่หอมแดงสับ ผัดนิดหนึ่ง เทน้ำซุปเนื้อลงไปแล้วขูดคราบให้ละลาย", "เคี่ยวจนเหลือครึ่งหนึ่ง ปิดไฟ ใส่เนยก้อนเล็ก ชิมเกลือ"],
+    pass: "ทำซอสราดสเต๊กเสร็จภายใน 5 นาที ระหว่างพักเนื้อ" },
+  { id: "sclassic", g: "sauce", n: "ซอสคลาสสิกของสเต๊ก", need: 3, r: ["ซอสพริกไทยดำ", "ซอสเห็ดครีม", "ชิมิชูร์รี"],
+    how: ["ซอสพริกไทยดำ: ทุบพริกไทยหยาบ คั่วให้หอมก่อน", "ซอสเห็ด: ผัดเห็ดจนน้ำระเหยและเป็นสีน้ำตาล ก่อนใส่ครีม", "ชิมิชูร์รี: สับสมุนไพรด้วยมีด ไม่ปั่น จะได้สีเขียวสดและไม่ขม"],
+    pass: "ทำได้ครบ 3 ซอส และรู้ว่าซอสไหนเข้ากับเนื้อแบบไหน" },
+
+  { id: "pmise", g: "pro", n: "เตรียมของก่อนเปิดไฟ", need: 3,
+    how: ["อ่านสูตรให้จบก่อน 1 รอบ", "หั่น ตวง ใส่ถ้วยแยกทุกอย่าง วางเรียงตามลำดับที่จะใส่ (ครัวร้านเรียกว่า mise en place)", "เปิดไฟก็ต่อเมื่อทุกอย่างพร้อมแล้ว"],
+    pass: "ทำอาหาร 3 มื้อติดกัน โดยไม่ต้องหยุดหาของกลางคันเลย" },
+  { id: "pclean", g: "pro", n: "ล้างไปทำไป", need: 3,
+    how: ["วางชามใส่เศษขยะไว้ข้างเขียง", "ระหว่างรอน้ำเดือดหรือรอของสุก ล้างของที่ใช้เสร็จแล้ว", "เช็ดเขียงและเคาน์เตอร์ทุกครั้งที่เปลี่ยนจากของดิบไปของสุก"],
+    pass: "กินเสร็จแล้ว ครัวกลับมาสะอาดได้ภายใน 5 นาที" },
+  { id: "psafe", g: "pro", n: "ความปลอดภัยของอาหาร", need: 5,
+    how: ["ล้างมือก่อนทำ และหลังจับเนื้อดิบทุกครั้ง", "เขียงเนื้อดิบแยกจากเขียงผักและของสุก", "ไก่ต้องสุกถึงข้างใน 74°C เนื้อสับต้องสุก 71°C ไม่กินแบบแรร์"],
+    pass: "ทำครบทุกข้อ 5 ครั้งติดกัน และเก็บของเหลือเข้าตู้ภายใน 2 ชั่วโมง" },
+  { id: "pmulti", g: "pro", n: "ทำ 2-3 เมนูให้เสร็จพร้อมกัน", need: 3,
+    how: ["เริ่มจากเมนูที่ใช้เวลานานที่สุดก่อน", "ใช้หน้า \"มื้อนี้\" ในแอป เพิ่มเมนูแล้วกดทำพร้อมกัน แอปจะเรียงขั้นให้", "จับเวลาทุกอย่าง อย่าใช้ความจำ"],
+    pass: "ทุกเมนูเสร็จร้อน ๆ ห่างกันไม่เกิน 5 นาที" },
+  { id: "pplate", g: "pro", n: "จัดจาน", need: 3, r: ["ริบอายสเต็ก ซอสพริกไทยดำ"],
+    how: ["ใช้จานสะอาด เช็ดขอบจานก่อนเสิร์ฟ", "วางของหลักตรงกลางหรือค่อนไปทางหนึ่ง อย่าให้ล้นจาน", "เพิ่มสีเขียวหรือสีสด เช่น ผักชี ต้นหอม พริก จานจะดูสด"],
+    pass: "ถ่ายรูปจานที่จัดแล้ว วางเทียบกับรูปจากร้าน ดูใกล้เคียงกัน" },
+
+  { id: "bcost", g: "boss", n: "คิดต้นทุนต่อจาน", need: 3,
+    how: ["ตอนจดบันทึก ใส่ค่าวัตถุดิบกับจำนวนจาน แอปจะคิดต่อจานให้", "ร้านอาหารหลายร้านตั้งราคาราว 3 เท่าของค่าวัตถุดิบ เพราะต้องจ่ายค่าแรง ค่าแก๊ส ค่าร้านด้วย", "ลองคิดดูว่าถ้าขายเมนูนี้ จะขายกี่บาท"],
+    pass: "รู้ต้นทุนต่อจานของเมนูที่ทำบ่อย 3 เมนู" },
+  { id: "bleft", g: "boss", n: "ใช้ของเหลือให้คุ้ม", need: 3, r: ["ข้าวผัดไข่", "น้ำสต็อกผัก"],
+    how: ["เศษเนื้อจากการแต่งสเต๊ก เอาไปผัดหรือทำข้าวผัด", "ผักใกล้เสียเอาไปทำซุปหรือน้ำสต็อกผัก", "ข้าวค้างคืนเหมาะกับข้าวผัดที่สุด"],
+    pass: "ทำ 3 เมนูจากของเหลือในตู้ โดยไม่ต้องซื้อของเพิ่ม" },
+  { id: "bscale", g: "boss", n: "ทำอาหารให้คนเยอะ", need: 1, r: ["แกงมัสมั่นเนื้อ"],
+    how: ["คูณวัตถุดิบตามจำนวนคน แต่เครื่องปรุงให้ใส่ทีละน้อยแล้วชิม", "หม้อใหญ่ใช้เวลาเดือดนานขึ้น ส่วนของผัดให้แบ่งผัดทีละรอบ ดีกว่าใส่ทีเดียวเต็มกระทะ", "วางแผนเวลาย้อนหลังจากเวลาที่จะเสิร์ฟ"],
+    pass: "ทำอาหารเลี้ยงคน 6 คนขึ้นไป อร่อยและเสร็จตรงเวลา" },
+  { id: "bsig", g: "boss", n: "เมนูประจำตัว", need: 3,
+    how: ["เลือกเมนูที่ชอบที่สุด แล้วปรับสูตรให้เป็นของตัวเอง", "จดสูตรละเอียดเป็นกรัม รสจะออกมาเหมือนเดิมทุกครั้ง", "ให้คนชิมโดยไม่บอกว่าเป็นครั้งไหน ถ้าเขาบอกว่ารสเหมือนกัน แปลว่าคุมได้แล้ว"],
+    pass: "ทำเมนูของตัวเอง 3 ครั้ง รสออกมาเหมือนกันทุกครั้ง" }
+];
+const CRANKS = [[0, "มือใหม่ในครัว"], [5, "ผู้ช่วยครัว"], [12, "หัวหน้าสถานี"], [20, "รองเชฟ"], [30, "เชฟ"]];
+const STEAK10 = [
+  { t: "ตั้งต้น", ch: "จี่กระทะร้อนจัดตามสูตรในแอป โรยเกลือตอนจะจี่ พักเนื้อ 5 นาที", look: "จดไว้เป็นตัวเทียบ ทั้งเปลือก ความฉ่ำ และความเค็ม" },
+  { t: "โรยเกลือล่วงหน้า", ch: "โรยเกลือแล้ววางในตู้เย็นแบบไม่ปิด 1 ชั่วโมงขึ้นไป หรือข้ามคืน", look: "เปลือกเกรียมกว่าเดิมไหม เค็มถึงข้างในไหม" },
+  { t: "หั่นทันที เทียบกับพัก", ch: "แบ่งเป็น 2 ชิ้น ชิ้นแรกหั่นทันที ชิ้นที่สองพัก 5 นาที", look: "ดูน้ำเนื้อที่ไหลออกบนเขียง และความฉ่ำตอนเคี้ยว" },
+  { t: "พลิกบ่อย", ch: "พลิกทุก 30 วินาที แทนการพลิกครั้งเดียว", look: "สุกเท่ากันทั้งชิ้นกว่าไหม ขอบสีเทาใต้เปลือกบางลงไหม" },
+  { t: "อาบเนย", ch: "นาทีสุดท้ายใส่เนย กระเทียมทุบ และสมุนไพร เอียงกระทะ ตักเนยราดเนื้อซ้ำ ๆ", look: "หอมขึ้นแค่ไหน คุ้มค่าเนยไหม" },
+  { t: "วัดอุณหภูมิ", ch: "เสียบเทอร์โมมิเตอร์กลางชิ้น ยกออกก่อนถึงระดับที่ต้องการ 3-5°C แล้ววัดอีกครั้งหลังพัก ถ้าไม่มีเทอร์โมมิเตอร์ ให้กดเนื้อเทียบกับตารางในสูตร", look: "ระหว่างพัก อุณหภูมิขึ้นต่ออีกกี่องศา" },
+  { t: "เนื้อหนาแบบรีเวิร์สเซียร์", ch: "เนื้อหนา 3-4 ซม. อบไฟอ่อนก่อน แล้วค่อยจี่ไฟแรงตอนท้าย", look: "สีชมพูเท่ากันตั้งแต่ขอบถึงกลางไหม", r: "สเต็กหนาแบบรีเวิร์สเซียร์" },
+  { t: "ซอสจากกระทะ", ch: "ระหว่างพักเนื้อ ทำซอสจากคราบในกระทะ ตามทักษะ \"ซอสจากกระทะหลังจี่\"", look: "ซอสเข้ากับเนื้อไหม ข้นพอไหม" },
+  { t: "เปลี่ยนส่วนเนื้อ", ch: "ลองเนื้อส่วนที่ไม่เคยทำ เช่น สันนอก สันใน ใบพาย หรือเนื้อไทยราคาถูก", look: "ความนุ่ม ความมัน และรสเนื้อต่างกันยังไง ราคาคุ้มไหม" },
+  { t: "รอบสอบ", ch: "ทำ 2 ชิ้นพร้อมกัน ให้ 2 คน คนละระดับความสุกตามที่เขาสั่ง", look: "ออกมาตรงตามสั่งทั้ง 2 ชิ้นไหม" }
+];
+const CFB = ["พอดี", "อร่อยมาก", "เค็มไป", "จืดไป", "หวานไป", "เปรี้ยวไป", "เผ็ดไป", "มันไป", "สุกไป", "ดิบไป", "เหนียว", "แฉะ"];
+const DOW = ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"];
+const cSkill = id => CSKILLS.find(s => s.id === id);
+const cprog = new Map(load("chef-skill-v1", []).filter(x => Array.isArray(x) && cSkill(x[0])).map(x => [x[0], { n: Math.max(0, +x[1] || 0), ok: typeof x[2] === "string" ? x[2] : "" }]));
+let clog = load("chef-log-v1", []).filter(e => e && e.u && e.dish && e.d);
+const cdays = new Set(load("chef-days-v1", []).filter(d => typeof d === "string"));
+let chefTab = load("chef-tab-v1", ["skills"])[0]; if (!["skills", "steak", "log"].includes(chefTab)) chefTab = "skills";
+let cOpen = "", cform = null;
+const cp = id => cprog.get(id) || { n: 0, ok: "" };
+const cpSet = (id, v) => cprog.set(id, { ...cp(id), ...v });
+const cPassed = () => CSKILLS.filter(s => cp(s.id).ok).length;
+const cRank = n => CRANKS.filter(r => n >= r[0]).pop();
+const cNextRank = n => CRANKS.find(r => r[0] > n);
+const cRound = i => clog.filter(e => e.sr === i + 1).sort((a, b) => (b.ts || 0) - (a.ts || 0))[0];
+const cNextRound = () => STEAK10.findIndex((_, i) => !cRound(i));
+const cNextSkill = () => CSKILLS.find(s => !cp(s.id).ok);
+const cStars = n => n ? "★".repeat(n) + "☆".repeat(5 - n) : "";
+const cMoney = v => Number(v).toLocaleString("en-US", { maximumFractionDigits: 2 });
+function saveChef() {
+  store("chef-skill-v1", [...cprog].map(([id, p]) => [id, p.n, p.ok]));
+  store("chef-log-v1", clog);
+  store("chef-days-v1", [...cdays].sort().slice(-400));
+}
+const chefStat = () => (cPassed() || clog.length) ? ` · ฝึกเชฟ ${cPassed()}/${CSKILLS.length}` : "";
+
+function chefHero() {
+  const p = cPassed(), N = CSKILLS.length, rank = cRank(p), nx = cNextRank(p);
+  const days = Array.from({ length: 7 }, (_, k) => { const d = addDays(new Date(), k - 6); return { d: ymd(d), dow: DOW[d.getDay()] }; });
+  const on = days.filter(x => cdays.has(x.d)).length;
+  return `<div class="card chefhero">
+      <div class="chefrank"><span class="thumb t1" aria-hidden="true">${ico("chef")}</span>
+        <div class="stext"><b>${rank[1]}</b><span>ผ่าน ${p} จาก ${N} ทักษะ${nx ? ` · อีก ${nx[0] - p} ทักษะเป็น${nx[1]}` : " · ผ่านครบทุกทักษะแล้ว"}</span></div></div>
+      <div class="cbar" role="progressbar" aria-label="ทักษะที่ผ่านแล้ว" aria-valuemin="0" aria-valuemax="${N}" aria-valuenow="${p}"><i style="width:${(p / N * 100).toFixed(1)}%"></i></div>
+      <div class="cweek" role="img" aria-label="7 วันล่าสุด ซ้อม ${on} วัน">${days.map(x => `<span class="${cdays.has(x.d) ? "on" : ""}${x.d === today() ? " now" : ""}"><i>${cdays.has(x.d) ? ico("tick") : ""}</i><small>${x.dow}</small></span>`).join("")}</div>
+      <p class="hint">7 วันล่าสุดซ้อมไป ${on} วัน ${on >= 4 ? "ถึงเป้าแล้ว เก่งมาก" : `เป้าคือ 4 วัน อีก ${4 - on} วัน`}</p>
+      <button type="button" class="btn primary big" data-act="c-log">${ICON.plus}จดการทำอาหาร</button></div>`;
+}
+function chefNext() {
+  const s = cNextSkill(), r = cNextRound(), rows = [];
+  if (s) { const st = CSTAGES.find(x => x[0] === s.g), n = cp(s.id).n;
+    rows.push(`<button type="button" class="shead" data-cgo="${s.id}"><span class="cstat" aria-hidden="true">${ico("bulb")}</span>
+      <span class="stext"><b>${esc(s.n)}</b><span>${esc(st[1])} · ${n ? `ซ้อมแล้ว ${n}/${s.need} ครั้ง` : `ซ้อมราว ${s.need} ครั้ง แล้วทดสอบ`}</span></span></button>`); }
+  if (r >= 0) rows.push(`<button type="button" class="shead" data-ctab="steak"><span class="cstat" aria-hidden="true">${r + 1}</span>
+      <span class="stext"><b>สเต๊กรอบที่ ${r + 1}: ${esc(STEAK10[r].t)}</b><span>${esc(STEAK10[r].ch)}</span></span></button>`);
+  return rows.length ? `<div class="card"><h3>ซ้อมต่อไป</h3><div class="cnext">${rows.join("")}</div></div>` : "";
+}
+function chefSkills() {
+  return CSTAGES.map(([g, name, sub]) => {
+    const list = CSKILLS.filter(s => s.g === g), ok = list.filter(s => cp(s.id).ok).length;
+    return `<h3 class="sgh">${esc(name)} <small>ผ่าน ${ok}/${list.length}</small></h3><p class="hint csub">${esc(sub)}</p><div class="sgl">${list.map(s => {
+      const p = cp(s.id), ready = !p.ok && p.n >= s.need;
+      const recs = (s.r || []).map(byKey).filter(Boolean);
+      return `<details class="sitem cskill${p.ok ? " ok" : ""}" id="c-${s.id}" ${cOpen === s.id ? "open" : ""}><summary>
+          <span class="cstat${p.ok ? " ok" : ""}" aria-hidden="true">${p.ok ? ico("tick") : p.n || ""}</span>
+          <span class="stext"><b>${esc(s.n)}</b><span>${p.ok ? `ผ่านแล้ว ${dayLabel(p.ok)}` : p.n ? `ซ้อมแล้ว ${p.n} ครั้ง${ready ? " · พร้อมทดสอบแล้ว" : ""}` : "ยังไม่เริ่ม"}</span></span></summary>
+        <div class="sbody">
+          <h4>วิธีฝึก</h4><ol class="shows">${s.how.map(h => `<li>${esc(h)}</li>`).join("")}</ol>
+          <h4>ผ่านเมื่อ</h4><p>${esc(s.pass)}</p>
+          ${s.warn ? `<p class="stip">${ico("alert")}<span>${esc(s.warn)}</span></p>` : ""}
+          ${recs.length ? `<h4>ฝึกกับเมนูในแอป</h4><div class="rowbtns">${recs.map(r => `<button type="button" class="btn small" data-open="${esc(r.key)}">${emoji(r)} ${esc(r.name)}</button>`).join("")}</div>` : ""}
+          <div class="rowbtns cacts"><button type="button" class="btn small primary" data-cprac="${s.id}">${ICON.plus}ซ้อมแล้ววันนี้</button>
+            <button type="button" class="btn small" data-cpass="${s.id}" aria-pressed="${!!p.ok}">${ico("tick")}${p.ok ? "ผ่านแล้ว" : "ทดสอบผ่านแล้ว"}</button>
+            <button type="button" class="btn small" data-cnote="${s.id}">จดละเอียด</button></div>
+        </div></details>`;
+    }).join("")}</div>`;
+  }).join("");
+}
+function chefSteak() {
+  const done = STEAK10.filter((_, i) => cRound(i)).length, nx = cNextRound(), base = byKey("ริบอายสเต็ก ซอสพริกไทยดำ");
+  return `<div class="card"><h3>สเต๊ก 10 รอบ <small>${done}/10</small></h3>
+      <p class="hint">ทำสเต๊กซ้ำ 10 ครั้ง แต่ละรอบเปลี่ยนแค่อย่างเดียว แล้วเทียบกับรอบก่อน ทำครบจะเข้าใจเนื้อมากกว่าทำ 10 เมนู เมนูละครั้ง</p>
+      <div class="cbar" role="progressbar" aria-label="สเต๊กที่ทำแล้ว" aria-valuemin="0" aria-valuemax="10" aria-valuenow="${done}"><i style="width:${done * 10}%"></i></div>
+      <details class="guide"><summary>อุณหภูมิกลางเนื้อ <small>ดูตาราง</small></summary>
+        <ul class="ctemps">${DONENESS.map(d => `<li><b>${d.name}</b><span>${d.temp}</span><span>${d.look}</span></li>`).join("")}</ul>
+        <p>ยกออกจากกระทะก่อนถึงตัวเลขนี้ 3-5°C เพราะเนื้อจะสุกต่อระหว่างพัก</p></details></div>
+    <ol class="clist">${STEAK10.map((x, i) => {
+      const e = cRound(i), next = i === nx, rec = byKey(x.r || "") || base;
+      return `<li class="crow${e ? " done" : ""}${next ? " next" : ""}">
+        <div class="crhead"><span class="cstat${e ? " ok" : ""}" aria-hidden="true">${e ? ico("tick") : i + 1}</span>
+          <span class="stext"><b>รอบ ${i + 1}: ${esc(x.t)}</b><span>${esc(x.ch)}</span></span></div>
+        ${e ? `<button type="button" class="cres" data-centry="${e.u}" aria-label="ดูบันทึกรอบ ${i + 1}"><span>${dayLabel(e.d)}${e.stars ? ` · <span class="cst">${cStars(e.stars)}</span>` : ""}${e.th ? ` · หนา ${e.th} ซม.` : ""}${e.dn !== undefined && e.dn !== "" && DONENESS[e.dn] ? ` · ${DONENESS[e.dn].name}` : ""}${e.temp ? ` · ${e.temp}°C` : ""}</span>${e.next ? `<span>ครั้งหน้า: ${esc(e.next)}</span>` : ""}</button>`
+          : `<p class="clook">${ico("bulb")}<span>ดูอะไร: ${esc(x.look)}</span></p>
+          <div class="rowbtns"><button type="button" class="btn small${next ? " primary" : ""}" data-csr="${i + 1}">${ICON.plus}จดรอบนี้</button>${rec ? `<button type="button" class="btn small" data-open="${esc(rec.key)}">เปิดสูตร</button>` : ""}</div>`}
+      </li>`;
+    }).join("")}</ol>`;
+}
+function chefLogList() {
+  if (!clog.length) return `<div class="empty"><span class="big-emoji" aria-hidden="true">📒</span><p>ยังไม่มีบันทึก ทำอาหารเสร็จแล้วจดสั้น ๆ ว่าทำอะไร คนชิมว่ายังไง และครั้งหน้าจะแก้อะไร</p><button type="button" class="btn primary" data-act="c-log">จดครั้งแรก</button></div>`;
+  const list = [...clog].sort((a, b) => b.d.localeCompare(a.d) || (b.ts || 0) - (a.ts || 0));
+  const count = {}; clog.forEach(e => { count[e.dish] = (count[e.dish] || 0) + 1; });
+  const top = Object.entries(count).sort((a, b) => b[1] - a[1])[0];
+  return `<p class="hint csum">ทำไปแล้ว ${clog.length} ครั้ง · ${Object.keys(count).length} เมนู${top && top[1] > 1 ? ` · ทำบ่อยสุด ${esc(top[0])} (${top[1]} ครั้ง)` : ""}</p>
+    <ul class="clog">${list.map(e => {
+      const r = e.rk && byKey(e.rk), sk = e.sk && cSkill(e.sk);
+      const per = e.cost && e.plates ? e.cost / e.plates : 0;
+      return `<li><button type="button" class="centry" data-centry="${e.u}">
+        ${e.photo ? `<img class="cthumb" data-photo="${e.photo}" alt="">` : `<span class="thumb sm t1" aria-hidden="true">${r ? emoji(r) : "🍳"}</span>`}
+        <span class="stext"><b>${esc(e.dish)}${e.sr ? ` <small>สเต๊กรอบ ${e.sr}</small>` : ""}</b>
+          <span>${dayLabel(e.d)}${e.stars ? ` · <span class="cst" aria-label="${e.stars} ดาว">${cStars(e.stars)}</span>` : ""}${sk ? ` · ฝึก${esc(sk.n)}` : ""}${per ? ` · ต่อจาน ${cMoney(per)} บาท` : ""}</span>
+          ${(e.fb || []).length ? `<span class="cfbs">${e.fb.map(x => `<i class="${x === "พอดี" || x === "อร่อยมาก" ? "good" : ""}">${esc(x)}</i>`).join("")}</span>` : ""}
+          ${e.next ? `<span class="cnextnote">ครั้งหน้า: ${esc(e.next)}</span>` : ""}</span></button></li>`;
+    }).join("")}</ul>`;
+}
+function renderChef() {
+  const tabs = [["skills", "ทักษะ"], ["steak", "สเต๊ก 10 รอบ"], ["log", "บันทึก"]];
+  $("chefBody").innerHTML = chefHero() + chefNext() +
+    `<div class="seg three" role="group" aria-label="ส่วนของหน้าฝึกเชฟ">${tabs.map(([k, n]) => `<button type="button" data-ctab="${k}" aria-pressed="${chefTab === k}">${n}${k === "log" && clog.length ? ` <small>${clog.length}</small>` : ""}</button>`).join("")}</div>
+    <div id="chefTabBody">${chefTab === "skills" ? chefSkills() : chefTab === "steak" ? chefSteak() : chefLogList()}</div>`;
+  fillPhotos($("chefBody"));
+}
+function chefSetTab(k, focus = true) {
+  chefTab = k; store("chef-tab-v1", [k]); renderChef();
+  if (focus) refocus(`[data-ctab="${k}"]`);
+}
+function chefGo(id) {
+  chefTab = "skills"; store("chef-tab-v1", ["skills"]); cOpen = id; renderChef();
+  const d = $("c-" + id); if (d) { d.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); d.querySelector("summary").focus({ preventScroll: true }); }
+}
+function chefPractice(id) {
+  const s = cSkill(id); if (!s) return;
+  const before = cp(id), hadDay = cdays.has(today());
+  cpSet(id, { n: before.n + 1 }); cdays.add(today()); saveChef(); cOpen = id; renderChef();
+  const n = cp(id).n;
+  toast(n === s.need && !before.ok ? `ซ้อม${s.n}ครบ ${n} ครั้งแล้ว ลองทดสอบดูว่าผ่านหรือยัง` : `ซ้อม${s.n} ครั้งที่ ${n}`,
+    { label: "เลิกทำ", fn: () => { cpSet(id, { n: before.n }); if (!hadDay && !clog.some(e => e.d === today())) cdays.delete(today()); saveChef(); renderChef(); } });
+}
+function chefPass(id) {
+  const s = cSkill(id); if (!s) return;
+  const was = cp(id).ok, r0 = cRank(cPassed());
+  cpSet(id, { ok: was ? "" : today() }); saveChef(); cOpen = id; renderChef(); refocus(`[data-cpass="${id}"]`);
+  const r1 = cRank(cPassed());
+  if (!was && r1 !== r0) { sfx("done"); toast(`ผ่าน${s.n}แล้ว เลื่อนขั้นเป็น${r1[1]}`); }
+  else toast(was ? `ยกเลิกผ่าน${s.n}แล้ว` : `ผ่าน${s.n}แล้ว`);
+}
+
+/* The journal form reuses the money sheet dialog. mform stays null so the money keypad shortcuts stay off. */
+function openChefForm(preset = {}) {
+  mform = null;
+  cform = { u: "", d: today(), dish: "", rk: "", sk: "", sr: 0, th: "", dn: "", temp: "", stars: 0, fb: [], next: "", cost: "", plates: "", photo: "", blob: null, ...preset };
+  if (cform.sr) { cform.dish = cform.dish || "สเต๊ก"; if (cform.th === "") cform.th = steak.th; if (cform.dn === "") cform.dn = steak.done; }
+  renderChefForm();
+  if (!mdlg.open) mdlg.showModal();
+}
+function editChefEntry(u) {
+  const e = clog.find(x => x.u === u); if (!e) return;
+  openChefForm({ ...e, fb: [...(e.fb || [])], cost: e.cost ? String(e.cost) : "", plates: e.plates ? String(e.plates) : "", temp: e.temp ? String(e.temp) : "", blob: null });
+}
+const cIsSteak = f => !!f.sr || /สเต็ก|สเต๊ก|steak/i.test(f.dish);
+function chefSteakFields(f) {
+  return `<span class="flabel" id="cfThLab">ความหนาของเนื้อ</span><div class="row" role="group" aria-labelledby="cfThLab">${THICK.map(t => `<button type="button" class="chip" data-cth="${t}" aria-pressed="${+f.th === t}">${t} ซม.</button>`).join("")}</div>
+    <span class="flabel" id="cfDnLab">ตั้งใจให้สุกระดับไหน</span><div class="row" role="group" aria-labelledby="cfDnLab">${DONENESS.map((d, k) => `<button type="button" class="chip" data-cdn="${k}" aria-pressed="${f.dn !== "" && +f.dn === k}"><span class="swatch d${k}" aria-hidden="true"></span>${d.name}</button>`).join("")}</div>
+    <label class="frow" for="cfTemp"><span>วัดกลางเนื้อได้ (ไม่ใส่ก็ได้)</span><span class="cunit"><input class="field sm" id="cfTemp" type="text" inputmode="decimal" autocomplete="off" maxlength="5" value="${esc(f.temp)}"> °C</span></label>`;
+}
+function chefPrevNote(dish, u) {
+  const d = dish.trim(); if (!d) return "";
+  const prev = clog.filter(e => e.dish === d && e.u !== u && e.next).sort((a, b) => b.d.localeCompare(a.d) || (b.ts || 0) - (a.ts || 0))[0];
+  return prev ? `<p class="decay warn">${ico("bulb")}<span>ครั้งก่อน (${dayLabel(prev.d)}) บอกว่าจะแก้: ${esc(prev.next)}</span></p>` : "";
+}
+function renderChefForm() {
+  const f = cform, sr = f.sr && STEAK10[f.sr - 1];
+  const names = [...new Set(RECIPES.map(r => r.name))];
+  mdlg.innerHTML = `
+    <div class="sheet-top"><span class="ttl" id="m-title">${f.u ? "แก้ไขบันทึก" : sr ? `สเต๊กรอบ ${f.sr}` : "จดการทำอาหาร"}</span><button type="button" class="fav" data-act="m-close" aria-label="ปิด">${ICON.close}</button></div>
+    <div class="sheet-scroll"><div class="sheet-body mform cform">
+      ${sr ? `<p class="decay ok"><span><b>${esc(sr.t)}</b> · ${esc(sr.ch)}<br>ดูอะไร: ${esc(sr.look)}</span></p>` : ""}
+      <label class="flabel" for="cfDish">ทำเมนูอะไร</label>
+      <input class="field" id="cfDish" type="text" list="cfDishes" maxlength="60" autocomplete="off" placeholder="เช่น ริบอายสเต็ก กะเพราเนื้อ" value="${esc(f.dish)}">
+      <datalist id="cfDishes">${names.map(n => `<option value="${esc(n)}"></option>`).join("")}</datalist>
+      <div id="cfPrev">${chefPrevNote(f.dish, f.u)}</div>
+      <span class="flabel" id="cfDateLab">วันที่</span><div class="row" role="group" aria-labelledby="cfDateLab"><button type="button" class="chip" data-cdate="0" aria-pressed="${f.d === today()}">วันนี้</button><button type="button" class="chip" data-cdate="-1" aria-pressed="${f.d === ymd(addDays(new Date(), -1))}">เมื่อวาน</button>
+        <input class="field datefield" id="cfDate" type="date" aria-label="เลือกวันที่" max="${today()}" value="${f.d}"></div>
+      <label class="flabel" for="cfSkill">ฝึกทักษะไหน (ไม่ใส่ก็ได้)</label>
+      <select class="field" id="cfSkill"><option value="">ไม่ระบุ</option>${CSTAGES.map(([g, n]) => `<optgroup label="${esc(n)}">${CSKILLS.filter(s => s.g === g).map(s => `<option value="${s.id}"${f.sk === s.id ? " selected" : ""}>${esc(s.n)}</option>`).join("")}</optgroup>`).join("")}</select>
+      <div id="cfSteak" class="cfgroup">${cIsSteak(f) ? chefSteakFields(f) : ""}</div>
+      <span class="flabel" id="cfStarLab">ให้คะแนนตัวเอง</span>
+      <div class="cstars" role="radiogroup" aria-labelledby="cfStarLab">${[1, 2, 3, 4, 5].map(k => `<button type="button" role="radio" data-cstar="${k}" aria-checked="${f.stars === k}" aria-label="${k} ดาว" class="${k <= f.stars ? "on" : ""}">★</button>`).join("")}</div>
+      <span class="flabel" id="cfFbLab">คนชิมว่ายังไง</span>
+      <div class="row" role="group" aria-labelledby="cfFbLab">${CFB.map(x => `<button type="button" class="chip" data-cfb="${esc(x)}" aria-pressed="${f.fb.includes(x)}">${esc(x)}</button>`).join("")}</div>
+      <label class="flabel" for="cfNext">ครั้งหน้าจะแก้อะไร</label>
+      <textarea class="field ta" id="cfNext" rows="3" maxlength="200" placeholder="เช่น ซับเนื้อให้แห้งกว่านี้ ใส่น้ำปลาน้อยลง">${esc(f.next)}</textarea>
+      <span class="flabel">ต้นทุน (ไม่ใส่ก็ได้)</span>
+      <div class="ccost"><label for="cfCost">ค่าวัตถุดิบ</label><span class="cunit"><input class="field sm" id="cfCost" type="text" inputmode="decimal" autocomplete="off" maxlength="8" value="${esc(f.cost)}"> บาท</span>
+        <label for="cfPlates">ได้</label><span class="cunit"><input class="field sm" id="cfPlates" type="text" inputmode="numeric" autocomplete="off" maxlength="3" value="${esc(f.plates)}"> จาน</span></div>
+      <p class="hint" id="cfPer" aria-live="polite"></p>
+      <span class="flabel">รูปอาหาร (ไม่ใส่ก็ได้)</span>
+      <div class="cphoto"><img id="cfImg" alt="รูปอาหารที่เลือก" ${f.photo ? `data-photo="${f.photo}"` : "hidden"}>
+        <label class="btn small" for="cfFile">${ico("camera")}${f.photo || f.blob ? "เปลี่ยนรูป" : "ถ่ายหรือเลือกรูป"}</label><input id="cfFile" type="file" accept="image/*" hidden></div>
+      ${f.u ? `<button type="button" class="link" data-act="c-delete" style="color:var(--chili);align-self:flex-start">ลบบันทึกนี้</button>` : ""}
+    </div></div>
+    <div class="sheet-foot"><button type="button" class="btn primary" data-act="c-save">บันทึก</button></div>`;
+  if (f.blob) { const img = $("cfImg"); img.src = URL.createObjectURL(f.blob); img.hidden = false; }
+  else fillPhotos(mdlg);
+  chefPer();
+}
+const cNum = s => { const v = parseFloat(String(s).replace(/,/g, "")); return isFinite(v) && v > 0 ? v : 0; };
+function chefPer() {
+  const el = $("cfPer"); if (!el) return;
+  const c = cNum($("cfCost").value), p = Math.round(cNum($("cfPlates").value));
+  el.textContent = c && p ? `ต่อจาน ${cMoney(c / p)} บาท · ถ้าขาย ร้านมักตั้งราคาราว ${cMoney(Math.ceil(c / p * 3 / 5) * 5)} บาท` : "";
+}
+function chefReadForm() {
+  const f = cform; if (!f || !$("cfDish")) return;
+  f.dish = $("cfDish").value.trim(); f.sk = $("cfSkill").value; f.next = $("cfNext").value.trim();
+  f.cost = $("cfCost").value.trim(); f.plates = $("cfPlates").value.trim(); if ($("cfTemp")) f.temp = $("cfTemp").value.trim();
+}
+async function saveChefForm() {
+  chefReadForm();
+  const f = cform;
+  if (!f.dish) { sfx("warn"); toast("ใส่ชื่อเมนูก่อน"); $("cfDish").focus(); return; }
+  const r = RECIPES.find(x => x.name === f.dish), steaky = cIsSteak(f);
+  const e = { u: f.u || newId(), ts: f.ts || Date.now(), d: f.d, dish: f.dish, rk: r ? r.key : "", sk: cSkill(f.sk) ? f.sk : "", sr: f.sr || 0,
+    th: steaky && f.th !== "" ? +f.th : "", dn: steaky && f.dn !== "" ? +f.dn : "", temp: steaky ? cNum(f.temp) || "" : "",
+    stars: f.stars || 0, fb: f.fb.filter(x => CFB.includes(x)), next: f.next.slice(0, 200),
+    cost: cNum(f.cost) || "", plates: Math.round(cNum(f.plates)) || "", photo: f.photo || "" };
+  if (f.blob) {
+    const id = "cp" + newId();
+    try { await photoDb.put(id, f.blob); if (e.photo) photoDb.del(e.photo).catch(() => {}); e.photo = id; }
+    catch (err) { toast("เก็บรูปไม่สำเร็จ บันทึกอื่นยังเก็บไว้ให้"); }
+  }
+  const old = clog.find(x => x.u === e.u), isNew = !old;
+  if (old) Object.assign(old, e); else clog.push(e);
+  if (isNew && e.sk) cpSet(e.sk, { n: cp(e.sk).n + 1 });
+  cdays.add(e.d); saveChef();
+  cform = null; mdlg.close(); sfx("on");
+  if (view === "chef") renderChef();
+  if (view === "home") renderHome();
+  const s = e.sk && cSkill(e.sk), ready = isNew && s && !cp(s.id).ok && cp(s.id).n === s.need;
+  const msg = ready ? `บันทึกแล้ว ซ้อม${s.n}ครบ ${s.need} ครั้ง ลองทดสอบดูได้แล้ว` : e.sr && isNew ? `บันทึกสเต๊กรอบ ${e.sr} แล้ว` : "บันทึกแล้ว";
+  if (isNew && e.cost) toast(msg, { label: "จดลงรายจ่าย", fn: () => openMoneyForm({ c: "grocery", amt: String(e.cost), n: ("วัตถุดิบ: " + e.dish).slice(0, 60) }) });
+  else toast(msg);
+}
+function deleteChefEntry() {
+  const f = cform; if (!f || !f.u) return;
+  const i = clog.findIndex(x => x.u === f.u); if (i < 0) return;
+  const [e] = clog.splice(i, 1), skBefore = e.sk ? cp(e.sk).n : 0;
+  if (e.sk) cpSet(e.sk, { n: Math.max(0, skBefore - 1) });
+  saveChef(); cform = null; mdlg.close(); renderChef();
+  let undone = false;
+  toast("ลบบันทึกแล้ว", { label: "เลิกทำ", fn: () => { undone = true; clog.push(e); if (e.sk) cpSet(e.sk, { n: skBefore }); saveChef(); renderChef(); } });
+  if (e.photo) setTimeout(() => { if (!undone && !clog.some(x => x.photo === e.photo)) photoDb.del(e.photo).catch(() => {}); }, 6000);
+}
+function chefCookDone(r) {
+  const s = CSKILLS.find(x => (x.r || []).includes(r.key) && !cp(x.id).ok);
+  openChefForm({ dish: r.name, rk: r.key, sk: s ? s.id : "" });
+}
+document.addEventListener("click", ev => {
+  const t = ev.target; let el;
+  if ((el = t.closest("[data-ctab]"))) { sfx("tap"); chefSetTab(el.dataset.ctab, !el.closest(".cnext")); if (el.closest(".cnext")) window.scrollTo({ top: $("chefTabBody").offsetTop - 80 }); return; }
+  if ((el = t.closest("[data-cgo]"))) { sfx("open"); chefGo(el.dataset.cgo); return; }
+  if ((el = t.closest("[data-cprac]"))) { sfx("on"); chefPractice(el.dataset.cprac); return; }
+  if ((el = t.closest("[data-cpass]"))) { sfx(cp(el.dataset.cpass).ok ? "off" : "on"); chefPass(el.dataset.cpass); return; }
+  if ((el = t.closest("[data-cnote]"))) { sfx("open"); openChefForm({ sk: el.dataset.cnote }); return; }
+  if ((el = t.closest("[data-csr]"))) { sfx("open"); openChefForm({ sr: +el.dataset.csr, sk: "hsear" }); return; }
+  if ((el = t.closest("[data-centry]"))) { sfx("open"); editChefEntry(el.dataset.centry); return; }
+  if (!cform || !mdlg.open) return;
+  if ((el = t.closest("[data-cdate]"))) { sfx("tap"); cform.d = ymd(addDays(new Date(), +el.dataset.cdate)); $("cfDate").value = cform.d;
+    mdlg.querySelectorAll("[data-cdate]").forEach(b => b.setAttribute("aria-pressed", ymd(addDays(new Date(), +b.dataset.cdate)) === cform.d)); return; }
+  if ((el = t.closest("[data-cstar]"))) { sfx("tap"); const k = +el.dataset.cstar; cform.stars = cform.stars === k ? 0 : k;
+    mdlg.querySelectorAll("[data-cstar]").forEach(b => { const n = +b.dataset.cstar; b.classList.toggle("on", n <= cform.stars); b.setAttribute("aria-checked", n === cform.stars); }); return; }
+  if ((el = t.closest("[data-cfb]"))) { sfx("tap"); const x = el.dataset.cfb, on = !cform.fb.includes(x);
+    cform.fb = on ? [...cform.fb, x] : cform.fb.filter(y => y !== x); el.setAttribute("aria-pressed", on); return; }
+  if ((el = t.closest("[data-cth]"))) { sfx("tap"); cform.th = +el.dataset.cth; mdlg.querySelectorAll("[data-cth]").forEach(b => b.setAttribute("aria-pressed", +b.dataset.cth === cform.th)); return; }
+  if ((el = t.closest("[data-cdn]"))) { sfx("tap"); cform.dn = +el.dataset.cdn; mdlg.querySelectorAll("[data-cdn]").forEach(b => b.setAttribute("aria-pressed", +b.dataset.cdn === cform.dn)); return; }
+});
+mdlg.addEventListener("input", ev => {
+  if (!cform) return;
+  const id = ev.target.id;
+  if (id === "cfCost" || id === "cfPlates") chefPer();
+  if (id === "cfDish") {
+    cform.dish = ev.target.value; $("cfPrev").innerHTML = chefPrevNote(cform.dish, cform.u);
+    const box = $("cfSteak"), want = cIsSteak(cform);
+    if (want && !box.innerHTML) { if (cform.th === "") cform.th = steak.th; if (cform.dn === "") cform.dn = steak.done; box.innerHTML = chefSteakFields(cform); }
+    else if (!want && box.innerHTML) { cform.temp = $("cfTemp").value; box.innerHTML = ""; }
+  }
+});
+mdlg.addEventListener("change", ev => {
+  if (!cform) return;
+  if (ev.target.id === "cfDate") { cform.d = ev.target.value && ev.target.value <= today() ? ev.target.value : today(); ev.target.value = cform.d;
+    mdlg.querySelectorAll("[data-cdate]").forEach(b => b.setAttribute("aria-pressed", ymd(addDays(new Date(), +b.dataset.cdate)) === cform.d)); }
+  if (ev.target.id === "cfFile" && ev.target.files[0]) {
+    const file = ev.target.files[0], img = new Image(), u = URL.createObjectURL(file); ev.target.value = "";
+    img.onload = async () => { const b = await shrink(img, false); URL.revokeObjectURL(u); if (!cform || !b) return; chefReadForm(); cform.blob = b; renderChefForm(); };
+    img.onerror = () => { URL.revokeObjectURL(u); toast("เปิดรูปนี้ไม่ได้ ลองรูปอื่น"); }; img.src = u;
+  }
+});
+mdlg.addEventListener("close", () => { cform = null; });
+
 const ACTIONS = {
+  "go-chef": () => go("chef"),
+  "c-log": () => openChefForm(),
+  "c-save": () => saveChefForm(),
+  "c-delete": () => deleteChefEntry(),
+  "cook-chef": () => chefCookDone(cur),
   "open-filters": () => { renderFilters(); fdlg.showModal(); },
   "close-filters": () => fdlg.close(),
   "reset": () => resetFilters(),
